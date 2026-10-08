@@ -140,3 +140,26 @@ No engine project, export, or device run exists. Every performance figure is a h
 ## Open after this pass
 
 - P6 readiness review (contradiction sweep + acceptance matrix, including joint ratification of the TEXTURE_BUDGET amendment and this spec's import settings), user confirmation of D07–D11, and D09.
+
+---
+
+# Follow-up review — P6 readiness review
+
+Date: 2026-10-08. Scope: documents only.
+
+## Completed checks
+
+- `docs/READINESS_REVIEW.md` written (Package P6), completing the WORK_PACKAGES sequence P0–P6 on paper. Full contradiction sweep over every shared value in the document set (jump envelope, whip timeline/hitbox, HP and i-frame arithmetic, frame counts 113 + 24 and enemy totals 46/36/31+3/70, stage clearances, texture figures, Godot 4.7.2 pin, iPhone 17 anchor, decision statuses): 25 AGREE, 3 DISAGREE — all values re-derived; the texture pipeline (278.97 MiB untrimmed → 102.68 MiB trimmed; 8/7/6-page residency readings; 144 MiB sensitivity case) recomputed programmatically and matched exactly; the manifest example re-parsed (durations sum 500 ms, active [150, 250]); all relative Markdown links re-resolved (60 in the pre-existing set, 136 including the new documents), 0 broken; stale-identity grep re-run (B1/B11 hold).
+- Two genuine inconsistencies in the newer package docs found and fixed: **SW-1** — `ASSET_BRIEFS.md` §10 claimed "18 assets" where its own table enumerates 13 asset IDs / 19 frames (the count TEXTURE_BUDGET's UI pixels are computed from); corrected in ASSET_BRIEFS, and the P3 REVIEW_RECORD entry above repeats the 18 figure — left unedited as dated history, superseded here. **SW-2** — `STAGE_DESIGN.md` §5's R1 "lane covers ground modules 66–78" overlapped §6's safe-zone guarantee for the checkpoint apron (modules 63–66); the §5 cell now states the shots pass 198–223 u above the ground route and cannot hit a ground hunter, per §3. A third disagreement (TECHNICAL_CONSTRAINTS' and VALIDATION V5's Android hardware anchors vs the confirmed D14 iPhone 17 target) is recorded as resolved by the documented supersession in TECHNICAL_SPEC §4–5, without editing the historical files. `DECISIONS.md` was not edited; no confirmed requirement was rewritten.
+- The WORK_PACKAGES "definition of specification-ready" applied item by item in READINESS_REVIEW §2: all six PASS on paper (first minute explainable from STAGE_DESIGN §7; full asset enumeration in ASSET_BRIEFS §§2–12; rendering vs collision separated per ASSET_SPEC §2 and per-asset collision references; attack timing derivable from SPEC §5 / ASSET_SPEC §3 / the manifest example alone; exact target device named in D14 + TECHNICAL_SPEC §4; proposal status readable from DECISIONS.md and every package header).
+- Revised acceptance matrix (READINESS_REVIEW §3): VALIDATION gates **V1–V9 all remain PENDING**, each with the evidence that would close it. AUDIT roll-up (READINESS_REVIEW §5): B1, B4, B5, B7–B12 resolved-on-paper; B6 resolved-on-paper with greybox confirmation owed (V6); B2 reconciled on paper but open with the user (ratification) and with the implementation phase (measurement, V2/V8); B3 open with the user (D09). No audit item remains open with a package.
+- Ratification list stated for the user (READINESS_REVIEW §4): **R1** the TEXTURE_BUDGET §5 amendment (no mip chains; ≤7-page peak-concurrency residency; 112.0 MiB peak) ratified jointly with TECHNICAL_SPEC §2's import settings — without it the 128 MiB budget fails as written (170.7 MiB all-resident mipmapped); **R2** D09 (confirm the contact-hurts/no-stomp baseline or request stomp kills); **R3** confirmation of the D07–D11 PROPOSED baselines and their P1–P5 derivatives; **R4** style-pack authorization at V1, after the implementation assignment. Production — Godot project, greybox, art, builds — requires a **separate explicit implementation assignment** per AGENTS.md and WORK_PACKAGES production gate 1; P6 does not grant or request it.
+
+## Explicitly not tested
+
+Unchanged from every prior entry: no engine project, export, art, animation, playtest, touch test, or device measurement exists. The iPhone 17 / iOS Safari target (D14), the Godot 4.7.2 pin, every performance figure, and every texture-budget number remain PROPOSED/NOT-TESTED hypotheses awaiting VALIDATION V1–V9 evidence.
+
+## Open after this pass
+
+- User ratifications R1–R3 (READINESS_REVIEW §4); D09 remains the only open interview question.
+- The specification phase is complete on paper: P0–P6 delivered, AUDIT B1–B12 dispositioned, VALIDATION V0's document-side evidence assembled in READINESS_REVIEW §§1–2. The next step belongs to a future explicit implementation assignment (WORK_PACKAGES production gates 1–5), starting with locking the engine version and the proposed mechanics, then a greybox touch movement + whip test on iPhone 17 hardware.

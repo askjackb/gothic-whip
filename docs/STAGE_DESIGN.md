@@ -106,7 +106,7 @@ Behavior values are GAMEPLAY_RULES §8 (PROPOSED); placement is [P4 proposal]. A
 | P4 | Ground pursuer (1) | modules 36–38 | patrol x 2304–2496 | B2 | Gap-then-enemy combination; module 35 kept clear as touchdown strip |
 | S1 | Airborne swooper (1) | above W2–W3 | patrol x ≈3136–3648 at +175–190 u over walkway | B3 | First airborne threat; stand-and-whip from ≥192 u landings |
 | P5 | Ground pursuer (1) | modules 67–69 | patrol x 4288–4480 | B4 | Ground lane of the mixed encounter |
-| R1 | Stationary ranged (2) | platform modules 71–72, top +2 | lane covers ground modules 66–78 from platform level | B4 | Crouch-dodge / elevated-route lesson; two readable routes (§3) |
+| R1 | Stationary ranged (2) | platform modules 71–72, top +2 | projectile lane overhangs ground modules 66–78 from platform level; over the ground route the shots pass 198–223 u up and cannot hit a ground hunter (§3), so the checkpoint apron (modules 63–66) stays safe | B4 | Crouch-dodge / elevated-route lesson; two readable routes (§3) |
 | S2 | Airborne swooper (1) | above modules 74–78 | patrol x 4736–5056 at +175–190 u over ground | B4 | Airborne threat after the platform, not stacked on it |
 | BOSS | Boss (8) | arena, spawn module 97 | arena modules 88–101 | B5 | Spacing + jump test; two attacks per GAMEPLAY_RULES §8.4 |
 

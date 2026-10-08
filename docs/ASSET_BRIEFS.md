@@ -184,7 +184,7 @@ UI-space assets (not world density). Text is always live UI text — never baked
 | `ui_victory` | 128×128 | 1 (stage-clear marker icon) |
 | `ui_rotate_prompt` | 192×128 | 1 (portrait rotate graphic, SPEC §6; wording is live text) |
 
-Total: **18 assets**. Rejection: icon illegible at actual touch size; lettering baked into the texture; pressed state indistinguishable at a glance.
+Total: **13 assets, 19 frames** (the six buttons carry normal and pressed frames; TEXTURE_BUDGET.md pixel totals count frames). Rejection: icon illegible at actual touch size; lettering baked into the texture; pressed state indistinguishable at a glance.
 
 ## 11. VFX set
 
