@@ -1,6 +1,6 @@
 # Asset generation instructions for a future asset worker
 
-This is an instruction template, not authorization to start generating assets during specification work. D05/D06 lock no visible pixels and primarily Castlevania. The identity is Simon Belmont in Castlevania’s world; choose the exact incarnation/costume reference and approve a canonical style pack first.
+This is an instruction template, not authorization to start generating assets during specification work. D05 locks no visible pixels; D06 makes Castlevania the design reference for tone and mechanics. The identity is an original hunter in an original gothic world (DECISIONS D02/D12 as amended 2026-10-08); the canonical hunter design reference is created by the P2 style pack — approve it and record the style-lock revision first. No franchise character, costume, or world element may be generated.
 
 ## Workflow
 
@@ -22,7 +22,7 @@ Prompted dimensions and anchors are targets, not proof the generator complied. V
 
 ## Hero attack key-pose example
 
-> Use the approved Simon design reference and style lock; if either is missing, stop and report it. Create the body-only full-extension key pose for hero_attack_ground, active phase. Painted gothic horror 2D, no visible pixel grid. Side view facing right, planted rear foot, believable shoulder/hip rotation, striking hand extended, empty hand socket ready for a separate whip layer. Maintain 224-source-pixel standing height and fixed 512×512 RGBA canvas with foot origin (256,448). Actual transparent background. No whip, no ground plane, no text, no camera zoom or changed outfit. This is one pose, not a full animation sheet.
+> Use the approved hunter design reference and style lock; if either is missing, stop and report it. Create the body-only full-extension key pose for hero_attack_ground, active phase. Painted gothic horror 2D, no visible pixel grid. Side view facing right, planted rear foot, believable shoulder/hip rotation, striking hand extended, empty hand socket ready for a separate whip layer. Maintain 224-source-pixel standing height and fixed 512×512 RGBA canvas with foot origin (256,448). Actual transparent background. No whip, no ground plane, no text, no camera zoom or changed outfit. This is one pose, not a full animation sheet.
 
 Follow with a separate whip-layer request tied to the accepted hand socket and matched pose. The arm and whip must meet in the composite. Review intended reach against the active hitbox before approving.
 

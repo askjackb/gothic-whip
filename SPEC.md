@@ -2,9 +2,9 @@
 
 ## 1. Intent and authority
 
-**Confirmed:** A 2D Godot platformer for mobile, playable on the web, with a future Android APK. Simon Belmont fights with a whip in Castlevania’s world. Jumping is less agile than Mario. The world is dark, gothic, highly detailed, and horrific.
+**Confirmed:** A 2D Godot platformer for mobile, playable on the web, with a future Android APK. An original hunter fights with a whip in an original gothic world. Jumping is less agile than Mario. The world is dark, gothic, highly detailed, and horrific. Castlevania is the design reference for tone and mechanics only; no franchise character or world element is part of the product identity.
 
-**Confirmed refinement:** Primarily Castlevania; no visible pixel art. Every supported action and pose must be fully animated, including crouch, jump, knockback/knockdown, recovery, and death. Octopath may inform depth/lighting only. See [the full animation contract](docs/ANIMATION_SPEC.md). The final identity choice is confirmed: Simon Belmont in Castlevania’s world. Exact costume/incarnation remains to be specified.
+**Confirmed refinement:** Primarily Castlevania as the design reference; no visible pixel art. Every supported action and pose must be fully animated, including crouch, jump, knockback/knockdown, recovery, and death. Octopath may inform depth/lighting only. See [the full animation contract](docs/ANIMATION_SPEC.md). The identity is confirmed (user decision 2026-10-08, see [the decision ledger amendments](docs/DECISIONS.md)): an original hunter in an original gothic world. The hunter's design reference is an original creation produced by the P2 art bible ([docs/ART_BIBLE.md](docs/ART_BIBLE.md)); no franchise character, costume, or world element is used.
 
 All numerical values and slice counts below are **proposed starting points**, not measured results or confirmed user decisions.
 
@@ -15,7 +15,7 @@ All numerical values and slice counts below are **proposed starting points**, no
 - **Horror with legibility:** detailed atmosphere surrounds a clearly readable hero, enemies, and traversable surfaces.
 - **Touch is primary:** the complete first slice can be played with two thumbs without precision acrobatics.
 
-The signature proposed moment: Simon crosses a short broken walkway, lands in a gothic courtyard, waits out an enemy's approach, and kills it with a clearly readable whip strike.
+The signature proposed moment: the hunter crosses a short broken walkway, lands in a gothic courtyard, waits out an enemy's approach, and kills it with a clearly readable whip strike.
 
 ## 3. First playable slice — proposed future milestone
 
@@ -41,9 +41,9 @@ Grounded whip strikes stop horizontal movement during the attack; airborne strik
 
 ## 5. Combat and failure contract — proposed
 
-Ground, crouched, and airborne whip variants use the same timeline. Crouched reach retains the same x bounds but shifts its active y interval to -48 to -20. One horizontal whip strike: 150 ms anticipation, 100 ms active, 250 ms recovery (500 ms total). Collision activates on the gameplay timeline, never inferred from opaque sprite pixels. Each target takes at most one hit per attack. At default scale, the active region is x=+40 to +168, y=-82 to -46 relative to Simon's foot pivot while facing right; left-facing mirrors the x bounds. These are tunable candidates requiring an overlay review against the illustration.
+Ground, crouched, and airborne whip variants use the same timeline. Crouched reach retains the same x bounds but shifts its active y interval to -48 to -20. One horizontal whip strike: 150 ms anticipation, 100 ms active, 250 ms recovery (500 ms total). Collision activates on the gameplay timeline, never inferred from opaque sprite pixels. Each target takes at most one hit per attack. At default scale, the active region is x=+40 to +168, y=-82 to -46 relative to the hunter's foot pivot while facing right; left-facing mirrors the x bounds. These are tunable candidates requiring an overlay review against the illustration.
 
-Five health units; ordinary contact costs one; pits cause checkpoint restart after a visible fall/death transition; no limited lives or score requirement. Ordinary damage triggers animated knockback and recovery; heavy boss hits trigger knockdown and get-up. Lethal damage overrides both with a death animation and final settled pose. Invulnerability lasts 1 s after damage, indicated with a non-strobing tint. Enemy contact, including landing on an enemy, hurts Simon in the proposed baseline; stomp kills remain an unresolved preference. Start with one hit to kill basic enemies, two for the ranged enemy, and eight for the boss. Values are intentionally provisional.
+Five health units; ordinary contact costs one; pits cause checkpoint restart after a visible fall/death transition; no limited lives or score requirement. Ordinary damage triggers animated knockback and recovery; heavy boss hits trigger knockdown and get-up. Lethal damage overrides both with a death animation and final settled pose. Invulnerability lasts 1 s after damage, indicated with a non-strobing tint. Enemy contact, including landing on an enemy, hurts the hunter in the proposed baseline; stomp kills remain an unresolved preference. Start with one hit to kill basic enemies, two for the ranged enemy, and eight for the boss. Values are intentionally provisional.
 
 Checkpoint restart restores health and encounter state. Boss defeat unlocks the exit. An explicit retry works after death and completion. Save persistence is not required for this short slice.
 

@@ -24,7 +24,7 @@ Do not confuse source pixels, logical game units, and displayed screen pixels. C
 
 Hero body frames use the fixed canvas above. Whip frames use a 768×512 source-pixel canvas with foot-origin anchor (256, 448), allowing up to 256 game units to the right of the shared origin. Each synchronized pose records the hand socket relative to the hero origin. The whip root must meet that socket. Source-space socket coordinates are converted using the density before placement.
 
-Both layers share animation time and facing. A one-piece full-body-plus-whip render is an optional reference, not the required runtime deliverable. The separate weapon avoids shrinking Simon or clipping long attacks to fit a small frame. No baked floor shadows or hitbox outlines in production frames.
+Both layers share animation time and facing. A one-piece full-body-plus-whip render is an optional reference, not the required runtime deliverable. The separate weapon avoids shrinking the hunter or clipping long attacks to fit a small frame. No baked floor shadows or hitbox outlines in production frames.
 
 Start with a standing collision body of approximately 40×104 game units, centered at (0, -52), subject to engine collision review. This is gameplay geometry, not the visible sprite silhouette. Whip hitboxes come from SPEC.md and must be reviewed with an overlay; they must not include anticipation/recovery frames or deal damage twice per target per strike.
 
@@ -36,7 +36,7 @@ Ground, air, and crouched attacks each use eight proposed body frames and eight 
 
 Grounded idle/attack foot baseline must not drift by more than 2 source px. Walk feet follow intentional contact phases; world translation belongs to gameplay. Keep face, costume seams, armor count, anatomy, and weapon identity stable. Crouch changes visible posture and collision deliberately; do not resize the entire sprite to simulate crouching.
 
-Enemy and boss coverage must follow the same no-static-substitute rule. Each brief defines its own sizes, pivots, complete state set, frame timing, tells, sockets, and collision; do not reuse Simon's frame size by default.
+Enemy and boss coverage must follow the same no-static-substitute rule. Each brief defines its own sizes, pivots, complete state set, frame timing, tells, sockets, and collision; do not reuse the hunter's frame size by default.
 
 ## 4. Terrain and environment
 

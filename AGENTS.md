@@ -4,7 +4,7 @@ The current assignment is specification development. Do not create game code, in
 
 Read README.md, SPEC.md, docs/DECISIONS.md, and docs/ANIMATION_SPEC.md first. Then read the contract relevant to your task.
 
-- Preserve confirmed user intent: 2D, Godot, web playable, mobile target, future Android APK, Simon Belmont in Castlevania’s world with whip combat, restrained jumping, gothic dark detailed horror, no visible pixels, and fully animated supported actions.
+- Preserve confirmed user intent: 2D, Godot, web playable, mobile target, future Android APK, an original hunter in an original gothic world with whip combat, restrained jumping, gothic dark detailed horror, no visible pixels, and fully animated supported actions. Castlevania is a design reference for tone and mechanics only — do not substitute franchise characters, costumes, or world elements, and do not revive the earlier Mario/crossover scope.
 - The latest user requirement supersedes conflicting earlier brainstorming. Never silently turn an open question or assistant proposal into a confirmed requirement.
 - Record proposed changes, reasons, dependencies, and validation in the decision ledger. User confirmation is required to change confirmed product requirements; routine document refinement is within scope.
 - Use one authoritative definition for each shared number. Gameplay and asset contracts must agree about scale, pivots, attack timing, and coordinate spaces.

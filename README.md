@@ -1,6 +1,6 @@
 # Gothic Whip — scope and asset framework
 
-A planning repository for a **2D gothic horror platformer starring Simon Belmont in Castlevania’s world, with whip-led combat and restrained jumping**, made in Godot for mobile browser play, with Android APK support planned later.
+A planning repository for a **2D gothic horror platformer starring an original hunter in an original gothic world, with whip-led combat and restrained jumping**, made in Godot for mobile browser play, with Android APK support planned later. Castlevania is the design reference for tone and mechanics only.
 
 **Status: specification handoff, not an implemented game.** No engine project, generated art, or playable build is included. “Gothic Whip” is a working repository label, not an approved game title.
 

@@ -30,7 +30,7 @@ Severity key: **blocking-for-production** (must be resolved before building/ship
 **B1. Identity vs distribution rights — RESOLVED by user decision (2026-10-08).** *Was: blocking-for-production.*
 As handed off, D02 confirmed "Simon Belmont in Castlevania's world" and D12 forbade substituting an original hunter, while D15 confirmed publication to a new public repository with a public web build and a later Android APK. A named Konami character and world cannot be licensed by this project, so no public build could ever ship under D02/D12 — the contradiction was total and could only be resolved by the user.
 **Resolution (user, 2026-10-08):** "Switch to an original hunter (shippable)." The protagonist and world are now an **original hunter in an original gothic world**. Castlevania remains a design *reference* for tone and mechanics only — whip-led combat, restrained jump, dark gothic horror, no visible pixels (D03–D06 substance unchanged). [DECISIONS.md](DECISIONS.md) has been amended for D02/D12 accordingly.
-*Follow-up edits required (not done in this pass — each needs its own consistency check):*
+*Follow-up edits required (enumerated when this audit was written; **completed by the B1 wording pass, 2026-10-08** — see REVIEW_RECORD "B1 wording consistency"; each file received its own consistency check in that pass):*
 - `SPEC.md` §1 (two identity sentences) and §2 (signature moment naming Simon).
 - `README.md` line 3 ("starring Simon Belmont…").
 - `AGENTS.md` "Preserve confirmed user intent" bullet.
@@ -71,8 +71,8 @@ SPEC §5 defines checkpoint restart (health + encounter state restored) but the 
 **B10. Enemy inside the whip dead zone — gap, filled by P1.** *Note.*
 The whip's active region starts at x +40; no document states what resolves an enemy that closes inside 40 u. P1 rule (proposal): contact damage + knockback separates hunter and attacker, and the 1 s i-frames prevent an instant re-trigger, so the dead zone can never soft-lock a fight.
 
-**B11. Stale identity wording outside DECISIONS.md — follow-up consistency pass.** *Blocking-for-package (P2 start).*
-Separate from B1's resolution: `AGENTS.md`, `README.md`, `SPEC.md`, `docs/ART_DIRECTION.md`, `docs/ASSET_SPEC.md`, and both files under `prompts/` still instruct future contributors to preserve "Simon Belmont in Castlevania's world" (enumerated in B1). Until that pass is made, a contributor following AGENTS.md literally would contradict the amended ledger. The ledger (D02/D12 as amended 2026-10-08) is authoritative in the interim; [GAMEPLAY_RULES.md](GAMEPLAY_RULES.md) already uses "the hunter" throughout.
+**B11. Stale identity wording outside DECISIONS.md — RESOLVED by the B1 wording pass (2026-10-08).**
+Separate from B1's resolution: `AGENTS.md`, `README.md`, `SPEC.md`, `docs/ART_DIRECTION.md`, `docs/ASSET_SPEC.md`, and both files under `prompts/` previously instructed future contributors to preserve "Simon Belmont in Castlevania's world" (enumerated in B1). That pass is now made: a grep over the seven files finds "Simon" only in `prompts/NEXT_LLM.md`, describing the superseded interview-era identity. All seven files now present the original-hunter identity, with Castlevania as design reference for tone/mechanics only.
 
 **B12. Transfer size vs resident size — note, no contradiction.**
 TECHNICAL_CONSTRAINTS pairs a ≤30 MiB *transferred* cold-cache payload with the ≤128 MiB *resident* RGBA budget. These measure different things (compressed download vs decoded GPU memory) and do not conflict; P5 should keep both and state the decompression assumption explicitly. Recorded so a future reader doesn't "fix" either number.

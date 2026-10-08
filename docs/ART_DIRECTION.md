@@ -4,7 +4,7 @@
 
 ## Visual grammar
 
-Simon Belmont in Castlevania’s world: recognizable warrior silhouette, readable face/hair mass, leather/metal separation, coherent costume construction, and a whip that reads at gameplay scale. Exact costume/incarnation must be resolved; do not average incompatible versions across generations.
+An original hunter: recognizable warrior silhouette, readable face/hair mass, leather/metal separation, coherent original costume construction, and a whip that reads at gameplay scale. The hunter's costume is an original design fixed by the P2 style pack ([ART_BIBLE.md](ART_BIBLE.md)); do not derive it from any franchise character or average incompatible references across generations.
 
 World: ruined masonry, pointed arches, funerary carvings, dead vegetation, corroded iron, mist, and evidence of abandonment. Use large readable structures before microdetail. Dense texture is allowed in quiet areas; traversable edges and enemy silhouettes get clean separation.
 
@@ -28,4 +28,4 @@ Select one coherent pack as the canonical reference and assign a style-lock revi
 
 Photorealistic backgrounds mixed accidentally with anime sprites; chibi proportions; decorative detail that resembles a hazard; frame-to-frame changes in face, costume, limb length, or weapon; arbitrary bloom; visual noise along collision edges; baked UI/text; isometric perspective; fog hiding enemies; bright whimsical scenery inconsistent with D04.
 
-Castlevania is the primary reference. Do not introduce recognizable Mario content or an expanded crossover roster without a later scope change.
+Castlevania is the primary design reference for tone and mechanics only. Do not reproduce franchise characters, costumes, names, or world elements, and do not introduce recognizable Mario content or an expanded crossover roster without a later scope change.
