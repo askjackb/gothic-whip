@@ -102,3 +102,22 @@ No candidate art exists; identity, palette, and readability are unverified until
 ## Open after this pass
 
 - P3 asset briefs/texture budget, P5 technical spec, P6 readiness review, D09.
+
+---
+
+# Follow-up review — P3 asset production briefs + texture budget
+
+Date: 2026-10-08. Scope: documents only.
+
+## Completed checks
+
+- `docs/ASSET_BRIEFS.md` written (Package P3): complete slice inventory with per-asset ID, canvas, pivot, density, frame counts and durations (each clip's durations sum to its stated total; combat clips reproduce SPEC §5's [75,75,50,50,62.5,62.5,62.5,62.5] = 500 ms, active [150, 250) ms), sockets/events, collision references, dependencies, and rejection rules — hero 113 body + 24 whip frames (ANIMATION_SPEC counts), pursuer 46, swooper 36, ranged 31 + projectile 3, boss 70 (enemy/boss counts proposed here with clip totals tied to GAMEPLAY_RULES tell/recovery timings), 14 terrain tiles, 4 backgrounds, 4 stage props, 18 UI assets, 6 VFX clips, audio deferred as an ID inventory. Manifest field definitions are stated against `templates/asset-manifest.example.json`.
+- `docs/TEXTURE_BUDGET.md` reconciles AUDIT B2 with full arithmetic: slice total 278.97 MiB untrimmed → 102.68 MiB trimmed under stated per-class trim factors at 85% packing efficiency = 8 atlas pages all-resident (170.7 MiB mipmapped; 128.0 MiB without mips) — **the 128 MiB budget does not hold as written**. Peak-concurrency readings: boss-arena peak 7 pages (112.0 MiB without mips), mixed-beat peak 6 pages (96.0 MiB). The proposed smallest contract change (no mip chains on slice art + peak-concurrency residency ≤7 pages with the boss-gate swap) is recorded as PROPOSED for P6/user ratification; no ASSET_SPEC or TECHNICAL_CONSTRAINTS number was edited. AUDIT B2 status updated accordingly: reconciled on paper, unresolved in fact until real packed art is measured.
+
+## Explicitly not tested
+
+No art exists to trim, pack, or measure; every trim factor and the 0.85 packing efficiency are planning assumptions. VALIDATION V2/V8 remain PENDING.
+
+## Open after this pass
+
+- P5 technical spec, P6 readiness review (including ratification of the TEXTURE_BUDGET amendment), D09.
