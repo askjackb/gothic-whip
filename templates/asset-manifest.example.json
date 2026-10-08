@@ -1,0 +1,115 @@
+{
+  "example_only": true,
+  "status": "candidate",
+  "asset_id": "hero_attack_ground",
+  "revision": 1,
+  "brief": "templates/ASSET_BRIEF.md",
+  "style_lock": null,
+  "identity_reference": null,
+  "generation": {
+    "tool": null,
+    "model": null,
+    "seed": null,
+    "prompt_record": null,
+    "reference_records": []
+  },
+  "canvas_source_px": [
+    512,
+    512
+  ],
+  "pixels_per_game_unit": 2,
+  "pivot_source_px": [
+    256,
+    448
+  ],
+  "facing": "right",
+  "mirror_for_left": true,
+  "format": "RGBA PNG",
+  "color_space": "sRGB",
+  "alpha": "transparent",
+  "timeline": {
+    "loop": false,
+    "total_ms": 500,
+    "active_interval_ms": [
+      150,
+      250
+    ],
+    "interval_convention": "start inclusive, end exclusive",
+    "combat_contract": "SPEC.md section 5"
+  },
+  "frames": [
+    {
+      "index": 0,
+      "path": "art/candidates/hero_attack_ground__r01__f000.png",
+      "duration_ms": 75,
+      "hand_socket_game_units": null,
+      "sha256": null
+    },
+    {
+      "index": 1,
+      "path": "art/candidates/hero_attack_ground__r01__f001.png",
+      "duration_ms": 75,
+      "hand_socket_game_units": null,
+      "sha256": null
+    },
+    {
+      "index": 2,
+      "path": "art/candidates/hero_attack_ground__r01__f002.png",
+      "duration_ms": 50,
+      "hand_socket_game_units": null,
+      "sha256": null
+    },
+    {
+      "index": 3,
+      "path": "art/candidates/hero_attack_ground__r01__f003.png",
+      "duration_ms": 50,
+      "hand_socket_game_units": null,
+      "sha256": null
+    },
+    {
+      "index": 4,
+      "path": "art/candidates/hero_attack_ground__r01__f004.png",
+      "duration_ms": 62.5,
+      "hand_socket_game_units": null,
+      "sha256": null
+    },
+    {
+      "index": 5,
+      "path": "art/candidates/hero_attack_ground__r01__f005.png",
+      "duration_ms": 62.5,
+      "hand_socket_game_units": null,
+      "sha256": null
+    },
+    {
+      "index": 6,
+      "path": "art/candidates/hero_attack_ground__r01__f006.png",
+      "duration_ms": 62.5,
+      "hand_socket_game_units": null,
+      "sha256": null
+    },
+    {
+      "index": 7,
+      "path": "art/candidates/hero_attack_ground__r01__f007.png",
+      "duration_ms": 62.5,
+      "hand_socket_game_units": null,
+      "sha256": null
+    }
+  ],
+  "collision_reference": "SPEC.md section 5; docs/ASSET_SPEC.md section 2",
+  "synchronized_asset": "whip_attack_ground",
+  "provenance": {
+    "creator": null,
+    "input_sources": [],
+    "usage_basis": null
+  },
+  "review": {
+    "verdict": "NOT-TESTED",
+    "evidence": [],
+    "rejection_reasons": []
+  },
+  "notes": [
+    "Illustrative contract; listed images do not exist.",
+    "Null fields must be completed before production approval.",
+    "The whip layer has its own larger canvas and the same world-space origin."
+  ]
+}
