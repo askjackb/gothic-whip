@@ -188,3 +188,28 @@ Date: 2026-10-08. Scope: first implementation pass, authorized by the user's exp
 ## Open after this pass
 
 - Production gate 3 (style pack + hero/whip pipeline) awaits its own explicit opening; the [P1 proposal] combat/AI numbers and the STAGE_DESIGN at-limit steps + pre-checkpoint pit await greybox playtest evidence (V6/V7) — on a real device, not in this headless environment.
+
+---
+
+# Follow-up review — FULL PRODUCTION (art, animation, audio, final slice)
+
+Date: 2026-10-08. Scope: complete production pass, authorized by the user's directive of 2026-10-08: "go ahead finish the game in full quality without asking me any question! results are expected to be pushed to a new repo using your gh." This opens production gates 3–5 (style pack, animation, full art/audio). Engine and gameplay contracts unchanged from the greybox pass; every gameplay constant in the code is byte-identical to the greybox values.
+
+## Completed checks
+
+- **Style pack (gate 3)**: the five ART_BIBLE §8 calibration pieces were generated (painted 2D gothic illustration, palette-locked, upper-left light) and visually reviewed by the production agent: no pixel grid, no anime/chibi, no gore, no franchise likeness. Approved and registered as **`style_lock_r01`** in `docs/ART_BIBLE.md` §9 with sha256 hashes; full hashes in `game/art/manifest.json`. Background plates (distant/midground/foreground) produced alongside. Recorded drift risk: neutral's closed coat-skirt vs attack key's open coat + trousers; animation follows the attack key.
+- **Animation (gate 4)**: full ANIMATION_SPEC inventory produced — **64 clips, 357 frames, spec counts met for every clip** (per-clip table in `game/art/manifest.json`). Two documented derivations: `hero_crouch_exit` = crouch_enter reversed, `hero_get_up` = knockdown reversed. Green-screen sheets chroma-keyed programmatically (alpha from green dominance + despill; per-sheet alpha coverage logged — e.g. hero_idle 0.335, whip 0.125); one uniform anchor scale per actor (no per-frame drift); contract canvases/pivots; whip grip-aligned (extended frame tip reach 181 u ≥ 168 u hitbox). Frames trimmed and MaxRects-packed into atlases: **7 pages / 112.0 MiB without mips — exactly the ratified R1 model** (`atlas_report.json`). Texture imports: mipmaps off, lossless, linear, fix_alpha_border.
+- **Audio**: 11 original synthesized WAVs (numpy, seeded): whip swing/hit, jump, land, hurt, death, enemy tell, checkpoint chime, boss tell, 32 s ambience loop + 32 s stage music loop (A-minor drones/bells, loop-crossfaded). Master/Music/SFX bus layout; 10-player SFX pool. No franchise audio.
+- **Integration**: AnimatedSprite2D everywhere (state machines authoritative; sprites never auto-play; whip frame-locked to `attack_t`; per-frame atlas trim offsets restored at runtime); parallax depth stack (sky/distant 0.3/midground 0.55/foreground 1.15); 14-tile terrain kit; props (effigy, checkpoint off/on, boss gates, exit); VFX (whip impact, enemy defeat, checkpoint, hazard telegraph/eruption, damage indicator); HUD art pips. Greybox `_draw()` visuals fully removed. Gameplay/collision numbers untouched.
+- **Tests**: extended headless smoke test (`game/tests/smoke_test.gd`) — all 19 original greybox checks plus production assertions (SpriteFrames resources load, all required clips present with frames, live hunter sprite plays hero clips with non-null frame textures, whip sprite visible and playing whip clips during attack, audio streams load): **PASS, zero failures**. 
+- **Rendering verification (Xvfb, real GPU pipeline)**: screenshots reviewed visually — painted illustration throughout, hunter distinguishable from backgrounds, no pixel grid, whip extension + impact read correctly, pursuer/boss/checkpoint/gates/HUD all render (`game/tests/visual_check.gd`).
+- **Web export + browser drive**: single-threaded Web export (71 MB build dir, 33 MB pck; raw source sheets excluded via export filter), driven in Chromium via route interception: game boots, stage loads, movement + whip + boss fight (THE WARDEN WAKES, gates, boss bar) all exercised, **zero console errors**.
+
+## Explicitly not tested
+
+- **iPhone 17 physical device: NOT-TESTED.** No device was available. Touch feel, iOS Safari quirks, real performance (60 fps / p95 frame time), payload/load-time targets — VALIDATION gates V2–V9 remain PENDING. Headless/Chromium evidence is not device evidence.
+- Animation quality is generation-grade painted art, not hand-tuned frame-by-frame animation; inter-clip character drift exists (documented in the manifest: coat construction follows the attack key; `hero_turn` final frame faces left pre-flip; boss generated facing left).
+
+## Open after this pass
+
+- V2–V9 device validation when hardware is available. R1 headroom is 16 MiB; if future art trims worse, the budget must be revisited (sensitivity case in TEXTURE_BUDGET).

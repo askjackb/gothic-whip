@@ -124,7 +124,63 @@ func _on_physics_frame() -> void:
 				_check(h.get_state() == "idle", "hunter idles after restart (state=%s)" % h.get_state())
 				_check(h.global_position.distance_to(Vector2(160, 512)) < 2.0,
 					"hunter back at stage-start respawn %s" % str(h.global_position))
+				_phase = 7
+		7: # production-art assertions (frames exist; live sprite follows state)
+			_check_art_resources()
+			h.global_position = Vector2(300, 512)
+			h.velocity = Vector2.ZERO
+			_input().debug_set_held("move_right", true)
+			_phase = 8
+		8:
+			if _frame >= _whip_frame + 300:
+				_input().debug_set_held("move_right", false)
+				var spr: AnimatedSprite2D = h.get("_body")
+				_check(spr != null and spr.sprite_frames != null, "hunter body sprite has SpriteFrames")
+				if spr != null:
+					_check(String(spr.animation).begins_with("hero_"),
+						"hunter sprite playing a hero clip (anim=%s)" % spr.animation)
+					var tex: Texture2D = spr.sprite_frames.get_frame_texture(spr.animation, spr.frame)
+					_check(tex != null, "hunter sprite frame texture is non-null")
+				_input().debug_press("whip")
+				_phase = 9
+		9:
+			if h.get_state() in ["attack_ground", "attack_air", "attack_crouch"]:
+				var wspr: AnimatedSprite2D = h.get("_whip_sprite")
+				_check(wspr != null and wspr.visible, "whip sprite visible during attack")
+				if wspr != null:
+					_check(String(wspr.animation).begins_with("whip_attack"),
+						"whip sprite playing a whip clip (anim=%s)" % wspr.animation)
 				_finish()
+			elif _frame > _whip_frame + 420:
+				_fail("hunter never entered an attack state for art check")
+				_finish()
+
+
+func _check_art_resources() -> void:
+	var required := {
+		"hero_frames.tres": ["hero_idle", "hero_walk", "hero_attack_ground", "hero_attack_air",
+			"hero_attack_crouch", "hero_crouch_idle", "hero_jump_rise", "hero_fall",
+			"hero_knockdown", "hero_get_up", "hero_death"],
+		"whip_frames.tres": ["whip_attack_ground", "whip_attack_air", "whip_attack_crouch"],
+		"enemy_frames.tres": ["pursuer_patrol_walk", "pursuer_alert", "pursuer_lunge",
+			"swooper_cruise", "swooper_dive", "ranged_idle", "ranged_aim", "projectile_grave_shot"],
+		"boss_frames.tres": ["boss_idle", "boss_walk", "boss_strike_windup",
+			"boss_hazard_windup", "boss_death"],
+		"fx_frames.tres": ["vfx_whip_impact", "vfx_enemy_defeat", "vfx_checkpoint_activate",
+			"vfx_hazard_telegraph", "vfx_hazard_eruption", "vfx_damage_indicator"],
+	}
+	for res_name in required:
+		var frames: SpriteFrames = load("res://art/spriteframes/" + res_name)
+		_check(frames != null, "%s loads" % res_name)
+		if frames == null:
+			continue
+		for anim in required[res_name]:
+			_check(frames.has_animation(anim) and frames.get_frame_count(anim) >= 2,
+				"%s has clip %s (%d frames)" % [res_name, anim,
+					frames.get_frame_count(anim) if frames.has_animation(anim) else 0])
+	for wav in ["sfx_whip_swing", "sfx_whip_hit", "sfx_jump", "sfx_hurt",
+			"sfx_death", "sfx_checkpoint", "sfx_boss_tell", "mus_stage_loop"]:
+		_check(load("res://art/audio/%s.wav" % wav) != null, "audio %s loads" % wav)
 
 
 func _finish() -> void:

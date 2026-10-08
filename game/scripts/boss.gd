@@ -5,7 +5,7 @@ class_name Boss
 ## HEAVY hit -> knockdown; 1100 ms recovery. Ground hazard: 1200 ms marked
 ## 160 u zone at the hunter's position, 400 ms eruption (<=46 u tall),
 ## ordinary knockback hit. Dormant until Main starts the fight.
-## GREYBOX visuals only.
+## Visuals: production frames (style_lock_r01) via Anim; hazard VFX by Main.
 
 const GRAVITY := 1600.0
 const ADVANCE_SPEED := 70.0
@@ -33,6 +33,20 @@ var zone_x := 0.0
 var last_hit_id := -1
 var home_pos := Vector2.ZERO
 
+var _visual: Node2D
+var _body: AnimatedSprite2D
+var _vis_clip := ""
+var _vis_t := 0.0
+
+const STATE_TO_CLIP := {
+	"dormant": "boss_idle", "idle": "boss_idle", "advance": "boss_walk",
+	"turn": "boss_turn", "strike_windup": "boss_strike_windup",
+	"strike": "boss_strike_execute", "strike_recover": "boss_strike_recover",
+	"hazard_cast": "boss_hazard_windup", "hazard_erupt": "boss_hazard_execute",
+	"hazard_recover": "boss_hazard_recover", "hurt": "boss_hurt",
+	"dead": "boss_death",
+}
+
 
 func _ready() -> void:
 	collision_layer = 4
@@ -45,6 +59,10 @@ func _ready() -> void:
 	shape.position = Vector2(0, -64)
 	add_child(shape)
 	home_pos = global_position
+	_visual = Node2D.new()
+	add_child(_visual)
+	_body = Anim.make_sprite(load("res://art/spriteframes/boss_frames.tres"), "boss_idle")
+	_visual.add_child(_body)
 
 
 func start_fight() -> void:
@@ -83,7 +101,7 @@ func _physics_process(delta: float) -> void:
 		if not is_on_floor():
 			velocity.y += GRAVITY * delta
 		move_and_slide()
-		queue_redraw()
+		_update_visuals(delta)
 		return
 
 	match state:
@@ -152,7 +170,7 @@ func _physics_process(delta: float) -> void:
 	elif velocity.y > 0.0:
 		velocity.y = 0.0
 	move_and_slide()
-	queue_redraw()
+	_update_visuals(delta)
 
 
 func _do_strike() -> void:
@@ -164,6 +182,14 @@ func _do_strike() -> void:
 func _set_state(s: String) -> void:
 	state = s
 	state_t = 0.0
+	if game != null:
+		if (s == "strike_windup" or s == "hazard_cast") and game.has_method("play_sfx"):
+			game.play_sfx("sfx_boss_tell")
+		if game.has_method("spawn_vfx"):
+			if s == "hazard_cast":
+				game.spawn_vfx("vfx_hazard_telegraph", Vector2(zone_x, global_position.y - 8.0))
+			elif s == "hazard_erupt":
+				game.spawn_vfx("vfx_hazard_eruption", Vector2(zone_x, global_position.y - 8.0))
 
 
 # ------------------------------------------------------------- interfaces
@@ -193,6 +219,8 @@ func apply_whip_hit(attack_id_: int, _from_x: float) -> void:
 	hp -= 1
 	if hp <= 0:
 		_set_state("dead")
+		if game != null and game.has_method("spawn_vfx"):
+			game.spawn_vfx("vfx_enemy_defeat", global_position + Vector2(0, -70))
 		if game != null and game.has_method("on_boss_defeated"):
 			game.on_boss_defeated()
 	elif state != "strike":
@@ -214,36 +242,15 @@ func reset_actor() -> void:
 
 # ---------------------------------------------------------------- visuals
 
-func _draw() -> void:
-	draw_set_transform(Vector2.ZERO, 0.0, Vector2(facing, 1))
-	var body := Color(0.23, 0.18, 0.25)
-	var accent := Color(0.43, 0.14, 0.2)
-	var bone := Color(0.85, 0.78, 0.66)
-	if state == "dead":
-		draw_rect(Rect2(-52, -16, 104, 16), body.darkened(0.4))
-		draw_circle(Vector2(46, -10), 11, body.darkened(0.3))
+func _update_visuals(delta: float) -> void:
+	if _body == null:
 		return
-	# hazard zone marker (world-anchored, drawn in local space)
-	if state == "hazard_cast" or state == "hazard_erupt":
-		var zx := zone_x - global_position.x - 80.0
-		var a := 0.55 if state == "hazard_erupt" else 0.28
-		var h := 46.0 if state == "hazard_erupt" else 8.0
-		draw_rect(Rect2(zx, -h, 160, h), Color(0.9, 0.25, 0.2, a))
-	draw_rect(Rect2(-30, -52, 16, 52), body.darkened(0.2)) # legs
-	draw_rect(Rect2(14, -52, 16, 52), body.darkened(0.2))
-	draw_rect(Rect2(-38, -118, 76, 70), body) # torso
-	draw_rect(Rect2(-38, -118, 76, 12), accent) # chest band
-	draw_colored_polygon(PackedVector2Array([Vector2(-30, -118), Vector2(-44, -134), Vector2(-24, -126)]), bone) # horn L
-	draw_colored_polygon(PackedVector2Array([Vector2(30, -118), Vector2(44, -134), Vector2(24, -126)]), bone) # horn R
-	draw_circle(Vector2(4, -106), 11, body.lightened(0.15)) # head
-	if state == "strike_windup":
-		draw_rect(Rect2(24, -150, 14, 52), body) # raised arm (tell)
-		draw_rect(Rect2(-4, -162, 5, 18), Color(1.0, 0.8, 0.3))
-		draw_circle(Vector2(-1.5, -138), 3.5, Color(1.0, 0.8, 0.3))
-	elif state == "strike":
-		draw_rect(Rect2(30, -104, 60, 16), body) # swung arm
-		draw_rect(Rect2(38, -140, 100, 140), Color(0.9, 0.3, 0.25, 0.18)) # strike flash
-	elif state == "hazard_cast":
-		draw_rect(Rect2(20, -140, 12, 44), body) # raised casting arm
+	_visual.scale.x = facing
+	var clip: String = STATE_TO_CLIP.get(state, "boss_idle")
+	if clip != _vis_clip:
+		_vis_clip = clip
+		_vis_t = 0.0
 	else:
-		draw_rect(Rect2(26, -100, 13, 48), body) # resting arm
+		_vis_t += delta
+	# dormant: hold the first idle frame (a still warden, GAMEPLAY_RULES S8.4)
+	Anim.apply(_body, clip, 0.0 if state == "dormant" else _vis_t)

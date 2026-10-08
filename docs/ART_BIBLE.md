@@ -185,13 +185,13 @@ On pack approval, register here (empty until then): style-lock revision ID; the 
 
 | Field | Value |
 |---|---|
-| Style-lock revision | — (pending pack approval) |
-| Approved references | — |
-| Reviewer / date | — |
-| Evidence | — (VALIDATION V1 PENDING) |
+| Style-lock revision | `style_lock_r01` |
+| Approved references | `game/art/source/style_hero_neutral.png` (sha256 c55290a6…e36ec7f), `game/art/source/style_hero_attack_key.png` (48bda238…1f31d5), `game/art/source/style_enemy_pursuer.png` (b2bcd942…540606), `game/art/source/style_terrain_patch_3x3.png` (e75599ec…f2), `game/art/source/style_env_mockup.png` (05620bfc…4640); background plates `bg_distant_silhouette.png`, `bg_midground_arch.png`, `bg_foreground_frame.png` (hashes in `game/art/manifest.json`). Full hashes recorded in the manifest; abbreviated here. |
+| Reviewer / date | Production agent (Muse), 2026-10-08, under the user's full-production directive of 2026-10-08 ("finish the game in full quality without asking me any question"). |
+| Evidence | All five calibration pieces were generated and visually reviewed: painted matte brushwork, no pixel grid, no anime/chibi, no gore, no franchise likeness; hero carries the §3 thorn-knot vest, tied-back hair, coiled braided whip; attack key has the empty extended hand; pursuer reads gaunt/wrong (not an animal); terrain patch is cold-slate masonry with worn top edges; env mockup proves the §2 depth stack with a single Ember accent. Known drift risk: the neutral's closed coat-skirt vs the attack key's open coat + trousers — animation prompts follow the attack-key construction (open coat tails over trousers). VALIDATION V1 record updated in REVIEW_RECORD (full-production entry). |
 
-## 10. What remains open
+## 10. Production status (2026-10-08)
 
-- The pack itself: no candidate art exists; V1 (art calibration) is PENDING and gates all production art.
-- Final enemy/boss sizes, canvases, and frame counts are P3's; background panel dimensions are settled in P3's budget reconciliation ([TEXTURE_BUDGET.md](TEXTURE_BUDGET.md)).
-- Everything visual here is PROPOSED except the confirmed constraints named in the header; user confirmation of the *designs* happens at pack review, not before.
+- The pack was approved as `style_lock_r01` (§9) and the FULL ANIMATION_SPEC inventory was produced from it: 64 clips / 357 frames (spec-complete; `hero_crouch_exit` and `hero_get_up` are documented reverse derivations). Per-clip provenance, hashes, and achieved counts live in `game/art/manifest.json`.
+- Texture residency measured from the built atlases: 7 pages / 112.0 MiB, mipmaps off (ratified R1 model) — recorded in `game/art/atlases/atlas_report.json`.
+- Remaining open items: validation V2–V9 (real-device frame times on iPhone 17, touch feel, perf) are still PENDING — no physical device was available during production. The R1 headroom (16 MiB) and the trims-sensitivity warning still stand.

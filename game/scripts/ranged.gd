@@ -4,7 +4,7 @@ class_name RangedThreat
 ## Rooted: 900 ms tracked aim with visible charge cue, one projectile,
 ## 700 ms recovery. Projectile hits are non-displacing (hurt_recoil);
 ## body contact is displacing. Stationary is not static: idle sways, aim
-## tracks, hurt interrupts aim. GREYBOX visuals only.
+## tracks, hurt interrupts aim. Visuals: production frames via Anim.
 
 const AIM_TIME := 0.900
 const RECOVER_TIME := 0.700
@@ -23,9 +23,18 @@ var facing := -1
 var last_hit_id := -1
 var home_pos := Vector2.ZERO
 
+var _visual: Node2D
+var _body: AnimatedSprite2D
+var _vis_clip := ""
+var _vis_t := 0.0
+
 
 func _ready() -> void:
 	home_pos = global_position
+	_visual = Node2D.new()
+	add_child(_visual)
+	_body = Anim.make_sprite(load("res://art/spriteframes/enemy_frames.tres"), "ranged_idle")
+	_visual.add_child(_body)
 
 
 func _in_range() -> bool:
@@ -63,7 +72,7 @@ func _physics_process(delta: float) -> void:
 			if state_t >= HURT_TIME:
 				aim_t = 0.0
 				_set_state("aim" if _in_range() else "idle")
-	queue_redraw()
+	_update_visuals(delta)
 
 
 func _fire() -> void:
@@ -76,6 +85,8 @@ func _fire() -> void:
 func _set_state(s: String) -> void:
 	state = s
 	state_t = 0.0
+	if s == "aim" and game != null and game.has_method("play_sfx"):
+		game.play_sfx("sfx_enemy_tell", 0.8)
 
 
 # ------------------------------------------------------------- interfaces
@@ -105,6 +116,8 @@ func apply_whip_hit(attack_id_: int, _from_x: float) -> void:
 	hp -= 1
 	if hp <= 0:
 		_set_state("dead")
+		if game != null and game.has_method("spawn_vfx"):
+			game.spawn_vfx("vfx_enemy_defeat", global_position + Vector2(0, -40))
 	else:
 		aim_t = 0.0
 		_set_state("hurt") # interrupts aim (GAMEPLAY_RULES S5)
@@ -123,19 +136,30 @@ func reset_actor() -> void:
 
 # ---------------------------------------------------------------- visuals
 
-func _draw() -> void:
-	draw_set_transform(Vector2.ZERO, 0.0, Vector2(facing, 1))
-	var teal := Color(0.25, 0.42, 0.37)
-	var bone := Color(0.85, 0.78, 0.66)
-	if state == "dead":
-		draw_rect(Rect2(-20, -10, 40, 10), teal.darkened(0.4))
-		draw_circle(Vector2(10, -6), 9, teal.darkened(0.4))
+func _update_visuals(delta: float) -> void:
+	if _body == null:
 		return
-	draw_rect(Rect2(-20, -14, 40, 14), Color(0.3, 0.3, 0.33)) # rooted base
-	draw_rect(Rect2(-7, -50, 14, 36), teal) # pillar
-	draw_circle(Vector2(0, -58), 12, teal) # turret head
-	draw_rect(Rect2(6, -62, 26, 7), teal.darkened(0.15)) # barrel
-	draw_circle(Vector2(2, -58), 4, bone) # eye lens
-	if state == "aim":
-		var charge := 3.0 + 8.0 * clampf(aim_t / AIM_TIME, 0.0, 1.0)
-		draw_circle(Vector2(36, -58), charge, Color(0.95, 0.55, 0.25, 0.8))
+	_visual.scale.x = facing
+	# recover opens with the 200 ms fire clip (ASSET_BRIEFS S6), then recover
+	var clip := "ranged_idle"
+	var t := state_t
+	match state:
+		"idle":
+			clip = "ranged_idle"
+		"aim":
+			clip = "ranged_aim"
+			t = aim_t
+		"recover":
+			if state_t < 0.2:
+				clip = "ranged_fire"
+			else:
+				clip = "ranged_recover"
+				t = state_t - 0.2
+		"hurt":
+			clip = "ranged_hurt"
+		"dead":
+			clip = "ranged_death"
+	if clip != _vis_clip:
+		_vis_clip = clip
+		_vis_t = t
+	Anim.apply(_body, clip, t)

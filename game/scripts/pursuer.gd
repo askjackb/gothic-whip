@@ -3,7 +3,7 @@ class_name Pursuer
 ## Ground pursuer - basic, 1 HP (GAMEPLAY_RULES S8.1, all values [P1 proposal]).
 ## Patrol 60 u/s; alert 300 ms; approach 100 u/s; wind-up 350 ms inside
 ## 120 u; lunge 260 u/s; recovery 600 ms. Contact is a displacing hit.
-## GREYBOX visuals only.
+## Visuals: production frames (style_lock_r01) via Anim; state machine rules.
 
 const GRAVITY := 1600.0
 const PATROL_SPEED := 60.0
@@ -27,6 +27,18 @@ var lunge_dir := -1
 var last_hit_id := -1
 var home_pos := Vector2.ZERO
 
+var _visual: Node2D
+var _body: AnimatedSprite2D
+var _vis_clip := ""
+var _vis_t := 0.0
+
+const STATE_TO_CLIP := {
+	"patrol": "pursuer_patrol_walk", "alert": "pursuer_alert",
+	"chase": "pursuer_approach_walk", "windup": "pursuer_lunge_windup",
+	"lunge": "pursuer_lunge", "recover": "pursuer_recovery",
+	"hurt": "pursuer_hurt", "dead": "pursuer_death",
+}
+
 
 func _ready() -> void:
 	collision_layer = 4
@@ -39,6 +51,10 @@ func _ready() -> void:
 	shape.position = Vector2(0, -28)
 	add_child(shape)
 	home_pos = global_position
+	_visual = Node2D.new()
+	add_child(_visual)
+	_body = Anim.make_sprite(load("res://art/spriteframes/enemy_frames.tres"), "pursuer_patrol_walk")
+	_visual.add_child(_body)
 
 
 func _same_level() -> bool:
@@ -60,7 +76,7 @@ func _physics_process(delta: float) -> void:
 		if not is_on_floor():
 			velocity.y += GRAVITY * delta
 		move_and_slide()
-		queue_redraw()
+		_update_visuals(delta)
 		return
 
 	match state:
@@ -107,12 +123,14 @@ func _physics_process(delta: float) -> void:
 	elif velocity.y > 0.0:
 		velocity.y = 0.0
 	move_and_slide()
-	queue_redraw()
+	_update_visuals(delta)
 
 
 func _set_state(s: String) -> void:
 	state = s
 	state_t = 0.0
+	if s == "alert" and game != null and game.has_method("play_sfx"):
+		game.play_sfx("sfx_enemy_tell")
 
 
 # ------------------------------------------------------------- interfaces
@@ -142,6 +160,8 @@ func apply_whip_hit(attack_id_: int, _from_x: float) -> void:
 	hp -= 1
 	if hp <= 0:
 		_set_state("dead")
+		if game != null and game.has_method("spawn_vfx"):
+			game.spawn_vfx("vfx_enemy_defeat", global_position + Vector2(0, -28))
 	else:
 		_set_state("hurt") # interrupts anticipation (GAMEPLAY_RULES S5)
 
@@ -159,25 +179,14 @@ func reset_actor() -> void:
 
 # ---------------------------------------------------------------- visuals
 
-func _draw() -> void:
-	draw_set_transform(Vector2.ZERO, 0.0, Vector2(facing, 1))
-	var body := Color(0.54, 0.23, 0.18)
-	var belly := Color(0.79, 0.44, 0.29)
-	if state == "dead":
-		draw_rect(Rect2(-28, -12, 56, 12), body.darkened(0.4))
+func _update_visuals(delta: float) -> void:
+	if _body == null:
 		return
-	var crouch := 5.0 if state in ["windup", "alert"] else 0.0
-	draw_rect(Rect2(-26, -14 + crouch, 7, 14), body.darkened(0.25))
-	draw_rect(Rect2(-9, -14 + crouch, 7, 14), body.darkened(0.25))
-	draw_rect(Rect2(6, -14 + crouch, 7, 14), body.darkened(0.25))
-	draw_rect(Rect2(20, -14 + crouch, 7, 14), body.darkened(0.25))
-	draw_rect(Rect2(-28, -46 + crouch, 56, 32), body)
-	draw_rect(Rect2(-20, -30 + crouch, 40, 14), belly)
-	draw_rect(Rect2(18, -50 + crouch, 22, 24), body) # head
-	draw_rect(Rect2(34, -36 + crouch, 10, 6), belly) # snout
-	draw_colored_polygon(PackedVector2Array([Vector2(-14, -46 + crouch), Vector2(-8, -58 + crouch), Vector2(-2, -46 + crouch)]), belly)
-	draw_colored_polygon(PackedVector2Array([Vector2(0, -46 + crouch), Vector2(6, -58 + crouch), Vector2(12, -46 + crouch)]), belly)
-	if state in ["alert", "windup"]:
-		# geometric telegraph: readable tell, never a static substitute
-		draw_rect(Rect2(-2, -86 + crouch, 5, 18), Color(1.0, 0.8, 0.3))
-		draw_circle(Vector2(0.5, -62 + crouch), 3.5, Color(1.0, 0.8, 0.3))
+	_visual.scale.x = facing
+	var clip: String = STATE_TO_CLIP.get(state, "pursuer_patrol_walk")
+	if clip != _vis_clip:
+		_vis_clip = clip
+		_vis_t = 0.0
+	else:
+		_vis_t += delta
+	Anim.apply(_body, clip, _vis_t)

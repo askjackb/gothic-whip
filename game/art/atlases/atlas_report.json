@@ -1,0 +1,13 @@
+{
+ "pages": 7,
+ "page_files": [
+  "atlas_hero_0.png",
+  "atlas_hero_1.png",
+  "atlas_boss_0.png",
+  "atlas_boss_1.png",
+  "atlas_boss_2.png",
+  "atlas_enemies_0.png",
+  "atlas_enemies_1.png"
+ ],
+ "resident_mib_no_mips": 112.0
+}

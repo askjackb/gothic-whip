@@ -1,0 +1,1423 @@
+{
+ "style_lock": "style_lock_r01",
+ "approved_references": {
+  "style_hero_neutral": {
+   "path": "game/art/source/style_hero_neutral.png",
+   "sha256": "c55290a6659b06b3b3d7b3664390516650bf533d90ce6d4bd0c41b8d1e36ec7f"
+  },
+  "style_hero_attack_key": {
+   "path": "game/art/source/style_hero_attack_key.png",
+   "sha256": "48bda238823a340b7cb632f665450d4fe01f2adc194a71519d34e0e4cb1f31d5"
+  },
+  "style_enemy_pursuer": {
+   "path": "game/art/source/style_enemy_pursuer.png",
+   "sha256": "b2bcd942ec1e903b0c957bee018f6991a659de6c3ece49cb36b3e6b2b5540606"
+  },
+  "style_terrain_patch_3x3": {
+   "path": "game/art/source/style_terrain_patch_3x3.png",
+   "sha256": "e75599ecc4160d2903c0ca7bf661d109d18d564b7d7a58135abe14283c9374f2"
+  },
+  "style_env_mockup": {
+   "path": "game/art/source/style_env_mockup.png",
+   "sha256": "05620bfc6194f61be02c4ba2030188a64b403026b554ec85833e65364fe54640"
+  },
+  "bg_distant_silhouette": {
+   "path": "game/art/source/bg_distant_silhouette.png",
+   "sha256": "af580a854afd0c66330078302e06a79ff9947b8e9c95ac429f13dbced4d3f6de"
+  },
+  "bg_midground_arch": {
+   "path": "game/art/source/bg_midground_arch.png",
+   "sha256": "3a099938c56c2630af68156a485875149837417e58c2e31b54d1c927d577a225"
+  },
+  "bg_foreground_frame": {
+   "path": "game/art/source/bg_foreground_frame.png",
+   "sha256": "6803225947eef05b4c4055715cfbfd812f3ec272d70b6232cc0aae195a71584c"
+  }
+ },
+ "clips": {
+  "hero_idle": {
+   "actor": "hero",
+   "spec_frames": 8,
+   "achieved_frames": 8,
+   "loop": true,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "durations_ms": [
+    125,
+    125,
+    125,
+    125,
+    125,
+    125,
+    125,
+    125
+   ]
+  },
+  "hero_walk": {
+   "actor": "hero",
+   "spec_frames": 10,
+   "achieved_frames": 10,
+   "loop": true,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "durations_ms": [
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80
+   ]
+  },
+  "hero_start_move": {
+   "actor": "hero",
+   "spec_frames": 3,
+   "achieved_frames": 3,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "durations_ms": [
+    50,
+    50,
+    50
+   ]
+  },
+  "hero_stop_move": {
+   "actor": "hero",
+   "spec_frames": 3,
+   "achieved_frames": 3,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "durations_ms": [
+    50,
+    50,
+    50
+   ]
+  },
+  "hero_turn": {
+   "actor": "hero",
+   "spec_frames": 3,
+   "achieved_frames": 3,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "durations_ms": [
+    50,
+    50,
+    50
+   ]
+  },
+  "hero_crouch_enter": {
+   "actor": "hero",
+   "spec_frames": 4,
+   "achieved_frames": 4,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "durations_ms": [
+    50,
+    50,
+    50,
+    50
+   ]
+  },
+  "hero_crouch_idle": {
+   "actor": "hero",
+   "spec_frames": 6,
+   "achieved_frames": 6,
+   "loop": true,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "durations_ms": [
+    150,
+    150,
+    150,
+    150,
+    150,
+    150
+   ]
+  },
+  "hero_jump_takeoff": {
+   "actor": "hero",
+   "spec_frames": 3,
+   "achieved_frames": 3,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "durations_ms": [
+    40,
+    40,
+    40
+   ]
+  },
+  "hero_jump_rise": {
+   "actor": "hero",
+   "spec_frames": 4,
+   "achieved_frames": 4,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "durations_ms": [
+    60,
+    60,
+    60,
+    60
+   ]
+  },
+  "hero_jump_apex": {
+   "actor": "hero",
+   "spec_frames": 3,
+   "achieved_frames": 3,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "durations_ms": [
+    50,
+    50,
+    50
+   ]
+  },
+  "hero_fall": {
+   "actor": "hero",
+   "spec_frames": 4,
+   "achieved_frames": 4,
+   "loop": true,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "durations_ms": [
+    100,
+    100,
+    100,
+    100
+   ]
+  },
+  "hero_land": {
+   "actor": "hero",
+   "spec_frames": 4,
+   "achieved_frames": 4,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "durations_ms": [
+    40,
+    40,
+    40,
+    40
+   ]
+  },
+  "hero_attack_ground": {
+   "actor": "hero",
+   "spec_frames": 8,
+   "achieved_frames": 8,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "durations_ms": [
+    75,
+    75,
+    50,
+    50,
+    62.5,
+    62.5,
+    62.5,
+    62.5
+   ]
+  },
+  "hero_attack_air": {
+   "actor": "hero",
+   "spec_frames": 8,
+   "achieved_frames": 8,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "durations_ms": [
+    75,
+    75,
+    50,
+    50,
+    62.5,
+    62.5,
+    62.5,
+    62.5
+   ]
+  },
+  "hero_attack_crouch": {
+   "actor": "hero",
+   "spec_frames": 8,
+   "achieved_frames": 8,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "durations_ms": [
+    75,
+    75,
+    50,
+    50,
+    62.5,
+    62.5,
+    62.5,
+    62.5
+   ]
+  },
+  "hero_hurt_recoil": {
+   "actor": "hero",
+   "spec_frames": 4,
+   "achieved_frames": 4,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "durations_ms": [
+    50,
+    50,
+    50,
+    50
+   ]
+  },
+  "hero_knockback": {
+   "actor": "hero",
+   "spec_frames": 4,
+   "achieved_frames": 4,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "durations_ms": [
+    75,
+    75,
+    75,
+    75
+   ]
+  },
+  "hero_knockdown": {
+   "actor": "hero",
+   "spec_frames": 6,
+   "achieved_frames": 6,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "durations_ms": [
+    60,
+    60,
+    60,
+    60,
+    60,
+    60
+   ]
+  },
+  "hero_death": {
+   "actor": "hero",
+   "spec_frames": 10,
+   "achieved_frames": 10,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "durations_ms": [
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80
+   ]
+  },
+  "whip_attack_ground": {
+   "actor": "whip",
+   "spec_frames": 8,
+   "achieved_frames": 8,
+   "loop": false,
+   "canvas": [
+    768,
+    512
+   ],
+   "pivot": [
+    276,
+    308
+   ],
+   "durations_ms": [
+    75,
+    75,
+    50,
+    50,
+    62.5,
+    62.5,
+    62.5,
+    62.5
+   ]
+  },
+  "whip_attack_air": {
+   "actor": "whip",
+   "spec_frames": 8,
+   "achieved_frames": 8,
+   "loop": false,
+   "canvas": [
+    768,
+    512
+   ],
+   "pivot": [
+    276,
+    308
+   ],
+   "durations_ms": [
+    75,
+    75,
+    50,
+    50,
+    62.5,
+    62.5,
+    62.5,
+    62.5
+   ]
+  },
+  "whip_attack_crouch": {
+   "actor": "whip",
+   "spec_frames": 8,
+   "achieved_frames": 8,
+   "loop": false,
+   "canvas": [
+    768,
+    512
+   ],
+   "pivot": [
+    276,
+    308
+   ],
+   "durations_ms": [
+    75,
+    75,
+    50,
+    50,
+    62.5,
+    62.5,
+    62.5,
+    62.5
+   ]
+  },
+  "pursuer_idle": {
+   "actor": "pursuer",
+   "spec_frames": 6,
+   "achieved_frames": 6,
+   "loop": true,
+   "canvas": [
+    320,
+    192
+   ],
+   "pivot": [
+    128,
+    160
+   ],
+   "durations_ms": [
+    150,
+    150,
+    150,
+    150,
+    150,
+    150
+   ]
+  },
+  "pursuer_patrol_walk": {
+   "actor": "pursuer",
+   "spec_frames": 8,
+   "achieved_frames": 8,
+   "loop": true,
+   "canvas": [
+    320,
+    192
+   ],
+   "pivot": [
+    128,
+    160
+   ],
+   "durations_ms": [
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90
+   ]
+  },
+  "pursuer_alert": {
+   "actor": "pursuer",
+   "spec_frames": 4,
+   "achieved_frames": 4,
+   "loop": false,
+   "canvas": [
+    320,
+    192
+   ],
+   "pivot": [
+    128,
+    160
+   ],
+   "durations_ms": [
+    75,
+    75,
+    75,
+    75
+   ]
+  },
+  "pursuer_approach_walk": {
+   "actor": "pursuer",
+   "spec_frames": 8,
+   "achieved_frames": 8,
+   "loop": true,
+   "canvas": [
+    320,
+    192
+   ],
+   "pivot": [
+    128,
+    160
+   ],
+   "durations_ms": [
+    70,
+    70,
+    70,
+    70,
+    70,
+    70,
+    70,
+    70
+   ]
+  },
+  "pursuer_lunge_windup": {
+   "actor": "pursuer",
+   "spec_frames": 4,
+   "achieved_frames": 4,
+   "loop": false,
+   "canvas": [
+    320,
+    192
+   ],
+   "pivot": [
+    128,
+    160
+   ],
+   "durations_ms": [
+    100,
+    100,
+    75,
+    75
+   ]
+  },
+  "pursuer_lunge": {
+   "actor": "pursuer",
+   "spec_frames": 3,
+   "achieved_frames": 3,
+   "loop": false,
+   "canvas": [
+    320,
+    192
+   ],
+   "pivot": [
+    128,
+    160
+   ],
+   "durations_ms": [
+    80,
+    80,
+    80
+   ]
+  },
+  "pursuer_recovery": {
+   "actor": "pursuer",
+   "spec_frames": 4,
+   "achieved_frames": 4,
+   "loop": false,
+   "canvas": [
+    320,
+    192
+   ],
+   "pivot": [
+    128,
+    160
+   ],
+   "durations_ms": [
+    150,
+    150,
+    150,
+    150
+   ]
+  },
+  "pursuer_hurt": {
+   "actor": "pursuer",
+   "spec_frames": 3,
+   "achieved_frames": 3,
+   "loop": false,
+   "canvas": [
+    320,
+    192
+   ],
+   "pivot": [
+    128,
+    160
+   ],
+   "durations_ms": [
+    60,
+    60,
+    60
+   ]
+  },
+  "pursuer_death": {
+   "actor": "pursuer",
+   "spec_frames": 6,
+   "achieved_frames": 6,
+   "loop": false,
+   "canvas": [
+    320,
+    192
+   ],
+   "pivot": [
+    128,
+    160
+   ],
+   "durations_ms": [
+    80,
+    80,
+    80,
+    80,
+    80,
+    80
+   ]
+  },
+  "swooper_perch_idle": {
+   "actor": "swooper",
+   "spec_frames": 6,
+   "achieved_frames": 6,
+   "loop": true,
+   "canvas": [
+    384,
+    256
+   ],
+   "pivot": [
+    192,
+    128
+   ],
+   "durations_ms": [
+    150,
+    150,
+    150,
+    150,
+    150,
+    150
+   ]
+  },
+  "swooper_cruise": {
+   "actor": "swooper",
+   "spec_frames": 8,
+   "achieved_frames": 8,
+   "loop": true,
+   "canvas": [
+    384,
+    256
+   ],
+   "pivot": [
+    192,
+    128
+   ],
+   "durations_ms": [
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90
+   ]
+  },
+  "swooper_dive_telegraph": {
+   "actor": "swooper",
+   "spec_frames": 4,
+   "achieved_frames": 4,
+   "loop": false,
+   "canvas": [
+    384,
+    256
+   ],
+   "pivot": [
+    192,
+    128
+   ],
+   "durations_ms": [
+    150,
+    150,
+    150,
+    150
+   ]
+  },
+  "swooper_dive": {
+   "actor": "swooper",
+   "spec_frames": 4,
+   "achieved_frames": 4,
+   "loop": false,
+   "canvas": [
+    384,
+    256
+   ],
+   "pivot": [
+    192,
+    128
+   ],
+   "durations_ms": [
+    60,
+    60,
+    60,
+    60
+   ]
+  },
+  "swooper_recovery_climb": {
+   "actor": "swooper",
+   "spec_frames": 6,
+   "achieved_frames": 6,
+   "loop": false,
+   "canvas": [
+    384,
+    256
+   ],
+   "pivot": [
+    192,
+    128
+   ],
+   "durations_ms": [
+    150,
+    150,
+    150,
+    150,
+    150,
+    150
+   ]
+  },
+  "swooper_hurt": {
+   "actor": "swooper",
+   "spec_frames": 3,
+   "achieved_frames": 3,
+   "loop": false,
+   "canvas": [
+    384,
+    256
+   ],
+   "pivot": [
+    192,
+    128
+   ],
+   "durations_ms": [
+    60,
+    60,
+    60
+   ]
+  },
+  "swooper_death_fall": {
+   "actor": "swooper",
+   "spec_frames": 5,
+   "achieved_frames": 5,
+   "loop": false,
+   "canvas": [
+    384,
+    256
+   ],
+   "pivot": [
+    192,
+    128
+   ],
+   "durations_ms": [
+    70,
+    70,
+    70,
+    70,
+    70
+   ]
+  },
+  "ranged_idle": {
+   "actor": "ranged",
+   "spec_frames": 6,
+   "achieved_frames": 6,
+   "loop": true,
+   "canvas": [
+    256,
+    320
+   ],
+   "pivot": [
+    128,
+    288
+   ],
+   "durations_ms": [
+    150,
+    150,
+    150,
+    150,
+    150,
+    150
+   ]
+  },
+  "ranged_aim": {
+   "actor": "ranged",
+   "spec_frames": 6,
+   "achieved_frames": 6,
+   "loop": false,
+   "canvas": [
+    256,
+    320
+   ],
+   "pivot": [
+    128,
+    288
+   ],
+   "durations_ms": [
+    150,
+    150,
+    150,
+    150,
+    150,
+    150
+   ]
+  },
+  "ranged_fire": {
+   "actor": "ranged",
+   "spec_frames": 3,
+   "achieved_frames": 3,
+   "loop": false,
+   "canvas": [
+    256,
+    320
+   ],
+   "pivot": [
+    128,
+    288
+   ],
+   "durations_ms": [
+    50,
+    50,
+    100
+   ]
+  },
+  "ranged_recover": {
+   "actor": "ranged",
+   "spec_frames": 7,
+   "achieved_frames": 7,
+   "loop": false,
+   "canvas": [
+    256,
+    320
+   ],
+   "pivot": [
+    128,
+    288
+   ],
+   "durations_ms": [
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100
+   ]
+  },
+  "ranged_hurt": {
+   "actor": "ranged",
+   "spec_frames": 3,
+   "achieved_frames": 3,
+   "loop": false,
+   "canvas": [
+    256,
+    320
+   ],
+   "pivot": [
+    128,
+    288
+   ],
+   "durations_ms": [
+    60,
+    60,
+    60
+   ]
+  },
+  "ranged_death": {
+   "actor": "ranged",
+   "spec_frames": 6,
+   "achieved_frames": 6,
+   "loop": false,
+   "canvas": [
+    256,
+    320
+   ],
+   "pivot": [
+    128,
+    288
+   ],
+   "durations_ms": [
+    80,
+    80,
+    80,
+    80,
+    80,
+    80
+   ]
+  },
+  "projectile_grave_shot": {
+   "actor": "projectile",
+   "spec_frames": 3,
+   "achieved_frames": 3,
+   "loop": true,
+   "canvas": [
+    64,
+    64
+   ],
+   "pivot": [
+    32,
+    32
+   ],
+   "durations_ms": [
+    80,
+    80,
+    80
+   ]
+  },
+  "boss_idle": {
+   "actor": "boss",
+   "spec_frames": 8,
+   "achieved_frames": 8,
+   "loop": true,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    176,
+    448
+   ],
+   "durations_ms": [
+    125,
+    125,
+    125,
+    125,
+    125,
+    125,
+    125,
+    125
+   ]
+  },
+  "boss_walk": {
+   "actor": "boss",
+   "spec_frames": 8,
+   "achieved_frames": 8,
+   "loop": true,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    176,
+    448
+   ],
+   "durations_ms": [
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80
+   ]
+  },
+  "boss_turn": {
+   "actor": "boss",
+   "spec_frames": 4,
+   "achieved_frames": 4,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    176,
+    448
+   ],
+   "durations_ms": [
+    75,
+    75,
+    75,
+    75
+   ]
+  },
+  "boss_strike_windup": {
+   "actor": "boss",
+   "spec_frames": 7,
+   "achieved_frames": 7,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    176,
+    448
+   ],
+   "durations_ms": [
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100
+   ]
+  },
+  "boss_strike_execute": {
+   "actor": "boss",
+   "spec_frames": 4,
+   "achieved_frames": 4,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    176,
+    448
+   ],
+   "durations_ms": [
+    50,
+    50,
+    50,
+    50
+   ]
+  },
+  "boss_strike_recover": {
+   "actor": "boss",
+   "spec_frames": 6,
+   "achieved_frames": 6,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    176,
+    448
+   ],
+   "durations_ms": [
+    200,
+    200,
+    200,
+    200,
+    150,
+    150
+   ]
+  },
+  "boss_hazard_windup": {
+   "actor": "boss",
+   "spec_frames": 8,
+   "achieved_frames": 8,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    176,
+    448
+   ],
+   "durations_ms": [
+    150,
+    150,
+    150,
+    150,
+    150,
+    150,
+    150,
+    150
+   ]
+  },
+  "boss_hazard_execute": {
+   "actor": "boss",
+   "spec_frames": 4,
+   "achieved_frames": 4,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    176,
+    448
+   ],
+   "durations_ms": [
+    100,
+    100,
+    100,
+    100
+   ]
+  },
+  "boss_hazard_recover": {
+   "actor": "boss",
+   "spec_frames": 6,
+   "achieved_frames": 6,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    176,
+    448
+   ],
+   "durations_ms": [
+    150,
+    150,
+    150,
+    150,
+    150,
+    150
+   ]
+  },
+  "boss_hurt": {
+   "actor": "boss",
+   "spec_frames": 3,
+   "achieved_frames": 3,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    176,
+    448
+   ],
+   "durations_ms": [
+    70,
+    70,
+    60
+   ]
+  },
+  "boss_death": {
+   "actor": "boss",
+   "spec_frames": 12,
+   "achieved_frames": 12,
+   "loop": false,
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    176,
+    448
+   ],
+   "durations_ms": [
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90
+   ]
+  },
+  "vfx_whip_impact": {
+   "actor": "vfx",
+   "spec_frames": 6,
+   "achieved_frames": 6,
+   "loop": false,
+   "canvas": [
+    256,
+    256
+   ],
+   "pivot": [
+    128,
+    128
+   ],
+   "durations_ms": [
+    40,
+    40,
+    40,
+    50,
+    50,
+    60
+   ]
+  },
+  "vfx_damage_indicator": {
+   "actor": "vfx",
+   "spec_frames": 2,
+   "achieved_frames": 2,
+   "loop": false,
+   "canvas": [
+    256,
+    256
+   ],
+   "pivot": [
+    128,
+    128
+   ],
+   "durations_ms": [
+    150,
+    150
+   ]
+  },
+  "vfx_enemy_defeat": {
+   "actor": "vfx",
+   "spec_frames": 8,
+   "achieved_frames": 8,
+   "loop": false,
+   "canvas": [
+    256,
+    256
+   ],
+   "pivot": [
+    128,
+    128
+   ],
+   "durations_ms": [
+    70,
+    70,
+    70,
+    70,
+    70,
+    70,
+    70,
+    70
+   ]
+  },
+  "vfx_checkpoint_activate": {
+   "actor": "vfx",
+   "spec_frames": 8,
+   "achieved_frames": 8,
+   "loop": false,
+   "canvas": [
+    256,
+    256
+   ],
+   "pivot": [
+    128,
+    128
+   ],
+   "durations_ms": [
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90
+   ]
+  },
+  "vfx_hazard_telegraph": {
+   "actor": "vfxhaz",
+   "spec_frames": 4,
+   "achieved_frames": 4,
+   "loop": false,
+   "canvas": [
+    320,
+    192
+   ],
+   "pivot": [
+    160,
+    176
+   ],
+   "durations_ms": [
+    300,
+    300,
+    300,
+    300
+   ]
+  },
+  "vfx_hazard_eruption": {
+   "actor": "vfxhaz",
+   "spec_frames": 6,
+   "achieved_frames": 6,
+   "loop": false,
+   "canvas": [
+    320,
+    192
+   ],
+   "pivot": [
+    160,
+    176
+   ],
+   "durations_ms": [
+    60,
+    60,
+    70,
+    70,
+    70,
+    70
+   ]
+  },
+  "hero_crouch_exit": {
+   "actor": "hero",
+   "spec_frames": 4,
+   "achieved_frames": 4,
+   "loop": false,
+   "note": "DERIVED: hero_crouch_enter played in reverse (documented)"
+  },
+  "hero_get_up": {
+   "actor": "hero",
+   "spec_frames": 6,
+   "achieved_frames": 6,
+   "loop": false,
+   "note": "DERIVED: hero_knockdown played in reverse (documented)"
+  }
+ },
+ "notes": [
+  "Character construction follows the attack key (open coat tails over trousers); the neutral reference uses a closed coat-skirt - drift risk recorded at style lock.",
+  "hero_turn clip's final frame faces left in the source art; the runtime flips the whole container with facing, giving a brief wrong-facing read mid-turn.",
+  "All frames: green-screen sheets chroma-keyed programmatically (alpha from green dominance, despilled; per-sheet alpha coverage logged by the pipeline), one uniform anchor scale per actor (hero_idle/pursuer_idle/swooper_cruise/ranged_idle/boss_idle), fixed contract canvases and pivots, frames trimmed for atlasing with per-frame trim offsets restored at runtime (art/clips.json trims)."
+ ],
+ "atlases": {
+  "pages": 7,
+  "page_files": [
+   "atlas_hero_0.png",
+   "atlas_hero_1.png",
+   "atlas_boss_0.png",
+   "atlas_boss_1.png",
+   "atlas_boss_2.png",
+   "atlas_enemies_0.png",
+   "atlas_enemies_1.png"
+  ],
+  "resident_mib_no_mips": 112.0
+ },
+ "audio": [
+  "mus_ambience_loop.wav",
+  "mus_stage_loop.wav",
+  "sfx_boss_tell.wav",
+  "sfx_checkpoint.wav",
+  "sfx_death.wav",
+  "sfx_enemy_tell.wav",
+  "sfx_hurt.wav",
+  "sfx_jump.wav",
+  "sfx_land.wav",
+  "sfx_whip_hit.wav",
+  "sfx_whip_swing.wav"
+ ]
+}

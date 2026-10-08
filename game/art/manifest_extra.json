@@ -1,0 +1,12 @@
+{
+ "derivations": [
+  "terrain: 14 tiles sliced/derived from style_terrain_patch_3x3",
+  "bg_sky: 1024x1024 gradient derived from bg_distant_silhouette sky band",
+  "prop_effigy -> 128x256 pivot(64,224)",
+  "prop_checkpoint off/on -> 192x320 pivot(96,288)",
+  "prop_boss_gate -> 128x320 pivot(64,288)",
+  "prop_exit -> 192x320 pivot(96,288)",
+  "ui_health_full/empty -> 64x64",
+  "bg_foreground_frame_rgba: green centre keyed to alpha"
+ ]
+}

@@ -3,7 +3,7 @@ class_name Swooper
 ## Airborne swooper - basic, 1 HP (GAMEPLAY_RULES S8.2, values [P1 proposal]).
 ## Cruises 175-190 u over its ground lane; 600 ms telegraphed dive bottoming
 ## 46-82 u over the lane (inside the standing whip band); 900 ms recovery.
-## GREYBOX visuals only. Moved manually (no physics body).
+## Visuals: production frames (style_lock_r01) via Anim. Moved manually.
 
 const CRUISE_ALT := 182.0
 const CRUISE_SPEED := 120.0
@@ -28,9 +28,25 @@ var anim_t := 0.0
 var last_hit_id := -1
 var home_pos := Vector2.ZERO
 
+var _visual: Node2D
+var _body: AnimatedSprite2D
+var _vis_clip := ""
+var _vis_t := 0.0
+
+const STATE_TO_CLIP := {
+	"cruise": "swooper_cruise", "telegraph": "swooper_dive_telegraph",
+	"dive": "swooper_dive", "climb": "swooper_recovery_climb",
+	"recover": "swooper_cruise", "hurt": "swooper_hurt",
+	"dead": "swooper_death_fall",
+}
+
 
 func _ready() -> void:
 	home_pos = global_position
+	_visual = Node2D.new()
+	add_child(_visual)
+	_body = Anim.make_sprite(load("res://art/spriteframes/enemy_frames.tres"), "swooper_cruise")
+	_visual.add_child(_body)
 
 
 func _cruise_y() -> float:
@@ -76,7 +92,7 @@ func _physics_process(delta: float) -> void:
 		"hurt":
 			if state_t >= 0.200:
 				_set_state("climb")
-	queue_redraw()
+	_update_visuals(delta)
 
 
 func _should_dive() -> bool:
@@ -91,6 +107,8 @@ func _should_dive() -> bool:
 func _set_state(s: String) -> void:
 	state = s
 	state_t = 0.0
+	if s == "telegraph" and game != null and game.has_method("play_sfx"):
+		game.play_sfx("sfx_enemy_tell", 1.2)
 
 
 # ------------------------------------------------------------- interfaces
@@ -121,6 +139,8 @@ func apply_whip_hit(attack_id_: int, _from_x: float) -> void:
 	if hp <= 0:
 		fall_vy = 0.0
 		_set_state("dead")
+		if game != null and game.has_method("spawn_vfx"):
+			game.spawn_vfx("vfx_enemy_defeat", global_position)
 	else:
 		_set_state("hurt")
 
@@ -138,20 +158,14 @@ func reset_actor() -> void:
 
 # ---------------------------------------------------------------- visuals
 
-func _draw() -> void:
-	var body := Color(0.35, 0.29, 0.48)
-	var wing := Color(0.48, 0.41, 0.66)
-	if state == "dead":
-		draw_colored_polygon(PackedVector2Array([Vector2(-16, 0), Vector2(0, -10), Vector2(16, 0), Vector2(0, 8)]), body.darkened(0.4))
+func _update_visuals(delta: float) -> void:
+	if _body == null:
 		return
-	if state == "telegraph":
-		body = Color(0.62, 0.5, 0.85) # brightened tell
-		if hunter != null:
-			draw_line(Vector2.ZERO, hunter.global_position - global_position, Color(1, 0.4, 0.3, 0.3), 2.0)
-		draw_rect(Rect2(-2, -44, 5, 18), Color(1.0, 0.8, 0.3))
-		draw_circle(Vector2(0.5, -20), 3.5, Color(1.0, 0.8, 0.3))
-	var flap := sin(anim_t * 10.0) * 10.0
-	draw_colored_polygon(PackedVector2Array([Vector2(-6, -4), Vector2(-34, -16 - flap), Vector2(-30, 2), Vector2(-8, 4)]), wing)
-	draw_colored_polygon(PackedVector2Array([Vector2(6, -4), Vector2(34, -16 - flap), Vector2(30, 2), Vector2(8, 4)]), wing)
-	draw_colored_polygon(PackedVector2Array([Vector2(-14, -8), Vector2(0, -14), Vector2(14, -8), Vector2(10, 8), Vector2(-10, 8)]), body)
-	draw_circle(Vector2(6 * facing, -8), 4, Color(0.9, 0.85, 0.7))
+	_visual.scale.x = facing
+	var clip: String = STATE_TO_CLIP.get(state, "swooper_cruise")
+	if clip != _vis_clip:
+		_vis_clip = clip
+		_vis_t = 0.0
+	else:
+		_vis_t += delta
+	Anim.apply(_body, clip, _vis_t)

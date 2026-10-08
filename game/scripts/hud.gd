@@ -2,13 +2,19 @@ extends CanvasLayer
 class_name HUD
 ## Presentation layer (TECHNICAL_SPEC S2): health pips, boss bar, touch
 ## buttons (>=64 px logical; SPEC S6 asks 64 initially), pause/victory/
-## rotate overlays, death fade. All text is live UI text (ASSET_SPEC S5).
-## GREYBOX: flat colors only, no textures.
+## rotate overlays, death fade, damage indicator. All text is live UI text
+## (ASSET_SPEC S5). Pips and damage frame use production art; the rest is
+## code-drawn UI as permitted by the briefs.
 
 var game: Node
 var input_state: InputState
 
-var _pips: Array[ColorRect] = []
+var _pips: Array = []
+var _pip_full: Texture2D
+var _pip_empty: Texture2D
+var _damage_flash: TextureRect
+var _damage_t := 0.0
+var _last_hp := 5
 var _boss_bar_root: Control
 var _boss_fill: ColorRect
 var _message_label: Label
@@ -21,12 +27,29 @@ var _rotate_pausing := false
 
 
 func _ready() -> void:
+	layer = 5
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_pip_full = load("res://art/ui/ui_health_full.png")
+	_pip_empty = load("res://art/ui/ui_health_empty.png")
 	_build_pips()
 	_build_boss_bar()
 	_build_labels()
 	_build_touch_controls()
 	_build_overlays()
+	_build_damage_flash()
+
+
+func _build_damage_flash() -> void:
+	# SPEC S5: steady, non-strobing damage indicator at the screen edge.
+	_damage_flash = TextureRect.new()
+	_damage_flash.size = Vector2(1280, 720)
+	_damage_flash.stretch_mode = TextureRect.STRETCH_SCALE
+	_damage_flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var frames: SpriteFrames = load("res://art/spriteframes/fx_frames.tres")
+	if frames != null and frames.has_animation("vfx_damage_indicator"):
+		_damage_flash.texture = frames.get_frame_texture("vfx_damage_indicator", 0)
+	_damage_flash.modulate = Color(1, 1, 1, 0)
+	add_child(_damage_flash)
 
 
 func _mk_label(text: String, pos: Vector2, size: Vector2, font_size: int, align := HORIZONTAL_ALIGNMENT_LEFT) -> Label:
@@ -56,12 +79,14 @@ func _mk_button(text: String, pos: Vector2, size: Vector2) -> Button:
 func _build_pips() -> void:
 	var box := HBoxContainer.new()
 	box.position = Vector2(16, 16)
-	box.add_theme_constant_override("separation", 6)
+	box.add_theme_constant_override("separation", 4)
 	add_child(box)
 	for i in 5:
-		var pip := ColorRect.new()
+		var pip := TextureRect.new()
 		pip.custom_minimum_size = Vector2(26, 26)
-		pip.color = Color(0.9, 0.85, 0.7)
+		pip.texture = _pip_full
+		pip.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		pip.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		box.add_child(pip)
 		_pips.append(pip)
 	_mk_label("HP", Vector2(16, 48), Vector2(60, 20), 16)
@@ -192,7 +217,14 @@ func _process(delta: float) -> void:
 	var hunter: Hunter = game.hunter
 	if hunter != null:
 		for i in _pips.size():
-			_pips[i].color = Color(0.9, 0.85, 0.7) if i < hunter.hp else Color(0.25, 0.25, 0.3)
+			_pips[i].texture = _pip_full if i < hunter.hp else _pip_empty
+		if hunter.hp < _last_hp:
+			_damage_t = 0.3 # steady indicator, not a strobe (SPEC S5)
+		_last_hp = hunter.hp
+		if _damage_t > 0.0:
+			_damage_t -= delta
+		if _damage_flash != null:
+			_damage_flash.modulate.a = 0.55 if _damage_t > 0.0 else 0.0
 		var target := 0.85 if hunter.state == "death" else 0.0
 		var c := _fade.color
 		c.a = move_toward(c.a, target, delta * 1.8)

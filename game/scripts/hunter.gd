@@ -3,8 +3,8 @@ class_name Hunter
 ## The hunter. Origin at the foot pivot (ASSET_SPEC S2). Implements the
 ## GAMEPLAY_RULES S4 state table, S2 interruption priority, S5 damage rules,
 ## S6 crouch-clearance cases. All constants from GAMEPLAY_RULES S1 / SPEC S4-S5.
-## GREYBOX: visuals are flat-color polygons drawn in _draw(); the logical
-## state machine is what the future animation clips will observe.
+## Visuals: production sprite frames (style_lock_r01) driven by this state
+## machine through scripts/anim.gd — the state machine stays authoritative.
 
 # --- spec constants (GAMEPLAY_RULES S1) ---
 const SPEED := 240.0
@@ -71,6 +71,14 @@ var _stand_shape: CollisionShape2D
 var _crouch_shape: CollisionShape2D
 var _clearance_shape: RectangleShape2D
 
+# visuals (production art; state-driven frames, see _update_visuals)
+var _visual: Node2D
+var _body: AnimatedSprite2D
+var _whip_sprite: AnimatedSprite2D
+var _vis_clip := ""
+var _vis_t := 0.0
+var _vfx_attack_id := -1
+
 
 func _ready() -> void:
 	collision_layer = 2
@@ -91,6 +99,20 @@ func _ready() -> void:
 	add_child(_crouch_shape)
 	_clearance_shape = RectangleShape2D.new()
 	_clearance_shape.size = Vector2(36, 100)
+	_build_visuals()
+
+
+func _build_visuals() -> void:
+	_visual = Node2D.new()
+	_visual.name = "Visual"
+	add_child(_visual)
+	var body_frames: SpriteFrames = load("res://art/spriteframes/hero_frames.tres")
+	_body = Anim.make_sprite(body_frames, "hero_idle")
+	_visual.add_child(_body)
+	var whip_frames: SpriteFrames = load("res://art/spriteframes/whip_frames.tres")
+	_whip_sprite = Anim.make_sprite(whip_frames, "whip_attack_ground")
+	_whip_sprite.visible = false
+	_visual.add_child(_whip_sprite)
 
 
 # ---------------------------------------------------------------- queries
@@ -174,6 +196,8 @@ func _try_jump() -> bool:
 		velocity.y = JUMP_VELOCITY
 		air_from_jump = true
 		_change_state("jump_takeoff")
+		if game != null and game.has_method("play_sfx"):
+			game.play_sfx("sfx_jump")
 		return true
 	return false
 
@@ -189,7 +213,10 @@ func _try_crouch_jump() -> bool:
 func _start_attack(kind_state: String) -> void:
 	attack_id += 1
 	attack_t = 0.0
+	_vfx_attack_id = -1
 	_change_state(kind_state)
+	if game != null and game.has_method("play_sfx"):
+		game.play_sfx("sfx_whip_swing")
 
 
 func _air_region_state() -> String:
@@ -228,7 +255,11 @@ func take_damage(kind: String, source_x: float) -> void:
 		death_in_pit = false
 		death_t = 0.0
 		_change_state("death")
+		if game != null and game.has_method("play_sfx"):
+			game.play_sfx("sfx_death")
 		return
+	if game != null and game.has_method("play_sfx"):
+		game.play_sfx("sfx_hurt")
 	var dir_away := -facing
 	if global_position.x < source_x:
 		dir_away = -1
@@ -307,8 +338,7 @@ func _physics_process(delta: float) -> void:
 
 	if is_whip_active():
 		_apply_whip_hits()
-	_update_visual_state()
-	queue_redraw()
+	_update_visuals(delta)
 
 
 func _state_logic(delta: float, dir: int, whip_pressed: bool) -> void:
@@ -475,6 +505,8 @@ func _post_move(delta: float) -> void:
 		velocity.y = 0.0
 
 	if grounded and not was_grounded:
+		if state != "attack_air" and state in AIR_STATES and game != null and game.has_method("play_sfx"):
+			game.play_sfx("sfx_land")
 		if state == "attack_air":
 			# Landing continues the same attack: elapsed time and hit ID carry
 			# over, only the grounded pose changes (GAMEPLAY_RULES S2).
@@ -510,64 +542,63 @@ func _apply_whip_hits() -> void:
 		if t.has_method("hurt_rect") and t.has_method("apply_whip_hit"):
 			var hr: Rect2 = t.hurt_rect()
 			if hr.size != Vector2.ZERO and rect.intersects(hr):
+				var before: int = t.last_hit_id if "last_hit_id" in t else -999
 				t.apply_whip_hit(attack_id, global_position.x)
+				var accepted: bool = ("last_hit_id" in t and int(t.last_hit_id) == attack_id and before != attack_id)
+				if accepted and game != null:
+					if game.has_method("play_sfx"):
+						game.play_sfx("sfx_whip_hit")
+					if game.has_method("spawn_vfx") and _vfx_attack_id != attack_id:
+						_vfx_attack_id = attack_id
+						var hit_point := rect.intersection(hr).get_center()
+						game.spawn_vfx("vfx_whip_impact", hit_point)
 
 
 # ---------------------------------------------------------------- visuals
-# GREYBOX ONLY: flat-color polygons. These are NOT animation frames; the
-# state machine above is the deliverable the animation contract observes.
+# Production frames (style_lock_r01). The state machine picks the clip and
+# the elapsed time; Anim maps that to a frame. Frames never drive logic.
 
-func _update_visual_state() -> void:
-	if state == "death":
-		modulate = Color(0.55, 0.55, 0.6)
-	elif state in ["hurt_recoil", "knockback", "knockdown"]:
-		modulate = Color(1.0, 0.55, 0.5)
-	elif invuln_t > 0.0:
-		modulate = Color(1, 1, 1, 0.55) # non-strobing tint (SPEC S5)
-	else:
-		modulate = Color.WHITE
+const STATE_TO_CLIP := {
+	"idle": "hero_idle", "start_move": "hero_start_move", "walk": "hero_walk",
+	"stop_move": "hero_stop_move", "turn": "hero_turn",
+	"crouch_enter": "hero_crouch_enter", "crouch_idle": "hero_crouch_idle",
+	"crouch_exit": "hero_crouch_exit",
+	"jump_takeoff": "hero_jump_takeoff", "jump_rise": "hero_jump_rise",
+	"jump_apex": "hero_jump_apex", "fall": "hero_fall", "land": "hero_land",
+	"attack_ground": "hero_attack_ground", "attack_air": "hero_attack_air",
+	"attack_crouch": "hero_attack_crouch",
+	"hurt_recoil": "hero_hurt_recoil", "knockback": "hero_knockback",
+	"knockdown": "hero_knockdown", "get_up": "hero_get_up", "death": "hero_death",
+}
+const STATE_TO_WHIP := {
+	"attack_ground": "whip_attack_ground", "attack_air": "whip_attack_air",
+	"attack_crouch": "whip_attack_crouch",
+}
 
 
-func _draw() -> void:
-	draw_set_transform(Vector2.ZERO, 0.0, Vector2(facing, 1))
-	var slate := Color(0.29, 0.35, 0.42)
-	var dark := Color(0.16, 0.19, 0.24)
-	var skin := Color(0.85, 0.74, 0.6)
-	var hair := Color(0.4, 0.27, 0.15)
-	var ochre := Color(0.72, 0.56, 0.34)
-	if state == "death":
-		draw_rect(Rect2(-42, -14, 84, 14), slate)
-		draw_circle(Vector2(38, -8), 8, skin)
+func _update_visuals(delta: float) -> void:
+	if _body == null:
 		return
-	if crouched_body:
-		draw_rect(Rect2(-16, -26, 32, 26), dark) # folded legs
-		draw_rect(Rect2(-17, -56, 34, 32), slate) # torso
-		draw_rect(Rect2(-17, -34, 34, 5), ochre) # belt
-		draw_circle(Vector2(5, -62), 8, hair)
-		draw_circle(Vector2(7, -60), 7, skin)
+	_visual.scale.x = facing
+	var clip: String = STATE_TO_CLIP.get(state, "hero_idle")
+	if clip != _vis_clip:
+		_vis_clip = clip
+		_vis_t = 0.0
 	else:
-		var airborne := state in AIR_STATES
-		if airborne:
-			draw_rect(Rect2(-13, -36, 26, 36), dark) # tucked legs
-		else:
-			draw_rect(Rect2(-13, -46, 10, 46), dark)
-			draw_rect(Rect2(3, -46, 10, 46), dark)
-		draw_rect(Rect2(-16, -88, 32, 46), slate)
-		draw_rect(Rect2(-16, -52, 32, 6), ochre)
-		draw_circle(Vector2(2, -101), 9, hair)
-		draw_circle(Vector2(4, -98), 8, skin)
-		draw_rect(Rect2(10, -80, 16, 7), slate) # whip arm
-	if state in ATTACK_STATES:
-		var hand := Vector2(16, -42) if state == "attack_crouch" else Vector2(16, -70)
-		var tip_x := 46.0
-		if attack_t < WHIP_ANTICIPATION:
-			tip_x = 46.0 + 30.0 * (attack_t / WHIP_ANTICIPATION)
-		elif attack_t < WHIP_ACTIVE_END:
-			tip_x = 168.0
-		else:
-			tip_x = 168.0 - 100.0 * ((attack_t - WHIP_ACTIVE_END) / (WHIP_TOTAL - WHIP_ACTIVE_END))
-		var mid := Vector2(hand.x + (tip_x - hand.x) * 0.5, hand.y - 7)
-		var tip := Vector2(tip_x, hand.y + 5)
-		draw_polyline(PackedVector2Array([hand, mid, tip]), Color(0.88, 0.82, 0.7), 4.0)
-		if is_whip_active():
-			draw_rect(_whip_rect_local(), Color(1.0, 0.85, 0.5, 0.15))
+		_vis_t += delta
+	var t := attack_t if state in ATTACK_STATES else _vis_t
+	Anim.apply(_body, clip, t)
+	# damage/death read (SPEC S5): non-strobing Bone tint; invuln steady alpha
+	if state == "death":
+		_visual.modulate = Color(0.62, 0.62, 0.68)
+	elif state in ["hurt_recoil", "knockback", "knockdown"]:
+		_visual.modulate = Color(1.35, 0.95, 0.9)
+	elif invuln_t > 0.0:
+		_visual.modulate = Color(1.25, 1.22, 1.1, 0.6)
+	else:
+		_visual.modulate = Color.WHITE
+	# whip layer: only during attacks, frame-locked to attack_t (SPEC S5)
+	var wclip: String = STATE_TO_WHIP.get(state, "")
+	_whip_sprite.visible = wclip != ""
+	if wclip != "":
+		Anim.apply(_whip_sprite, wclip, attack_t)

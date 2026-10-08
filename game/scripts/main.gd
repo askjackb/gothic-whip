@@ -1,8 +1,9 @@
 extends Node2D
-## Gothic Whip - greybox slice (game gate 2). Builds the STAGE_DESIGN P4
-## blockout as collision + flat-color greybox terrain, wires the actors,
-## routes hazard damage, and owns camera / checkpoint / boss-gate / exit /
-## restart flow (GAMEPLAY_RULES S7). No production art anywhere in here.
+## Gothic Whip - full production slice. Builds the STAGE_DESIGN P4 blockout
+## as collision + production terrain tiles, wires the actors, routes hazard
+## damage, and owns camera / checkpoint / boss-gate / exit / restart flow
+## (GAMEPLAY_RULES S7), plus parallax backgrounds, VFX, and audio playback.
+## Gameplay numbers are the greybox-verified SPEC values, unchanged.
 
 const GROUND_Y := 512.0 # row 0 top surface
 const KILL_Y := 800.0 # stage kill plane (GAMEPLAY_RULES S7)
@@ -63,11 +64,42 @@ var boss_defeated := false
 var _completed := false
 var _rotate_paused := false
 
+var _fx_frames: SpriteFrames
+var _sfx: Dictionary = {}
+var _sfx_players: Array[AudioStreamPlayer] = []
+var _music_players: Array[AudioStreamPlayer] = []
+
+const TILE_TEX := {
+	"cap_left": "res://art/terrain/terrain_cap_left.png",
+	"cap_mid": "res://art/terrain/terrain_cap_mid.png",
+	"cap_right": "res://art/terrain/terrain_cap_right.png",
+	"side_left": "res://art/terrain/terrain_side_left.png",
+	"side_right": "res://art/terrain/terrain_side_right.png",
+	"fill": "res://art/terrain/terrain_fill_center.png",
+	"bottom_left": "res://art/terrain/terrain_bottom_left.png",
+	"bottom_mid": "res://art/terrain/terrain_bottom_mid.png",
+	"bottom_right": "res://art/terrain/terrain_bottom_right.png",
+	"inner_left": "res://art/terrain/terrain_inner_left.png",
+	"inner_right": "res://art/terrain/terrain_inner_right.png",
+	"plat_left": "res://art/terrain/terrain_plat_end_left.png",
+	"plat_mid": "res://art/terrain/terrain_plat_mid.png",
+	"plat_right": "res://art/terrain/terrain_plat_end_right.png",
+}
+var _tiles: Dictionary = {}
+var _gate_tex: Texture2D
+
 
 func _ready() -> void:
 	input_state = InputState.new()
 	add_child(input_state)
 	input_state.pause_toggled.connect(toggle_pause)
+
+	_fx_frames = load("res://art/spriteframes/fx_frames.tres")
+	for key in TILE_TEX:
+		_tiles[key] = load(TILE_TEX[key])
+	_gate_tex = load("res://art/props/prop_boss_gate.png")
+	_build_parallax()
+	_setup_audio()
 
 	_build_terrain()
 	_build_gates()
@@ -296,6 +328,11 @@ func _notification(what: int) -> void:
 func _physics_process(_delta: float) -> void:
 	if hunter == null or _completed:
 		return
+	# DEV AID (not a gameplay feature): F9 warps to the boss arena approach
+	# for screenshot/testing sessions. See README "Debug aid".
+	if Input.is_physical_key_pressed(KEY_F9):
+		hunter.global_position = Vector2(5560, GROUND_Y)
+		hunter.velocity = Vector2.ZERO
 	if hunter.state != "death" and hunter.global_position.y > KILL_Y:
 		hunter.start_pit_death()
 		return
@@ -307,6 +344,8 @@ func _physics_process(_delta: float) -> void:
 		checkpoint.set_activated()
 		respawn_point = CHECKPOINT_POS
 		hud.set_message("CHECKPOINT")
+		play_sfx("sfx_checkpoint")
+		spawn_vfx("vfx_checkpoint_activate", CHECKPOINT_POS + Vector2(0, -6))
 	if boss_defeated and hunter.global_position.x >= 6600.0:
 		_complete_stage()
 		return
@@ -348,26 +387,114 @@ func _process(delta: float) -> void:
 	camera.position = camera.position.lerp(target, k)
 
 
-# ------------------------------------------------------------ greybox art
-# Flat-color terrain + distant silhouettes. NOT production art.
+# ------------------------------------------------------- presentation
+# Parallax depth stack (ART_BIBLE S2), production terrain tiles, VFX, audio.
+
+func _build_parallax() -> void:
+	var back := ParallaxBackground.new()
+	back.layer = -100
+	back.scroll_ignore_camera_zoom = true
+	add_child(back)
+	_add_parallax_layer(back, "res://art/bg_sky.png", Vector2.ZERO, Vector2(640, 360), Vector2(1.25, 0.7032), 0.0, true)
+	_add_parallax_layer(back, "res://art/bg_distant_silhouette.png", Vector2(0.25, 0.1), Vector2(0, 60), Vector2(0.5714, 0.5714), 1280.0)
+	_add_parallax_layer(back, "res://art/bg_midground_arch.png", Vector2(0.55, 0.25), Vector2(0, 20), Vector2(0.6116, 0.75), 1438.0)
+	var front := ParallaxBackground.new()
+	front.layer = 1
+	front.scroll_ignore_camera_zoom = true
+	add_child(front)
+	_add_parallax_layer(front, "res://art/bg_foreground_frame_rgba.png", Vector2(1.15, 1.0), Vector2(0, -30), Vector2(0.6116, 0.75), 1438.0)
+
+
+func _add_parallax_layer(pb: ParallaxBackground, tex_path: String, motion: Vector2, offset: Vector2, scl: Vector2, mirror_x: float, centered := false) -> void:
+	var layer := ParallaxLayer.new()
+	layer.motion_scale = motion
+	if mirror_x > 0.0:
+		layer.motion_mirroring = Vector2(mirror_x, 0)
+	var spr := Sprite2D.new()
+	spr.texture = load(tex_path)
+	spr.centered = centered
+	spr.position = offset
+	spr.scale = scl
+	layer.add_child(spr)
+	pb.add_child(layer)
+
+
+func spawn_vfx(clip: String, world_pos: Vector2) -> void:
+	if _fx_frames == null:
+		return
+	var v := VfxPlayer.new()
+	add_child(v)
+	v.setup(_fx_frames, clip, world_pos)
+
+
+func _setup_audio() -> void:
+	for name in ["sfx_whip_swing", "sfx_whip_hit", "sfx_jump", "sfx_land",
+			"sfx_hurt", "sfx_death", "sfx_enemy_tell", "sfx_checkpoint", "sfx_boss_tell"]:
+		_sfx[name] = load("res://art/audio/%s.wav" % name)
+	for i in 10:
+		var pl := AudioStreamPlayer.new()
+		pl.bus = "SFX"
+		add_child(pl)
+		_sfx_players.append(pl)
+	for name in ["mus_ambience_loop", "mus_stage_loop"]:
+		var pl := AudioStreamPlayer.new()
+		pl.stream = load("res://art/audio/%s.wav" % name)
+		pl.bus = "Music"
+		pl.volume_db = -16.0 if name == "mus_stage_loop" else -20.0
+		add_child(pl)
+		_music_players.append(pl)
+		pl.play()
+
+
+func play_sfx(name: String, pitch := 1.0) -> void:
+	var stream: AudioStream = _sfx.get(name)
+	if stream == null:
+		return
+	for pl in _sfx_players:
+		if not pl.playing:
+			pl.stream = stream
+			pl.pitch_scale = pitch
+			pl.play()
+			return
+
 
 func _draw() -> void:
-	draw_rect(Rect2(-200, -400, STAGE_RIGHT + 400, 1250), Color(0.07, 0.07, 0.11))
-	# distant gothic silhouettes (flat)
-	var sil := Color(0.1, 0.1, 0.15)
-	for i in range(0, int(STAGE_RIGHT), 640):
-		draw_rect(Rect2(i + 60, 180, 90, 332), sil)
-		draw_colored_polygon(PackedVector2Array([
-			Vector2(i + 55, 180), Vector2(i + 105, 110), Vector2(i + 155, 180)]), sil)
-	var top_edge := Color(0.42, 0.45, 0.52)
-	var fill := Color(0.2, 0.21, 0.26)
+	# Production terrain: the 14-tile masonry kit (128 px source = 64 u).
 	for entry in TERRAIN:
-		var rect: Rect2 = entry[0]
-		draw_rect(rect, fill)
-		draw_rect(Rect2(rect.position, Vector2(rect.size.x, 5)), top_edge)
-	if fight_active:
-		var bar := Color(0.5, 0.52, 0.58)
-		draw_rect(Rect2(5568, 192, 64, 320), Color(0.16, 0.16, 0.2))
-		draw_rect(Rect2(6528, 192, 64, 320), Color(0.16, 0.16, 0.2))
-		for x in [5584.0, 5608.0, 6544.0, 6568.0]:
-			draw_rect(Rect2(x, 192, 7, 320), bar)
+		_draw_terrain_rect(entry[0], bool(entry[1]))
+	# Boss gates: prop art at the arena edges, solid only during the fight.
+	if _gate_tex != null:
+		var tint := Color(1, 1, 1, 0.95) if fight_active else Color(1, 1, 1, 0.25)
+		draw_texture_rect_region(_gate_tex, Rect2(5568, 352, 64, 160), Rect2(0, 0, 128, 320), tint)
+		draw_texture_rect_region(_gate_tex, Rect2(6528, 352, 64, 160), Rect2(0, 0, 128, 320), tint)
+
+
+func _draw_terrain_rect(rect: Rect2, one_way: bool) -> void:
+	var cols := int(ceil(rect.size.x / 64.0))
+	var rows := int(ceil(rect.size.y / 64.0))
+	for cx in cols:
+		for cy in rows:
+			var w := minf(64.0, rect.size.x - cx * 64.0)
+			var h := minf(64.0, rect.size.y - cy * 64.0)
+			var cell := Rect2(rect.position + Vector2(cx * 64.0, cy * 64.0), Vector2(w, h))
+			var key := "fill"
+			if cy == 0:
+				if one_way:
+					key = "plat_left" if cx == 0 else ("plat_right" if cx == cols - 1 else "plat_mid")
+					if cols == 1:
+						key = "plat_mid"
+				else:
+					key = "cap_left" if cx == 0 else ("cap_right" if cx == cols - 1 else "cap_mid")
+					if cols == 1:
+						key = "cap_mid"
+			elif cy == rows - 1 and not one_way:
+				key = "bottom_left" if cx == 0 else ("bottom_right" if cx == cols - 1 else "bottom_mid")
+				if cols == 1:
+					key = "bottom_mid"
+			elif cx == 0:
+				key = "side_left"
+			elif cx == cols - 1:
+				key = "side_right"
+			var tex: Texture2D = _tiles.get(key)
+			if tex != null:
+				draw_texture_rect_region(tex, cell, Rect2(0, 0, w * 2.0, h * 2.0))

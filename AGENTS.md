@@ -1,10 +1,10 @@
 # Instructions for contributors and LLMs
 
-The current assignment is specification development. Do not create game code, initialize a Godot project, generate production art, or publish a playable build as part of filling out this framework. A later explicit implementation assignment can change that phase.
+## Full production assignment — 2026-10-08 (current)
 
-## Implementation assignment — 2026-10-08
+The user directed on 2026-10-08: "go ahead finish the game in full quality without asking me any question! results are expected to be pushed to a new repo using your gh." This opened ALL production gates (style pack, animation, audio, full art) and forbids asking the user questions — work autonomously and document decisions. Status: production is COMPLETE as of 2026-10-08 (see `docs/REVIEW_RECORD.md`, full-production entry): style lock `style_lock_r01`, 64 clips / 357 frames, 11 synthesized audio files, 7 atlas pages / 112.0 MiB, extended smoke test PASS, web export verified in Chromium with zero console errors. The playable repo is `askjackb/gothic-whip-game` (Godot project + `docs/` web build on GitHub Pages). Outstanding: VALIDATION V2–V9 device evidence (iPhone 17) — pending hardware; never claim it exists.
 
-The user gave the explicit go ("go!", 2026-10-08) for production gates 1–2 of `docs/WORK_PACKAGES.md`: a Godot project now exists in `game/` (greybox slice implementing SPEC.md / GAMEPLAY_RULES.md / STAGE_DESIGN.md mechanics, headless smoke test, single-threaded web export in `game/build/web/`). That authorization covers the greybox and its export only. **The style pack is the next gate**: do not generate production art, animation frames, or audio, and do not claim animation or device validation, until that gate is explicitly opened. Greybox visuals in `game/` are flat-color placeholders by design; the contracts in this repository remain the authority for every number.
+Earlier phase text (specification-only phase; greybox gates 1–2 authorization) is superseded by this assignment and retained in git history.
 
 Read README.md, SPEC.md, docs/DECISIONS.md, and docs/ANIMATION_SPEC.md first. Then read the contract relevant to your task.
 

@@ -1,0 +1,1392 @@
+{
+ "clips": {
+  "hero_idle": {
+   "actor": "hero",
+   "frames": 8,
+   "loop": true,
+   "durations_ms": [
+    125,
+    125,
+    125,
+    125,
+    125,
+    125,
+    125,
+    125
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "source_sheet": "hero_idle"
+  },
+  "hero_walk": {
+   "actor": "hero",
+   "frames": 10,
+   "loop": true,
+   "durations_ms": [
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "source_sheet": "hero_walk"
+  },
+  "hero_start_move": {
+   "actor": "hero",
+   "frames": 3,
+   "loop": false,
+   "durations_ms": [
+    50,
+    50,
+    50
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "source_sheet": "hero_start_move"
+  },
+  "hero_stop_move": {
+   "actor": "hero",
+   "frames": 3,
+   "loop": false,
+   "durations_ms": [
+    50,
+    50,
+    50
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "source_sheet": "hero_stop_move"
+  },
+  "hero_turn": {
+   "actor": "hero",
+   "frames": 3,
+   "loop": false,
+   "durations_ms": [
+    50,
+    50,
+    50
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "source_sheet": "hero_turn"
+  },
+  "hero_crouch_enter": {
+   "actor": "hero",
+   "frames": 4,
+   "loop": false,
+   "durations_ms": [
+    50,
+    50,
+    50,
+    50
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "source_sheet": "hero_crouch_enter"
+  },
+  "hero_crouch_idle": {
+   "actor": "hero",
+   "frames": 6,
+   "loop": true,
+   "durations_ms": [
+    150,
+    150,
+    150,
+    150,
+    150,
+    150
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "source_sheet": "hero_crouch_idle"
+  },
+  "hero_jump_takeoff": {
+   "actor": "hero",
+   "frames": 3,
+   "loop": false,
+   "durations_ms": [
+    40,
+    40,
+    40
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "source_sheet": "hero_jump_takeoff"
+  },
+  "hero_jump_rise": {
+   "actor": "hero",
+   "frames": 4,
+   "loop": false,
+   "durations_ms": [
+    60,
+    60,
+    60,
+    60
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "source_sheet": "hero_jump_rise"
+  },
+  "hero_jump_apex": {
+   "actor": "hero",
+   "frames": 3,
+   "loop": false,
+   "durations_ms": [
+    50,
+    50,
+    50
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "source_sheet": "hero_jump_apex"
+  },
+  "hero_fall": {
+   "actor": "hero",
+   "frames": 4,
+   "loop": true,
+   "durations_ms": [
+    100,
+    100,
+    100,
+    100
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "source_sheet": "hero_fall"
+  },
+  "hero_land": {
+   "actor": "hero",
+   "frames": 4,
+   "loop": false,
+   "durations_ms": [
+    40,
+    40,
+    40,
+    40
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "source_sheet": "hero_land"
+  },
+  "hero_attack_ground": {
+   "actor": "hero",
+   "frames": 8,
+   "loop": false,
+   "durations_ms": [
+    75,
+    75,
+    50,
+    50,
+    62.5,
+    62.5,
+    62.5,
+    62.5
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "source_sheet": "hero_attack_ground"
+  },
+  "hero_attack_air": {
+   "actor": "hero",
+   "frames": 8,
+   "loop": false,
+   "durations_ms": [
+    75,
+    75,
+    50,
+    50,
+    62.5,
+    62.5,
+    62.5,
+    62.5
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "source_sheet": "hero_attack_air"
+  },
+  "hero_attack_crouch": {
+   "actor": "hero",
+   "frames": 8,
+   "loop": false,
+   "durations_ms": [
+    75,
+    75,
+    50,
+    50,
+    62.5,
+    62.5,
+    62.5,
+    62.5
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "source_sheet": "hero_attack_crouch"
+  },
+  "hero_hurt_recoil": {
+   "actor": "hero",
+   "frames": 4,
+   "loop": false,
+   "durations_ms": [
+    50,
+    50,
+    50,
+    50
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "source_sheet": "hero_hurt_recoil"
+  },
+  "hero_knockback": {
+   "actor": "hero",
+   "frames": 4,
+   "loop": false,
+   "durations_ms": [
+    75,
+    75,
+    75,
+    75
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "source_sheet": "hero_knockback"
+  },
+  "hero_knockdown": {
+   "actor": "hero",
+   "frames": 6,
+   "loop": false,
+   "durations_ms": [
+    60,
+    60,
+    60,
+    60,
+    60,
+    60
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "source_sheet": "hero_knockdown"
+  },
+  "hero_death": {
+   "actor": "hero",
+   "frames": 10,
+   "loop": false,
+   "durations_ms": [
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "source_sheet": "hero_death"
+  },
+  "whip_attack_ground": {
+   "actor": "whip",
+   "frames": 8,
+   "loop": false,
+   "durations_ms": [
+    75,
+    75,
+    50,
+    50,
+    62.5,
+    62.5,
+    62.5,
+    62.5
+   ],
+   "canvas": [
+    768,
+    512
+   ],
+   "pivot": [
+    276,
+    308
+   ],
+   "source_sheet": "whip_attack_ground"
+  },
+  "whip_attack_air": {
+   "actor": "whip",
+   "frames": 8,
+   "loop": false,
+   "durations_ms": [
+    75,
+    75,
+    50,
+    50,
+    62.5,
+    62.5,
+    62.5,
+    62.5
+   ],
+   "canvas": [
+    768,
+    512
+   ],
+   "pivot": [
+    276,
+    308
+   ],
+   "source_sheet": "whip_attack_air"
+  },
+  "whip_attack_crouch": {
+   "actor": "whip",
+   "frames": 8,
+   "loop": false,
+   "durations_ms": [
+    75,
+    75,
+    50,
+    50,
+    62.5,
+    62.5,
+    62.5,
+    62.5
+   ],
+   "canvas": [
+    768,
+    512
+   ],
+   "pivot": [
+    276,
+    308
+   ],
+   "source_sheet": "whip_attack_crouch"
+  },
+  "pursuer_idle": {
+   "actor": "pursuer",
+   "frames": 6,
+   "loop": true,
+   "durations_ms": [
+    150,
+    150,
+    150,
+    150,
+    150,
+    150
+   ],
+   "canvas": [
+    320,
+    192
+   ],
+   "pivot": [
+    128,
+    160
+   ],
+   "source_sheet": "pursuer_idle"
+  },
+  "pursuer_patrol_walk": {
+   "actor": "pursuer",
+   "frames": 8,
+   "loop": true,
+   "durations_ms": [
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90
+   ],
+   "canvas": [
+    320,
+    192
+   ],
+   "pivot": [
+    128,
+    160
+   ],
+   "source_sheet": "pursuer_patrol_walk"
+  },
+  "pursuer_alert": {
+   "actor": "pursuer",
+   "frames": 4,
+   "loop": false,
+   "durations_ms": [
+    75,
+    75,
+    75,
+    75
+   ],
+   "canvas": [
+    320,
+    192
+   ],
+   "pivot": [
+    128,
+    160
+   ],
+   "source_sheet": "pursuer_alert"
+  },
+  "pursuer_approach_walk": {
+   "actor": "pursuer",
+   "frames": 8,
+   "loop": true,
+   "durations_ms": [
+    70,
+    70,
+    70,
+    70,
+    70,
+    70,
+    70,
+    70
+   ],
+   "canvas": [
+    320,
+    192
+   ],
+   "pivot": [
+    128,
+    160
+   ],
+   "source_sheet": "pursuer_approach_walk"
+  },
+  "pursuer_lunge_windup": {
+   "actor": "pursuer",
+   "frames": 4,
+   "loop": false,
+   "durations_ms": [
+    100,
+    100,
+    75,
+    75
+   ],
+   "canvas": [
+    320,
+    192
+   ],
+   "pivot": [
+    128,
+    160
+   ],
+   "source_sheet": "pursuer_lunge_windup"
+  },
+  "pursuer_lunge": {
+   "actor": "pursuer",
+   "frames": 3,
+   "loop": false,
+   "durations_ms": [
+    80,
+    80,
+    80
+   ],
+   "canvas": [
+    320,
+    192
+   ],
+   "pivot": [
+    128,
+    160
+   ],
+   "source_sheet": "pursuer_lunge"
+  },
+  "pursuer_recovery": {
+   "actor": "pursuer",
+   "frames": 4,
+   "loop": false,
+   "durations_ms": [
+    150,
+    150,
+    150,
+    150
+   ],
+   "canvas": [
+    320,
+    192
+   ],
+   "pivot": [
+    128,
+    160
+   ],
+   "source_sheet": "pursuer_recovery"
+  },
+  "pursuer_hurt": {
+   "actor": "pursuer",
+   "frames": 3,
+   "loop": false,
+   "durations_ms": [
+    60,
+    60,
+    60
+   ],
+   "canvas": [
+    320,
+    192
+   ],
+   "pivot": [
+    128,
+    160
+   ],
+   "source_sheet": "pursuer_hurt"
+  },
+  "pursuer_death": {
+   "actor": "pursuer",
+   "frames": 6,
+   "loop": false,
+   "durations_ms": [
+    80,
+    80,
+    80,
+    80,
+    80,
+    80
+   ],
+   "canvas": [
+    320,
+    192
+   ],
+   "pivot": [
+    128,
+    160
+   ],
+   "source_sheet": "pursuer_death"
+  },
+  "swooper_perch_idle": {
+   "actor": "swooper",
+   "frames": 6,
+   "loop": true,
+   "durations_ms": [
+    150,
+    150,
+    150,
+    150,
+    150,
+    150
+   ],
+   "canvas": [
+    384,
+    256
+   ],
+   "pivot": [
+    192,
+    128
+   ],
+   "source_sheet": "swooper_perch_idle"
+  },
+  "swooper_cruise": {
+   "actor": "swooper",
+   "frames": 8,
+   "loop": true,
+   "durations_ms": [
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90
+   ],
+   "canvas": [
+    384,
+    256
+   ],
+   "pivot": [
+    192,
+    128
+   ],
+   "source_sheet": "swooper_cruise"
+  },
+  "swooper_dive_telegraph": {
+   "actor": "swooper",
+   "frames": 4,
+   "loop": false,
+   "durations_ms": [
+    150,
+    150,
+    150,
+    150
+   ],
+   "canvas": [
+    384,
+    256
+   ],
+   "pivot": [
+    192,
+    128
+   ],
+   "source_sheet": "swooper_dive_telegraph"
+  },
+  "swooper_dive": {
+   "actor": "swooper",
+   "frames": 4,
+   "loop": false,
+   "durations_ms": [
+    60,
+    60,
+    60,
+    60
+   ],
+   "canvas": [
+    384,
+    256
+   ],
+   "pivot": [
+    192,
+    128
+   ],
+   "source_sheet": "swooper_dive"
+  },
+  "swooper_recovery_climb": {
+   "actor": "swooper",
+   "frames": 6,
+   "loop": false,
+   "durations_ms": [
+    150,
+    150,
+    150,
+    150,
+    150,
+    150
+   ],
+   "canvas": [
+    384,
+    256
+   ],
+   "pivot": [
+    192,
+    128
+   ],
+   "source_sheet": "swooper_recovery_climb"
+  },
+  "swooper_hurt": {
+   "actor": "swooper",
+   "frames": 3,
+   "loop": false,
+   "durations_ms": [
+    60,
+    60,
+    60
+   ],
+   "canvas": [
+    384,
+    256
+   ],
+   "pivot": [
+    192,
+    128
+   ],
+   "source_sheet": "swooper_hurt"
+  },
+  "swooper_death_fall": {
+   "actor": "swooper",
+   "frames": 5,
+   "loop": false,
+   "durations_ms": [
+    70,
+    70,
+    70,
+    70,
+    70
+   ],
+   "canvas": [
+    384,
+    256
+   ],
+   "pivot": [
+    192,
+    128
+   ],
+   "source_sheet": "swooper_death_fall"
+  },
+  "ranged_idle": {
+   "actor": "ranged",
+   "frames": 6,
+   "loop": true,
+   "durations_ms": [
+    150,
+    150,
+    150,
+    150,
+    150,
+    150
+   ],
+   "canvas": [
+    256,
+    320
+   ],
+   "pivot": [
+    128,
+    288
+   ],
+   "source_sheet": "ranged_idle"
+  },
+  "ranged_aim": {
+   "actor": "ranged",
+   "frames": 6,
+   "loop": false,
+   "durations_ms": [
+    150,
+    150,
+    150,
+    150,
+    150,
+    150
+   ],
+   "canvas": [
+    256,
+    320
+   ],
+   "pivot": [
+    128,
+    288
+   ],
+   "source_sheet": "ranged_aim"
+  },
+  "ranged_fire": {
+   "actor": "ranged",
+   "frames": 3,
+   "loop": false,
+   "durations_ms": [
+    50,
+    50,
+    100
+   ],
+   "canvas": [
+    256,
+    320
+   ],
+   "pivot": [
+    128,
+    288
+   ],
+   "source_sheet": "ranged_fire"
+  },
+  "ranged_recover": {
+   "actor": "ranged",
+   "frames": 7,
+   "loop": false,
+   "durations_ms": [
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100
+   ],
+   "canvas": [
+    256,
+    320
+   ],
+   "pivot": [
+    128,
+    288
+   ],
+   "source_sheet": "ranged_recover"
+  },
+  "ranged_hurt": {
+   "actor": "ranged",
+   "frames": 3,
+   "loop": false,
+   "durations_ms": [
+    60,
+    60,
+    60
+   ],
+   "canvas": [
+    256,
+    320
+   ],
+   "pivot": [
+    128,
+    288
+   ],
+   "source_sheet": "ranged_hurt"
+  },
+  "ranged_death": {
+   "actor": "ranged",
+   "frames": 6,
+   "loop": false,
+   "durations_ms": [
+    80,
+    80,
+    80,
+    80,
+    80,
+    80
+   ],
+   "canvas": [
+    256,
+    320
+   ],
+   "pivot": [
+    128,
+    288
+   ],
+   "source_sheet": "ranged_death"
+  },
+  "projectile_grave_shot": {
+   "actor": "projectile",
+   "frames": 3,
+   "loop": true,
+   "durations_ms": [
+    80,
+    80,
+    80
+   ],
+   "canvas": [
+    64,
+    64
+   ],
+   "pivot": [
+    32,
+    32
+   ],
+   "source_sheet": "projectile_grave_shot"
+  },
+  "boss_idle": {
+   "actor": "boss",
+   "frames": 8,
+   "loop": true,
+   "durations_ms": [
+    125,
+    125,
+    125,
+    125,
+    125,
+    125,
+    125,
+    125
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    176,
+    448
+   ],
+   "source_sheet": "boss_idle"
+  },
+  "boss_walk": {
+   "actor": "boss",
+   "frames": 8,
+   "loop": true,
+   "durations_ms": [
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80,
+    80
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    176,
+    448
+   ],
+   "source_sheet": "boss_walk"
+  },
+  "boss_turn": {
+   "actor": "boss",
+   "frames": 4,
+   "loop": false,
+   "durations_ms": [
+    75,
+    75,
+    75,
+    75
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    176,
+    448
+   ],
+   "source_sheet": "boss_turn"
+  },
+  "boss_strike_windup": {
+   "actor": "boss",
+   "frames": 7,
+   "loop": false,
+   "durations_ms": [
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    176,
+    448
+   ],
+   "source_sheet": "boss_strike_windup"
+  },
+  "boss_strike_execute": {
+   "actor": "boss",
+   "frames": 4,
+   "loop": false,
+   "durations_ms": [
+    50,
+    50,
+    50,
+    50
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    176,
+    448
+   ],
+   "source_sheet": "boss_strike_execute"
+  },
+  "boss_strike_recover": {
+   "actor": "boss",
+   "frames": 6,
+   "loop": false,
+   "durations_ms": [
+    200,
+    200,
+    200,
+    200,
+    150,
+    150
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    176,
+    448
+   ],
+   "source_sheet": "boss_strike_recover"
+  },
+  "boss_hazard_windup": {
+   "actor": "boss",
+   "frames": 8,
+   "loop": false,
+   "durations_ms": [
+    150,
+    150,
+    150,
+    150,
+    150,
+    150,
+    150,
+    150
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    176,
+    448
+   ],
+   "source_sheet": "boss_hazard_windup"
+  },
+  "boss_hazard_execute": {
+   "actor": "boss",
+   "frames": 4,
+   "loop": false,
+   "durations_ms": [
+    100,
+    100,
+    100,
+    100
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    176,
+    448
+   ],
+   "source_sheet": "boss_hazard_execute"
+  },
+  "boss_hazard_recover": {
+   "actor": "boss",
+   "frames": 6,
+   "loop": false,
+   "durations_ms": [
+    150,
+    150,
+    150,
+    150,
+    150,
+    150
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    176,
+    448
+   ],
+   "source_sheet": "boss_hazard_recover"
+  },
+  "boss_hurt": {
+   "actor": "boss",
+   "frames": 3,
+   "loop": false,
+   "durations_ms": [
+    70,
+    70,
+    60
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    176,
+    448
+   ],
+   "source_sheet": "boss_hurt"
+  },
+  "boss_death": {
+   "actor": "boss",
+   "frames": 12,
+   "loop": false,
+   "durations_ms": [
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    176,
+    448
+   ],
+   "source_sheet": "boss_death"
+  },
+  "vfx_whip_impact": {
+   "actor": "vfx",
+   "frames": 6,
+   "loop": false,
+   "durations_ms": [
+    40,
+    40,
+    40,
+    50,
+    50,
+    60
+   ],
+   "canvas": [
+    256,
+    256
+   ],
+   "pivot": [
+    128,
+    128
+   ],
+   "source_sheet": "vfx_whip_impact"
+  },
+  "vfx_damage_indicator": {
+   "actor": "vfx",
+   "frames": 2,
+   "loop": false,
+   "durations_ms": [
+    150,
+    150
+   ],
+   "canvas": [
+    256,
+    256
+   ],
+   "pivot": [
+    128,
+    128
+   ],
+   "source_sheet": "vfx_damage_indicator"
+  },
+  "vfx_enemy_defeat": {
+   "actor": "vfx",
+   "frames": 8,
+   "loop": false,
+   "durations_ms": [
+    70,
+    70,
+    70,
+    70,
+    70,
+    70,
+    70,
+    70
+   ],
+   "canvas": [
+    256,
+    256
+   ],
+   "pivot": [
+    128,
+    128
+   ],
+   "source_sheet": "vfx_enemy_defeat"
+  },
+  "vfx_checkpoint_activate": {
+   "actor": "vfx",
+   "frames": 8,
+   "loop": false,
+   "durations_ms": [
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90
+   ],
+   "canvas": [
+    256,
+    256
+   ],
+   "pivot": [
+    128,
+    128
+   ],
+   "source_sheet": "vfx_checkpoint_activate"
+  },
+  "vfx_hazard_telegraph": {
+   "actor": "vfxhaz",
+   "frames": 4,
+   "loop": false,
+   "durations_ms": [
+    300,
+    300,
+    300,
+    300
+   ],
+   "canvas": [
+    320,
+    192
+   ],
+   "pivot": [
+    160,
+    176
+   ],
+   "source_sheet": "vfx_hazard_telegraph"
+  },
+  "vfx_hazard_eruption": {
+   "actor": "vfxhaz",
+   "frames": 6,
+   "loop": false,
+   "durations_ms": [
+    60,
+    60,
+    70,
+    70,
+    70,
+    70
+   ],
+   "canvas": [
+    320,
+    192
+   ],
+   "pivot": [
+    160,
+    176
+   ],
+   "source_sheet": "vfx_hazard_eruption"
+  },
+  "hero_crouch_exit": {
+   "actor": "hero",
+   "frames": 4,
+   "loop": false,
+   "durations_ms": [
+    50,
+    50,
+    50,
+    50
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "derived_from": "hero_crouch_enter",
+   "derivation": "reversed"
+  },
+  "hero_get_up": {
+   "actor": "hero",
+   "frames": 6,
+   "loop": false,
+   "durations_ms": [
+    75,
+    75,
+    75,
+    75,
+    75,
+    75
+   ],
+   "canvas": [
+    512,
+    512
+   ],
+   "pivot": [
+    256,
+    448
+   ],
+   "derived_from": "hero_knockdown",
+   "derivation": "reversed"
+  }
+ },
+ "derived": [
+  "hero_crouch_exit derived from hero_crouch_enter (reversed)",
+  "hero_get_up derived from hero_knockdown (reversed)"
+ ],
+ "notes": []
+}
