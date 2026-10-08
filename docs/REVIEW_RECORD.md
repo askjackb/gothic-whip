@@ -121,3 +121,22 @@ No art exists to trim, pack, or measure; every trim factor and the 0.85 packing 
 ## Open after this pass
 
 - P5 technical spec, P6 readiness review (including ratification of the TEXTURE_BUDGET amendment), D09.
+
+---
+
+# Follow-up review — P5 technical / export specification
+
+Date: 2026-10-08. Scope: documents only.
+
+## Completed checks
+
+- `docs/TECHNICAL_SPEC.md` written (Package P5): engine pinned to **Godot 4.7.2-stable** with matching export templates — verified by direct fetch of the official godotengine.org download archive page for 4.7.2-stable on 2026-10-08 (4.8 exists only as dev snapshots and is excluded); GDScript (not .NET) and the Compatibility renderer per D10 and the official web-export documentation; single-threaded web export as the baseline, with the COOP/COEP cross-origin-isolation requirement stated as the reason threaded builds are not the default.
+- Scene/input/data boundaries specified per TECHNICAL_CONSTRAINTS' responsibility split (input layer, player state machine, combat hit-IDs, animation event reporting, level data, presentation, per-set asset loading), an 8-item web export checklist, a device/browser matrix anchored on **iPhone 17 / iOS Safari as must-support** (D14) with desktop Chrome/Firefox as dev references, and a performance measurement protocol (60 fps, p95 frame ≤20 ms, ≤30 MiB cold payload, ≤12 s at 20 Mbps/50 ms RTT — all PROPOSED, NOT-TESTED) re-anchored from the superseded Android-phone anchor. Android APK remains DEFERRED with a prerequisites list. AUDIT B4's follow-ups are recorded as delivered.
+
+## Explicitly not tested
+
+No engine project, export, or device run exists. Every performance figure is a hypothesis awaiting the §5 protocol on real hardware; VALIDATION V5–V9 remain PENDING.
+
+## Open after this pass
+
+- P6 readiness review (contradiction sweep + acceptance matrix, including joint ratification of the TEXTURE_BUDGET amendment and this spec's import settings), user confirmation of D07–D11, and D09.

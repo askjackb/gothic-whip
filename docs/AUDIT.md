@@ -53,6 +53,7 @@ DECISIONS D09 (PROPOSED, "Not answered by user") and SPEC §5 agree on the basel
 - iOS Safari is a **must-support** target, not an exploratory check; the D14 either/or is closed.
 - The single-threaded web-export baseline (D10, PROPOSED) aligns well with Safari's constraints; P5 should still verify the pinned Godot version's WebGL2/WASM behavior on the actual device.
 - Android APK remains DEFERRED (D16) and is unaffected by this resolution.
+**P5 follow-up delivered (2026-10-08):** [TECHNICAL_SPEC.md](TECHNICAL_SPEC.md) pins Godot 4.7.2-stable (verified at the official godotengine.org download archive on the check date), anchors the device/browser matrix and performance protocol on iPhone 17 / iOS Safari, and keeps the APK section DEFERRED with prerequisites. All performance targets remain PROPOSED and NOT-TESTED; the stale "mid-range Android phone" anchor text in TECHNICAL_CONSTRAINTS.md is superseded by TECHNICAL_SPEC.md and left unedited as history.
 
 **B5. D13 horror intensity — RESOLVED by user decision (2026-10-08).** *Was: blocking-for-package (P2).*
 **Resolution (user, 2026-10-08):** the proposed treatment is confirmed — dread, decay, silhouettes; **no explicit gore**. Recorded in [DECISIONS.md](DECISIONS.md). P2 (art bible) may now fix content limits against this line.
@@ -82,4 +83,4 @@ TECHNICAL_CONSTRAINTS pairs a ≤30 MiB *transferred* cold-cache payload with th
 
 1. **D09** — confirm the no-stomp baseline (contact hurts, including landing on an enemy), or request stomp kills and a P1 revision.
 2. **D07–D11** — the slice shape, control scheme, engine baseline, view/grid/density numbers all remain PROPOSED; [GAMEPLAY_RULES.md](GAMEPLAY_RULES.md) is written against them and needs confirmation before it can be treated as settled (its values change nothing the user has confirmed).
-3. Everything in B2 (texture residency) and the B4 follow-ups (iPhone 17 performance matrix) is specification work for P3/P5 — no user input needed, but no production art or build should start until both close.
+3. B2 (texture residency) and the B4 follow-ups (iPhone 17 performance matrix) were P3/P5 specification work and are now delivered ([TEXTURE_BUDGET.md](TEXTURE_BUDGET.md), [TECHNICAL_SPEC.md](TECHNICAL_SPEC.md)) — no user input was needed for the documents, but no production art or build should start until the texture amendment is ratified and the device protocol has real runs.
