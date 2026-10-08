@@ -15,5 +15,5 @@ Read README.md, SPEC.md, docs/DECISIONS.md, and docs/ANIMATION_SPEC.md first. Th
 - Do not fill unknowns with fabricated approvals, generated-asset claims, benchmark results, or licensing claims.
 - Keep scope bounded to the proposed first slice unless it is explicitly revised. Do not reintroduce an all-franchise roster, metroidvania map, inventory economy, online features, or procedural generation.
 - State acceptance evidence and remaining uncertainty in each handoff. A self-review is not evidence of an on-device playtest.
-- Deliver documents and examples only in this phase. Templates and JSON examples are not runnable implementations or completed assets.
+- Production artifacts (game project, art, builds) are delivered per the current assignment above; keep templates and JSON examples clearly separate from shipped assets.
 - Review all changed relative links and JSON examples. Only claim checks that actually ran.
