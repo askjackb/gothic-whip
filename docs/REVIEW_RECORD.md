@@ -163,3 +163,28 @@ Unchanged from every prior entry: no engine project, export, art, animation, pla
 
 - User ratifications R1–R3 (READINESS_REVIEW §4); D09 remains the only open interview question.
 - The specification phase is complete on paper: P0–P6 delivered, AUDIT B1–B12 dispositioned, VALIDATION V0's document-side evidence assembled in READINESS_REVIEW §§1–2. The next step belongs to a future explicit implementation assignment (WORK_PACKAGES production gates 1–5), starting with locking the engine version and the proposed mechanics, then a greybox touch movement + whip test on iPhone 17 hardware.
+
+---
+
+# Follow-up review — implementation gates 1–2: greybox slice + web export
+
+Date: 2026-10-08. Scope: first implementation pass, authorized by the user's explicit implementation assignment ("go!", 2026-10-08) for production gates 1–2. Engine: **Godot 4.7.2-stable** (binary and matching 4.7.2 export templates verified present on this machine), GDScript, Compatibility renderer, single-threaded web export per TECHNICAL_SPEC S1/S3.
+
+## Completed checks
+
+- **`game/` Godot project created** (`game/project.godot`, `scenes/main.tscn`, `scripts/`): 1280×720 logical view, canvas_items/keep stretch, InputMap actions move_left/move_right/jump/whip/crouch/pause (keyboard in project.godot plus on-screen touch buttons 104–160 logical px via `scripts/input_state.gd`, one input layer for both, opposing inputs neutral, pause/focus-loss clears held input).
+- **Hunter** (`scripts/hunter.gd`): the full GAMEPLAY_RULES S4 state table (21 states) with S2 interruption priority, S5 damage routing (projectile→hurt_recoil, contact/hazard→knockback 160 u/s, boss heavy→knockdown/get_up), S6 crouch-clearance cases, 100 ms coyote + buffer, whip 150/100/250 ms with per-attack hit IDs surviving the air→ground continuation, 5 HP, 1 s i-frames. Constants taken from GAMEPLAY_RULES S1 unchanged.
+- **Stage** (`scripts/main.gd` TERRAIN table): the P4 blockout B1–B5 (104 modules) — one-way slabs/treads over recovery routes, B2 pit + global kill plane, checkpoint module 64, boss gates at modules 87/102, exit at module 103; all mandatory gaps/steps/landings inside the STAGE_DESIGN S4 envelope by construction.
+- **Enemies**: pursuer (patrol/alert/chase/windup/lunge/recover, 1 HP), swooper (cruise/600 ms telegraph dive/900 ms climb, 1 HP), ranged (900 ms tracked aim, 280 u/s projectile, 2 HP, aim interruptible), boss (advance/turn, 700 ms-tell heavy strike, 1200 ms-telegraphed 160 u hazard eruption, 8 HP, defeat opens gates + unlocks exit). All behavior values are the [P1 proposal]s, unverified by play.
+- **Headless smoke test** (`game/tests/smoke_test.gd`, GUT-less SceneTree script): real run output — scene loads with zero script errors; hunter walks 120.0 u in 0.5 s; jump rise measured 133.4 u (discrete-integration overshoot vs the 128 u analytic value; mandatory limits remain inside the envelope); whip verified inactive at ~100 ms, active at ~200 ms, inactive at ~300 ms; effigy hit exactly once per attack; contact hit → knockback at 4 HP; lethal hit → death → restart at stage start with 5 HP. **19/19 checks PASS, exit code 0.**
+- **Web export**: `Web` preset (thread support off, so no COOP/COEP headers needed) exported cleanly to `game/build/web/` (index.html + index.js + index.pck + index.wasm ~39.5 MB); served over HTTP and driven in headless Chromium (SwiftShader WebGL): engine boots, greybox scene renders (spawn plaza, effigy, pursuer visible), keyboard movement works, **zero console errors**. Evidence: `game/screenshot_spawn.png`, `game/screenshot_action.png`.
+
+## Explicitly not tested
+
+- **Everything visual is greybox**: flat-color `_draw()` polygons per actor. No production art, no style pack (next gate), no animation frames — ANIMATION_SPEC's completeness proof remains unstarted; no claim of animation quality is made or implied.
+- **No device evidence**: iPhone 17 / iOS Safari (D14) touch play, focus/resume on a real browser, portrait rotate behavior, performance protocol (60 fps / p95 ≤ 20 ms / payload / load targets, TECHNICAL_SPEC S5) — all NOT-TESTED. Headless SwiftShader frame rate is not performance evidence; input-timing observations in that environment are wall-clock-unreliable.
+- Boss/hazard/checkpoint/exit flows are exercised by construction and code path review, not yet by a scripted end-to-end kill-to-exit run; VALIDATION gates V1–V9 remain PENDING as a whole.
+
+## Open after this pass
+
+- Production gate 3 (style pack + hero/whip pipeline) awaits its own explicit opening; the [P1 proposal] combat/AI numbers and the STAGE_DESIGN at-limit steps + pre-checkpoint pit await greybox playtest evidence (V6/V7) — on a real device, not in this headless environment.
