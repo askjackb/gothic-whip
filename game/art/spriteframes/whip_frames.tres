@@ -1,103 +1,102 @@
 [gd_resource type="SpriteFrames" format=3]
 
 [ext_resource type="Texture2D" path="res://art/atlases/atlas_enemies_0.png" id="1"]
-[ext_resource type="Texture2D" path="res://art/atlases/atlas_enemies_1.png" id="2"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1"]
 atlas = ExtResource("1")
-region = Rect2(0, 1102, 237, 285)
+region = Rect2(1142, 1628, 200, 260)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2"]
 atlas = ExtResource("1")
-region = Rect2(661, 253, 298, 261)
+region = Rect2(667, 998, 205, 273)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3"]
 atlas = ExtResource("1")
-region = Rect2(333, 257, 323, 237)
+region = Rect2(0, 0, 329, 248)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4"]
-atlas = ExtResource("2")
-region = Rect2(696, 0, 348, 155)
+atlas = ExtResource("1")
+region = Rect2(535, 1503, 349, 165)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5"]
 atlas = ExtResource("1")
-region = Rect2(1168, 1012, 297, 224)
+region = Rect2(1641, 549, 315, 154)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6"]
 atlas = ExtResource("1")
-region = Rect2(512, 804, 308, 236)
+region = Rect2(840, 1271, 273, 203)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7"]
 atlas = ExtResource("1")
-region = Rect2(512, 1719, 318, 203)
+region = Rect2(1450, 1364, 195, 238)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8"]
-atlas = ExtResource("2")
-region = Rect2(195, 178, 293, 187)
+atlas = ExtResource("1")
+region = Rect2(1274, 817, 197, 257)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_9"]
 atlas = ExtResource("1")
-region = Rect2(1176, 835, 255, 173)
+region = Rect2(1825, 290, 187, 248)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_10"]
-atlas = ExtResource("2")
-region = Rect2(195, 0, 312, 178)
+atlas = ExtResource("1")
+region = Rect2(1448, 554, 193, 258)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_11"]
 atlas = ExtResource("1")
-region = Rect2(333, 0, 328, 257)
+region = Rect2(329, 0, 328, 231)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_12"]
 atlas = ExtResource("1")
-region = Rect2(993, 0, 348, 236)
+region = Rect2(884, 1474, 347, 154)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_13"]
 atlas = ExtResource("1")
-region = Rect2(869, 775, 307, 237)
+region = Rect2(1510, 1892, 289, 151)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_14"]
 atlas = ExtResource("1")
-region = Rect2(1471, 809, 294, 234)
+region = Rect2(1471, 966, 253, 182)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_15"]
 atlas = ExtResource("1")
-region = Rect2(1465, 1830, 302, 189)
+region = Rect2(1799, 1792, 182, 232)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_16"]
 atlas = ExtResource("1")
-region = Rect2(1579, 1348, 315, 192)
+region = Rect2(1724, 967, 184, 245)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_17"]
 atlas = ExtResource("1")
-region = Rect2(305, 494, 308, 244)
+region = Rect2(1825, 703, 182, 264)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_18"]
 atlas = ExtResource("1")
-region = Rect2(661, 0, 332, 253)
+region = Rect2(1448, 290, 189, 264)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_19"]
 atlas = ExtResource("1")
-region = Rect2(0, 0, 333, 274)
+region = Rect2(657, 0, 314, 237)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_20"]
 atlas = ExtResource("1")
-region = Rect2(820, 1012, 348, 195)
+region = Rect2(0, 1118, 348, 193)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_21"]
 atlas = ExtResource("1")
-region = Rect2(993, 236, 315, 249)
+region = Rect2(537, 1310, 303, 186)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_22"]
 atlas = ExtResource("1")
-region = Rect2(1341, 0, 321, 255)
+region = Rect2(754, 527, 251, 220)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_23"]
 atlas = ExtResource("1")
-region = Rect2(0, 274, 305, 248)
+region = Rect2(1637, 290, 188, 259)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_24"]
 atlas = ExtResource("1")
-region = Rect2(1471, 580, 310, 229)
+region = Rect2(1641, 703, 184, 263)
 
 [resource]
 animations = [

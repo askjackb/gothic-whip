@@ -275,3 +275,90 @@ Date: 2026-10-09. Scope: extension of the scale-fix pass at the user's direction
 ## Open after this pass
 
 - Same as the scale-fix entry: V2–V9 device validation when hardware is available.
+
+---
+
+# Follow-up review — whip pose progression + VFX envelopes (user-reported)
+
+Date: 2026-10-09. Trigger: user played the live build and reported "the whip
+action suddenly pop as a illogical state" and "explosions like effect that
+pop irregularly". Scope: art only — no durations, pivots, hitboxes or
+gameplay code changed. Tool: `tools/fix_whip_vfx.py`; full before/after
+metrics in `game/art/WHIP_VFX_FIX_2026-10-09.md`; originals archived in
+`game/art/source/frames_prefix_2026-10-09.zip` (appended, never destroyed).
+
+## Bug 1 — whip pose progression (rebuilt, not patched)
+
+Diagnosis (measured): ground clip heights 281→257→233→**151**→220→232→199→183
+with f03 a dead-straight horizontal bar snapping in with no unfurl before
+it; crouch f00 already extended (right edge +324 px of pivot); air
+alternated coil/arc shape families frame to frame.
+
+Fix: all three whip clips (8 frames each) re-rendered procedurally as one
+continuous motion per clip — coiled wind-up → opening coil with escaping
+tip → unfurling half-loop → extending arc → crack frame with a whip-like
+curve (sag + taper, not a bar) → follow-through → recoil → coil rest. The
+braid is drawn as a ribbon along the pose paths, textured with
+cross-section slices of the original crack frame (brown braided look and
+28→16 px taper preserved); each clip's handle plate is pixel-identical in
+all 8 frames.
+
+Measured after: grip (276, gy) constant per clip, gy drift ≤0.5 px
+(criterion ≤3); crack tip right edge 619–621 → reach 171.5–172.5 u
+(≥168 u hitbox); tip monotonic through extension in all three clips; worst
+adjacent bbox-height step −34.4% (the crack flattening; criterion ≤35%).
+Regenerated strips `seq_whip_*.png` inspected frame-by-frame: the swing
+reads as one motion in all three variants.
+
+## Bug 2 — VFX envelopes (per clip, judged against gameplay footprint)
+
+- **vfx_whip_impact — rebuilt.** Before: widths 234→256→256→256→204→102
+  (last frame a 20 px-tall sliver) — an instant near-full-canvas blast
+  (128 u, the full whip hitbox width) held for 3 frames. After: one
+  starburst family rebuilt from the densest original frame, widths
+  86→148→**204**→162→108→58 px with alpha decay, center (128,128) on every
+  frame (drift 0). Peak 102 u at the contact point, proportionate.
+- **vfx_enemy_defeat — repaired.** Before: full-canvas 256² from frame 0;
+  in-game it also read as a hard grey square (source smoke is opaque to
+  the canvas edge). After: scale 0.50→1.0→0.65 + alpha decay about the
+  center and a radial alpha feather, so it grows, peaks on the enemy and
+  dissipates as a soft cloud.
+- **vfx_checkpoint_activate — repaired.** Width dip 119→81→198 smoothed to
+  64→110→150→168→162→148→122→111, base-anchored at the checkpoint foot.
+- **vfx_hazard_eruption — light tail repair.** Tail re-widening (core
+  170→310) fixed (f4 ×1.18, f5 ×0.66, alpha 0.85). The frame-0→1 full-height
+  ignition is kept: an eruption column (160 u zone) igniting within one
+  250 ms frame is the designed read.
+- **vfx_hazard_telegraph — placement repair.** Envelope was regular, but
+  the crack band sat at canvas rows 0–80 and rendered 58–88 u above the
+  ground it marks (spawn is boss.y−8 with pivot row 176). Art shifted
+  +108 px inside its canvas so the band sits on the ground line, matching
+  the eruption's bottom anchor at the same spawn point.
+- **vfx_damage_indicator — PASS, untouched** (2-frame HUD vignette flash,
+  center drift ≤2 px).
+
+## Verification (all actually run/looked at)
+
+- `tools/audit_sequences.py`: 64 clips, **0 defects**; strips regenerated.
+- `tests/sequence_engine_check.gd`: **SEQUENCE ENGINE RESULT: PASS**;
+  `tests/smoke_test.gd`: **SMOKE RESULT: PASS**.
+- Engine screenshots (xvfb, `tests/fix_shots.gd`): `fix_whip_strike.png`
+  (curved crack frame overlapping the effigy, proportionate starburst),
+  `fix_whip_crouch.png`, `fix_whip_air.png`, `fix_enemy_defeat.png`
+  (soft feathered burst), `fix_boss_telegraph.png` (telegraph band on the
+  ground at the hunter's feet, "THE WARDEN WAKES").
+- Fresh web export driven in Chromium (SwiftShader, route-intercepted
+  local files): boots, walks, enemy AI advances, **0 console/page errors**.
+  Strike captured from recorded video frames
+  (`tests/shots/fix_whip_strike_web.png`: whip extended into the burst at
+  the effigy). A browser enemy-defeat frame was not captured — frame-precise
+  timing under SwiftShader is dominated by the engine captures above;
+  stated honestly rather than staged.
+- Pipeline note recorded in the metrics doc: after `pack_atlases.py`, run
+  `godot --headless --path . --import` once, or plain script runs will show
+  stale cached atlas textures at the new region coordinates (this bit us
+  during verification and was diagnosed by region-content crops).
+
+## Explicitly not tested
+
+- iPhone 17 physical device (V2–V9 still pending) — unchanged.

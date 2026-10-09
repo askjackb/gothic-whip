@@ -1394,7 +1394,8 @@
   "hero_turn clip's final frame faces left in the source art; the runtime flips the whole container with facing, giving a brief wrong-facing read mid-turn.",
   "All frames: green-screen sheets chroma-keyed programmatically (alpha from green dominance, despilled; per-sheet alpha coverage logged by the pipeline), one uniform anchor scale per actor (hero_idle/pursuer_idle/swooper_cruise/ranged_idle/boss_idle), fixed contract canvases and pivots, frames trimmed for atlasing with per-frame trim offsets restored at runtime (art/clips.json trims).",
   "CORRECTION (2026-10-09): the 'one uniform anchor scale per actor' statement in the note above did not hold in the shipped frames (hero walk 192 px vs idle 224 px; crouch 252 px; boss turn/hurt clipped at 448 px). Fixed by per-clip scale normalization; full before/after record in the scale_fix_2026_10_09 section of this manifest and game/art/SCALE_AUDIT_*.md.",
-  "Atlases repacked 2026-10-09 after the scale fix: 5 pages / 80.0 MiB (was 7 / 112.0), still within the ratified R1 residency model (<= 7 pages, mips off)."
+  "Atlases repacked 2026-10-09 after the scale fix: 5 pages / 80.0 MiB (was 7 / 112.0), still within the ratified R1 residency model (<= 7 pages, mips off).",
+  "WHIP/VFX FIX (2026-10-09, user-reported): whip clips rebuilt as one continuous coil->unfurl->curved-crack->recoil motion per clip (procedural ribbon renderer, tools/fix_whip_vfx.py; handle plates pixel-identical, grip (276,~308) every frame, crack reach 172u); vfx_whip_impact rebuilt as a single-peak starburst envelope (peak 204px, center-locked); vfx_enemy_defeat growth/decay + radial feather; vfx_checkpoint_activate width dip smoothed; vfx_hazard_eruption tail re-widening repaired; vfx_hazard_telegraph art shifted +108px to sit on the ground at its spawn (was floating 58-88u up). Full before/after metrics: game/art/WHIP_VFX_FIX_2026-10-09.md. Originals archived in game/art/source/frames_prefix_2026-10-09.zip."
  ],
  "atlases": {
   "pages": 5,
@@ -1891,15 +1892,27 @@
  "sequence_audit_2026_10_09": {
   "deliverable": "game/art/SEQUENCE_AUDIT.md",
   "strips": "game/tests/shots/seq_<actor>_<clip>.png (64 strips)",
-  "engine_check": "game/tests/sequence_engine_check.gd \u2014 SEQUENCE ENGINE RESULT: PASS (64 clips, 357 frames stepped)",
+  "engine_check": "game/tests/sequence_engine_check.gd — SEQUENCE ENGINE RESULT: PASS (64 clips, 357 frames stepped)",
   "defects_found_and_fixed": [
-   "vfx_damage_indicator blank frames (see scale_fix record) \u2014 pipeline special case added; frames now carry the red vignette."
+   "vfx_damage_indicator blank frames (see scale_fix record) — pipeline special case added; frames now carry the red vignette."
   ],
   "waived": [
-   "pursuer_idle: no runtime state (patrol covers locomotion; alert owns the rear-up); frames 1/4 rear inside the idle loop \u2014 not user-visible, retained for inventory.",
-   "swooper_perch_idle: no runtime state (swooper spawns cruising; no perch behavior shipped) \u2014 retained for inventory."
+   "pursuer_idle: no runtime state (patrol covers locomotion; alert owns the rear-up); frames 1/4 rear inside the idle loop — not user-visible, retained for inventory.",
+   "swooper_perch_idle: no runtime state (swooper spawns cruising; no perch behavior shipped) — retained for inventory."
   ],
-  "warnings_accepted": "Boss cloak hems pool 4-50 px below the foot line in two recover opening frames and hero_death ash settles 6 px below; feet stay on the pivot \u2014 painted cloth, not drift.",
+  "warnings_accepted": "Boss cloak hems pool 4-50 px below the foot line in two recover opening frames and hero_death ash settles 6 px below; feet stay on the pivot — painted cloth, not drift.",
   "result": "0 unwaived defects; all 64 clips match spec frame counts and duration totals; whip totals 500 ms with active frames 2-3 and max active tip reach 172 u (>= 168 u)."
+ },
+ "whip_vfx_fix_2026_10_09": {
+  "user_report": "whip action suddenly pops as an illogical state; explosions-like effect pops irregularly",
+  "whip": "3 clips x 8 frames re-rendered (ribbon along designed pose paths, braid slices from original crack frame); grip drift <=0.5px; tip extension monotonic; crack tip R=619-621 (172u); worst adjacent height step -34.4% at crack",
+  "vfx_whip_impact": "rebuilt from densest frame: widths 86/148/204/162/108/58, center (128,128) all frames (before: 234/256/256/256/204/102 ending in a 20px-tall sliver)",
+  "vfx_enemy_defeat": "scale envelope 0.50->1.0->0.65 + alpha decay + radial feather (before: full-canvas 256 from frame 0, hard square edges in-game)",
+  "vfx_checkpoint_activate": "width envelope 64/110/150/168/162/148/122/111 base-anchored (before: 49/119/81/198 dip)",
+  "vfx_hazard_eruption": "tail repair only: f4 x1.18, f5 x0.66 alpha 0.85 (core 170->201->205); full-height ignition kept (eruption physics, 160u zone)",
+  "vfx_hazard_telegraph": "art shifted +108px in canvas to the ground line (envelope already regular)",
+  "vfx_damage_indicator": "PASS untouched (2-frame HUD vignette flash, drift <=2px)",
+  "metrics_doc": "game/art/WHIP_VFX_FIX_2026-10-09.md",
+  "backup": "game/art/source/frames_prefix_2026-10-09.zip"
  }
 }
