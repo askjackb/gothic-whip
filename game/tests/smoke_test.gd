@@ -14,6 +14,8 @@ var _start_x := 0.0
 var _jump_start_y := 0.0
 var _apex_y := 0.0
 var _whip_frame := 0
+var _reg_frame := 0
+var _reg_start_x := 0.0
 
 
 func _initialize() -> void:
@@ -150,9 +152,60 @@ func _on_physics_frame() -> void:
 				if wspr != null:
 					_check(String(wspr.animation).begins_with("whip_attack"),
 						"whip sprite playing a whip clip (anim=%s)" % wspr.animation)
-				_finish()
+				# Soft-lock regression (2026-10-09): under the B3 re-ascent
+				# tread (one-way slab 52 u over the street) a crouch must not
+				# trap the hunter. Enemies frozen so the check is deterministic.
+				for e in _main.enemies:
+					e.set_physics_process(false)
+					e.set_process(false)
+				h.global_position = Vector2(3550, 512)
+				h.velocity = Vector2.ZERO
+				h.facing = 1
+				_reg_frame = _frame
+				_phase = 10
 			elif _frame > _whip_frame + 420:
 				_fail("hunter never entered an attack state for art check")
+				_finish()
+		10: # settle under the tread, then crouch and hold
+			if _frame >= _reg_frame + 15:
+				_check(h.grounded, "regression: hunter grounded under re-ascent tread")
+				_input().debug_set_held("crouch", true)
+				_reg_frame = _frame
+				_phase = 11
+		11: # 0.5 s of held crouch -> crouch_idle; release + hold Right
+			if _frame >= _reg_frame + 30:
+				_check(h.get_state() == "crouch_idle",
+					"regression: hunter crouched under tread (state=%s)" % h.get_state())
+				_input().debug_set_held("crouch", false)
+				_input().debug_set_held("move_right", true)
+				_reg_start_x = h.global_position.x
+				_reg_frame = _frame
+				_phase = 12
+		12: # 1 s of held Right: must exit crouch states and actually move
+			if _frame >= _reg_frame + 60:
+				_input().debug_set_held("move_right", false)
+				var dx := h.global_position.x - _reg_start_x
+				_check(h.get_state() not in ["crouch_enter", "crouch_idle"],
+					"soft-lock regression: releasing crouch under a one-way tread exits crouch (state=%s)" % h.get_state())
+				_check(dx > 60.0,
+					"soft-lock regression: hunter walks out from under the tread (moved %.1f u)" % dx)
+				h.global_position = Vector2(3550, 512)
+				h.velocity = Vector2.ZERO
+				_input().debug_set_held("crouch", true)
+				_reg_frame = _frame
+				_phase = 13
+		13: # crouched again; Space must jump (SPEC S6 case 3)
+			if _frame >= _reg_frame + 30:
+				_check(h.get_state() == "crouch_idle",
+					"regression: hunter crouched again under tread (state=%s)" % h.get_state())
+				_input().debug_press("jump")
+				_reg_frame = _frame
+				_phase = 14
+		14: # jump from crouch under the tread must leave the ground
+			if _frame >= _reg_frame + 25:
+				_input().debug_set_held("crouch", false)
+				_check(h.global_position.y < 500.0,
+					"soft-lock regression: crouch-jump under one-way tread leaves ground (y=%.1f)" % h.global_position.y)
 				_finish()
 
 

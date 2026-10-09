@@ -2,7 +2,7 @@
 
 Method: PIL/scipy measurement of `game/art/frames/<clip>/` (alpha > 40; LCC = largest connected component = the figure). Pivot drift tolerance ≤ 2 px; adjacent-frame LCC height pop threshold > 4.0%. One contact strip per clip in `game/tests/shots/seq_<actor>_<clip>.png` (red = contract pivot, green = actor design height).
 
-Clips audited: 64. Defects: 0. Warnings: 6. Waived: 6. Intended transitions noted: 149.
+Clips audited: 64. Defects: 0. Warnings: 6. Waived: 6. Intended transitions noted: 148.
 
 ## Per-clip verdicts
 
@@ -27,9 +27,9 @@ Clips audited: 64. Defects: 0. Warnings: 6. Waived: 6. Intended transitions note
 | hero_knockback | hero | 4/4 | 300 | False | 185/212/224 | 0.5 | - | hero.knockback | CHECK |
 | hero_knockdown | hero | 6/6 | 360 | False | 123/144/229 | 2 | - | hero.knockdown | CHECK |
 | hero_death | hero | 10/10 | 800 | False | 42/179/229 | 6 | - | hero.death | CHECK |
-| whip_attack_ground | whip | 8/8 | 500 | False | 150/239/268 | 0.5 | - | whip.attack_ground | CHECK |
-| whip_attack_air | whip | 8/8 | 500 | False | 147/225/253 | 0.5 | - | whip.attack_air | CHECK |
-| whip_attack_crouch | whip | 8/8 | 500 | False | 182/243/260 | 0 | - | whip.attack_crouch | CHECK |
+| whip_attack_ground | whip | 8/8 | 500 | False | 20/82/85 | 0 | - | whip.attack_ground | CHECK |
+| whip_attack_air | whip | 8/8 | 500 | False | 17/75/107 | 0 | - | whip.attack_air | CHECK |
+| whip_attack_crouch | whip | 8/8 | 500 | False | 16/73/80 | 0 | - | whip.attack_crouch | CHECK |
 | pursuer_idle | pursuer | 6/6 | 900 | True | 109/111/148 | 1 | 1.8 | — | WAIVED |
 | pursuer_patrol_walk | pursuer | 8/8 | 720 | True | 106/111/124 | 1 | 8.5 | pursuer.patrol | CHECK |
 | pursuer_alert | pursuer | 4/4 | 300 | False | 111/160/160 | 19 | - | pursuer.alert | CHECK |
@@ -144,23 +144,22 @@ Warnings disposition: the six warnings are painted cloth/ash extending below the
 - hero_death: height pop f6->f7: 130->88 (-32.3%) [reviewed cyclic/intended pose]
 - hero_death: height pop f7->f8: 88->42 (-52.3%) [reviewed cyclic/intended pose]
 - hero_death: height pop f8->f9: 42->78 (+85.7%) [reviewed cyclic/intended pose]
-- whip_attack_ground: height pop f0->f1: 256->268 (+4.7%) [reviewed cyclic/intended pose]
-- whip_attack_ground: height pop f1->f2: 268->244 (-9.0%) [reviewed cyclic/intended pose]
-- whip_attack_ground: height pop f2->f3: 244->160 (-34.4%) [reviewed cyclic/intended pose]
-- whip_attack_ground: height pop f3->f4: 160->150 (-6.2%) [reviewed cyclic/intended pose]
-- whip_attack_ground: height pop f4->f5: 150->198 (+32.0%) [reviewed cyclic/intended pose]
-- whip_attack_ground: height pop f5->f6: 198->234 (+18.2%) [reviewed cyclic/intended pose]
-- whip_attack_ground: height pop f6->f7: 234->252 (+7.7%) [reviewed cyclic/intended pose]
-- whip_attack_air: height pop f0->f1: 242->253 (+4.5%) [reviewed cyclic/intended pose]
-- whip_attack_air: height pop f1->f2: 253->225 (-11.1%) [reviewed cyclic/intended pose]
-- whip_attack_air: height pop f2->f3: 225->148 (-34.2%) [reviewed cyclic/intended pose]
-- whip_attack_air: height pop f4->f5: 147->176 (+19.7%) [reviewed cyclic/intended pose]
-- whip_attack_air: height pop f5->f6: 176->226 (+28.4%) [reviewed cyclic/intended pose]
-- whip_attack_air: height pop f6->f7: 226->239 (+5.8%) [reviewed cyclic/intended pose]
-- whip_attack_crouch: height pop f1->f2: 260->232 (-10.8%) [reviewed cyclic/intended pose]
-- whip_attack_crouch: height pop f2->f3: 232->188 (-19.0%) [reviewed cyclic/intended pose]
-- whip_attack_crouch: height pop f4->f5: 182->215 (+18.1%) [reviewed cyclic/intended pose]
-- whip_attack_crouch: height pop f5->f6: 215->255 (+18.6%) [reviewed cyclic/intended pose]
+- whip_attack_ground: height pop f2->f3: 85->20 (-76.5%) [reviewed cyclic/intended pose]
+- whip_attack_ground: height pop f3->f4: 20->83 (+315.0%) [reviewed cyclic/intended pose]
+- whip_attack_ground: height pop f4->f5: 83->39 (-53.0%) [reviewed cyclic/intended pose]
+- whip_attack_ground: height pop f5->f6: 39->83 (+112.8%) [reviewed cyclic/intended pose]
+- whip_attack_air: height pop f0->f1: 70->66 (-5.7%) [reviewed cyclic/intended pose]
+- whip_attack_air: height pop f1->f2: 66->97 (+47.0%) [reviewed cyclic/intended pose]
+- whip_attack_air: height pop f2->f3: 97->17 (-82.5%) [reviewed cyclic/intended pose]
+- whip_attack_air: height pop f3->f4: 17->107 (+529.4%) [reviewed cyclic/intended pose]
+- whip_attack_air: height pop f4->f5: 107->57 (-46.7%) [reviewed cyclic/intended pose]
+- whip_attack_air: height pop f5->f6: 57->81 (+42.1%) [reviewed cyclic/intended pose]
+- whip_attack_crouch: height pop f1->f2: 74->53 (-28.4%) [reviewed cyclic/intended pose]
+- whip_attack_crouch: height pop f2->f3: 53->16 (-69.8%) [reviewed cyclic/intended pose]
+- whip_attack_crouch: height pop f3->f4: 16->74 (+362.5%) [reviewed cyclic/intended pose]
+- whip_attack_crouch: height pop f4->f5: 74->47 (-36.5%) [reviewed cyclic/intended pose]
+- whip_attack_crouch: height pop f5->f6: 47->80 (+70.2%) [reviewed cyclic/intended pose]
+- whip_attack_crouch: height pop f6->f7: 80->76 (-5.0%) [reviewed cyclic/intended pose]
 - pursuer_patrol_walk: height pop f0->f1: 115->124 (+7.8%) [reviewed cyclic/intended pose]
 - pursuer_patrol_walk: height pop f2->f3: 122->112 (-8.2%) [reviewed cyclic/intended pose]
 - pursuer_patrol_walk: height pop f3->f4: 112->107 (-4.5%) [reviewed cyclic/intended pose]

@@ -187,7 +187,27 @@ func _has_standing_clearance() -> bool:
 	query.transform = Transform2D(0.0, global_position + Vector2(0, -54))
 	query.collision_mask = 1
 	query.exclude = [get_rid()]
-	return get_world_2d().direct_space_state.intersect_shape(query).is_empty()
+	# One-way slabs (the 12 u treads/walkways) collide only from above, so
+	# they are not ceilings: counting them here trapped a crouched hunter
+	# forever under any tread floating 52 u over a floor (crouch_idle pins
+	# velocity.x and both its exit and the crouch-jump gate on this check;
+	# 2026-10-09 soft-lock report). Only solid shapes block standing.
+	for hit in get_world_2d().direct_space_state.intersect_shape(query):
+		if not _hit_is_one_way(hit):
+			return false
+	return true
+
+
+func _hit_is_one_way(hit: Dictionary) -> bool:
+	var body := hit.get("collider") as CollisionObject2D
+	if body == null:
+		return false
+	var idx := int(hit.get("shape", -1))
+	var owners := body.get_shape_owners()
+	if idx < 0 or idx >= owners.size():
+		return false
+	var cs := body.shape_owner_get_owner(owners[idx]) as CollisionShape2D
+	return cs != null and cs.one_way_collision
 
 
 func _try_jump() -> bool:

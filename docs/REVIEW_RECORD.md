@@ -362,3 +362,171 @@ reads as one motion in all three variants.
 ## Explicitly not tested
 
 - iPhone 17 physical device (V2–V9 still pending) — unchanged.
+
+---
+
+# Follow-up review — crouch soft-lock under one-way treads (2026-10-09)
+
+**Status: fix prepared and verified locally; deliberately NOT committed,
+pushed, or deployed.** The user reported a possible soft-lock from a
+live-browser playtest ("wedged immobile against a thin black vine/column
+tile … Left/Right/Down/Space+Right produced no movement until page
+reload"), then directed: "just wait for me to playtest it manually." The
+live build (gothic-whip-game `c1d3056`, Pages) is unchanged; everything
+below is uncommitted working-tree state in both repos, awaiting the
+user's manual playtest report.
+
+## Diagnosis (real defect, reproduced headlessly)
+
+Mechanism: `crouch_idle` pins `velocity.x = 0` (SPEC §3: no crouch-walk)
+and both of its exits — release-to-stand and the §6-case-3 crouch-jump —
+gate on `Hunter._has_standing_clearance()`. That query counted **one-way**
+slabs as ceilings. Every 12 u tread/walkway slab floating 52 u above a
+floor therefore traps a hunter who crouches beneath it: no stand, no
+jump, no crawl, indefinitely. Input latency is excluded as the cause:
+scripted engine inputs (held Right 1.5 s + Space, the same keys the
+playtest tried) moved the hunter **0.0 u** at the trap spots.
+
+Reproduction (`tests/smoke_test.gd`-driven probes, pre-fix):
+- (3550, 512) under the B3 re-ascent tread: crouch → release → 0.0 u,
+  stuck in `crouch_idle`. On the tread (3550, 448) under W3: 0.0 u.
+- The clearance query at (2680, 512) hits exactly one shape: the 128×12
+  one-way tread (`one_way=true`) — nothing else blocks standing there.
+- Clearance-blocked-while-grounded spots (same defect class): under B3
+  tread1 (x 2624–2752, floor 512), under/on the re-ascent tread
+  (x 3520–3584, floors 512/448), under B4 treads R1a (x 4480–4544) and
+  R1b (x 4672–4736), floor 512. Controls with 116 u headroom (under W2,
+  under the B4 platform) are unaffected. This matches the playtest
+  location: first pit crossed → B3 ascent/street area → thin tread slab.
+
+## Prepared fix (uncommitted)
+
+`game/scripts/hunter.gd`: `_has_standing_clearance()` now ignores hits
+whose `CollisionShape2D.one_way_collision` is true (new `_hit_is_one_way`
+helper; unresolvable hits still count as blockers, so genuinely solid
+ceilings still block standing). One-way slabs never collide from below,
+so this only removes the false ceiling. No gameplay constants, timings,
+or state transitions changed. Regression phases added to
+`tests/smoke_test.gd` (crouch under the re-ascent tread → release +
+Right must exit crouch and move > 60 u; crouch-jump must leave the
+ground), enemies frozen for determinism.
+
+## Verification (all actually run/looked at)
+
+- Pre-fix, the new smoke regression fails with exactly the 3 soft-lock
+  assertions (stays `crouch_idle`, moved 0.0 u, y stays 512.0); all 80
+  pre-existing assertions pass. Post-fix: **SMOKE RESULT: PASS**.
+- Post-fix directed probes: every former trap spot moves 212–360 u and
+  ends in `idle`; `clearance_free=true` at all 5 spots and controls.
+- Engine screenshots (xvfb, `tests/soft_lock_shots.gd`):
+  `tests/shots/fix_soft_lock_crouched.png` (hunter crouched under the
+  tread at the chained door) and `fix_soft_lock_walkout.png` (0.6 s
+  later: standing, mid-stride walking out).
+- Fresh web export of the fixed code, served locally and driven in
+  headless Chromium (Playwright, SwiftShader): boots, plays B1→B4,
+  checkpoint/death/respawn work, **0 console/page errors** across all
+  drives (`tests/shots/fix_soft_lock_web_b3.png`). The at-the-tread
+  crouch sequence was not re-staged in the browser — under SwiftShader
+  the hunter repeatedly died to pursuers en route and respawned,
+  clearing held input by design; the exact-spot proof is the
+  deterministic engine evidence above. Stated honestly.
+
+## Explicitly not tested / not done
+
+- NOT committed, NOT pushed, Pages NOT republished (user's instruction,
+  2026-10-09). The live build still contains the soft-lock.
+  *(Superseded later on 2026-10-09: published together with the
+  whip-in-hand fix — see the next entry.)*
+- iPhone 17 physical device (V2–V9 still pending) — unchanged.
+- Adjacent observation, deliberately untouched (out of scope): normal
+  crouch entry never calls `set_crouched_body(true)` (only the
+  attack-air landing path does), so the 40×60 collision swap SPEC §4
+  describes does not occur for ordinary crouching. Flagged for a
+  separate decision; irrelevant to this trap (the body overlaps one-way
+  treads either way, and one-way shapes never push).
+
+---
+# Follow-up fix — whip held in the hand (user-reported) + crouch soft-lock, published together
+
+Date: 2026-10-09. User's manual-playtest report on the live build: the
+whip roll/unroll motion is right, "but it is not holding or attached
+correctly to the player — it doesn't look like he is holding a whip; the
+whip when rolled is the same size as the player."
+
+## Diagnosis (measured, composites reproduced)
+
+Yesterday's rebuild (`tools/fix_whip_vfx.py`) fixed the whip's MOTION —
+one continuous coil→unfurl→crack progression, no more per-frame pop —
+but it kept the original painted whip's proportions and a fixed grip
+point: a ~28 px cross-section "log" whose grip sat at a fixed canvas
+point (276, gy≈308) in every frame, with rolled coils up to 257 px
+tall — the hero's whole body height in attack f0. On body+whip
+composites the fat near-segment floats across his chest/face while his
+painted fist reaches out empty (attack_ground f3), and the coil reads
+as a giant curled horn. Both user observations confirmed exactly.
+
+## Fix (`tools/fix_whip_in_hand.py`)
+
+Re-rendered the three whip clips' drawing only. Pose progression,
+frame timing [75,75,50,50,62.5,62.5,62.5,62.5] ms, canvases, pivots,
+0.5 sprite scale, hitboxes and crack tip reach are unchanged.
+
+- **Hand anchors**: the whip-hand (fist centre) of all 24 attack body
+  frames was read off coordinate-grid zoom crops of the painted frames
+  and stored in the fix script (machine-readable copy:
+  `game/art/whip_hands.json`). Verified on body+whip composites with
+  anchor crosses — every cross sits on the painted fist.
+- **Held grip**: a short wrapped grip (32 px long, ~11 px thick) drawn
+  through the fist along the forearm direction of that frame; the thong
+  emerges from its front end. Grip centroid lands ≤ 4.5 px from the
+  fist anchor in all 24 frames; nearest whip pixel distance 0.0 px.
+- **Proportions**: the thong is the original painted brown braid
+  re-sliced thin — cross-section tapers 9 → 2.5 px handle→tip (measured
+  max ≤ 10 px away from the fist; the ~28 px baton is gone).
+- **Compact coil**: rolled frames now coil at the fist — coil bounding
+  boxes 77×70 … 110×85 px vs the previous 257 px full-body spiral
+  (≤ 55% of the hero's 224 px standing height, as specified).
+- **Reach**: crack tip 172.0–173.0 u on all three clips (hitbox 168 u;
+  whip-canvas tip x 619–621, unchanged from the motion fix).
+- Replaced generation-2 whip frames archived to
+  `game/art/source/frames_prefix_2026-10-09_gen2.zip`. Audit contract
+  updated (`tools/audit_sequences.py`): whip art must reach within
+  6 px of the frame's painted fist (DEFECT), replacing the old
+  fixed-pivot grip-drift check. **Audit: 0 defects** (6 pre-existing
+  cloth warnings unchanged). Evidence strips:
+  `game/tests/shots/fix2_composite_whip_attack_{ground,air,crouch}.png`;
+  numbers in `game/art/WHIP_HAND_FIX_2026-10-09.md`.
+
+## Verification
+
+- Sequence engine check: **SEQUENCE ENGINE RESULT: PASS** (64 clips,
+  357 frames). Smoke test: **SMOKE RESULT: PASS** (includes the
+  soft-lock regression phases below).
+- Deterministic engine capture (xvfb, exact crack frame):
+  `game/tests/shots/fix2_whip_strike_engine.png` — thin whip visibly
+  extending from the fist.
+- Fresh web export driven in headless Chromium (SwiftShader): hunter
+  visibly holding the whip, crack frame touching the training effigy
+  with the impact burst, compact gold coil visible at his hand between
+  swings, **0 console errors** — `game/tests/shots/fix2_whip_strike.png`
+  (driver: `tools/web_check2.js`; synthetic key events need a mash-
+  and-capture stream because SwiftShader screenshots take ~1.8 s).
+- Operational note recorded: after repacking atlas PNGs, run
+  `godot --headless --import` before capturing — otherwise the runtime
+  samples the previous import cache and sprites render stale regions
+  (this bit during this fix: the whip briefly "drew" a swooper wing).
+
+## Shipped together
+
+This pass also publishes the held crouch soft-lock fix (previous entry:
+one-way tread slabs no longer count as standing ceilings;
+`scripts/hunter.gd` + smoke regression phases). Both fixes are
+committed and pushed to `askjackb/gothic-whip` and
+`askjackb/gothic-whip-game` together, with a fresh `docs/` web build;
+Pages verified built and serving HTTP 200.
+
+## Explicitly not tested
+
+- iPhone 17 physical device (V2–V9 still pending) — unchanged.
+- The adjacent `set_crouched_body` observation from the soft-lock
+  entry remains a separate, undecided item.

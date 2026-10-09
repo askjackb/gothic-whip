@@ -156,7 +156,7 @@ def grip_stats(alpha):
     return gx, gy, tip
 
 
-def frame_metrics(path, actor, pivot):
+def frame_metrics(path, actor, pivot, hand=None):
     im = Image.open(path).convert("RGBA")
     a = np.asarray(im)[..., 3]
     full = bbox_of(a > THR)
@@ -177,7 +177,21 @@ def frame_metrics(path, actor, pivot):
                 m["grip"] = [gx, round(gy, 1) if gy is not None else None]
                 m["tip_x"] = tip
                 m["tip_reach_u"] = round((tip - pivot[0]) / 2.0, 1)
-                m["grip_drift"] = [gx - pivot[0], round((gy or pivot[1]) - pivot[1], 1)]
+            # 2026-10-09 whip-in-hand fix: the grip contract is the painted
+            # fist, not a fixed canvas point. whip_hands.json (written by
+            # tools/fix_whip_in_hand.py) gives the fist per frame in body
+            # coords; whip canvas = body + (20, -140) (pivot mapping).
+            if hand is not None:
+                hx, hy = hand[0] + 20, hand[1] - 140
+                dt = ndimage.distance_transform_edt(a <= THR)
+                d = float(dt[min(max(hy, 0), a.shape[0] - 1),
+                             min(max(hx, 0), a.shape[1] - 1)])
+                m["hand"] = [hx, hy]
+                m["hand_px"] = round(d, 1)
+                m["grip_drift"] = [round(d, 1), 0]
+            else:
+                m["hand_px"] = None
+                m["grip_drift"] = [999, 0]
         elif actor in ("swooper", "projectile", "vfx", "vfxhaz"):
             cx, cy = (lcc[0] + lcc[2]) / 2.0, (lcc[1] + lcc[3]) / 2.0
             m["anchor"] = [round(cx, 1), round(cy, 1)]
@@ -234,6 +248,10 @@ def draw_strip(clip, actor, frames_meta, pivot, canvas, target):
 def main():
     manifest = json.load(open(os.path.join(ART, "manifest.json")))
     clips_json = json.load(open(os.path.join(ART, "clips.json")))
+    whip_hands = {}
+    hj = os.path.join(ART, "whip_hands.json")
+    if os.path.exists(hj):
+        whip_hands = json.load(open(hj))
     results = {}
     defects, warnings, intended, waived = [], [], [], []
 
@@ -246,7 +264,13 @@ def main():
         durations_ms = [round(d * 1000, 3) for d in durations]
         d = os.path.join(FRAMES, clip)
         files = sorted(f for f in os.listdir(d) if f.endswith(".png")) if os.path.isdir(d) else []
-        frames = [frame_metrics(os.path.join(d, f), actor, pivot) for f in files]
+        frames = []
+        for fi, f in enumerate(files):
+            hand = None
+            if actor == "whip":
+                hs = whip_hands.get(clip, {}).get("hands_body_canvas", [])
+                hand = hs[fi] if fi < len(hs) else None
+            frames.append(frame_metrics(os.path.join(d, f), actor, pivot, hand))
         target = 140 if clip in CROUCH_CLIPS else TARGETS.get(actor)
         r = {"actor": actor, "canvas": canvas, "pivot": pivot, "loop": cj.get("loop", info.get("loop")),
              "spec_frames": info.get("spec_frames"), "file_frames": len(files),
@@ -276,8 +300,12 @@ def main():
                 if actor in ("vfx", "vfxhaz"):
                     pass  # effect centroids move by design; no pivot contract
                 elif actor == "whip":
-                    if max(abs(dr[0]), abs(dr[1])) > PIVOT_TOL:
-                        flag("WARN", f"f{i} grip-centroid drift {dr} px (> {PIVOT_TOL})")
+                    # grip contract = the painted fist (whip_hands.json):
+                    # whip alpha must reach within 6 px of the hand anchor
+                    if fm.get("hand_px") is None:
+                        flag("DEFECT", f"f{i} no whip_hands.json anchor for this frame")
+                    elif fm["hand_px"] > 6:
+                        flag("DEFECT", f"f{i} whip art floats {fm['hand_px']} px from the painted fist (> 6)")
                 elif actor in ("swooper", "projectile"):
                     if max(abs(dr[0]), abs(dr[1])) > PIVOT_TOL:
                         flag("DEFECT", f"f{i} center drift {dr} px (> {PIVOT_TOL})")
