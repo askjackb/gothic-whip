@@ -686,3 +686,69 @@ rectangle outlines). Everything else was complete.
 - The rebuilt idle's on-screen feel (breathing loop) awaits the user's
   playtest verdict, as does a fully regenerated idle sheet if they
   want one when the image service is back.
+
+---
+
+# Follow-up review — crouch zoom + boss torso disease repaired (user playtest round 5)
+
+Date: 2026-10-09. Scope: sprite art only (frames, atlases,
+spriteframes, clips). Gameplay, timings and hitboxes untouched; whip
+clips untouched.
+
+What the user reported, in plain words: when the hunter crouches, he
+seems to shrink a little (about 0.9×), and when he stands back up he
+seems to grow. And the boss has the same "waist-up" problem the hunter
+had in round 4.
+
+What was actually wrong:
+
+- Crouch: the crouch-enter and crouch-exit drawings were made as a
+  slightly smaller man (head 31–33 px wide instead of the standing
+  38 px), so the animation read as a zoom, not a bend. The crouched
+  idle was ~5% small the same way.
+- Boss: his idle, turn and spell-cast wind-up were a helmet, one huge
+  arm and a cape cone with no legs at all — the same issue as the
+  hunter's old idle, missed last round because the check treated him
+  as a "robe" character and looked the other way. His big slam was
+  also drawn with parts 1.15–1.5× too big. His walk, hurt, strike
+  wind-up and spell slam were drawn correctly and were not touched.
+
+What was done:
+
+- Crouch enter/exit rebuilt around the standing figure so the man's
+  head is 38 px wide in every frame (37–38 measured) while his height
+  goes 224 → 140 by bending; feet stay planted. Crouch idle corrected
+  to the same head size. Before/after strips:
+  `game/tests/shots/fix5/fix5_crouch_beforeafter.png`,
+  `fix5_crouch_sequence.png`.
+- The four broken boss clips were redrawn as full knights with legs
+  (image generation, using the correct walking boss as the look
+  reference) and scaled to match the good clips (standing height
+  352 px). The boss death sequence was not redrawn — it already reads
+  as one collapse — but was shrunk to 0.8× so its armour pieces match
+  the size of his good clips; this means he starts falling from a
+  slightly shorter stance, which reads as the start of the crumple.
+  Evidence strips: `game/tests/shots/fix5/fix5_boss_*.png`.
+- The automatic check (`tools/audit_integrity.py`) now also catches
+  both of these problems. On the saved pre-fix frames it reports
+  **15 defects**; on the repaired frames it reports **0**.
+
+Verification:
+
+- `tools/audit_sequences.py`: 64 clips, 0 defects, 0 warnings.
+- `tests/sequence_engine_check.gd`: SEQUENCE ENGINE RESULT: PASS.
+- `tests/smoke_test.gd`: SMOKE RESULT: PASS.
+- Fresh web export driven in Chromium (`tools/web_check4.js`):
+  0 console errors; hunter crouched (full body, correct size) and the
+  boss standing and fighting in his arena, legs and all —
+  `game/tests/shots/fix5/web5_b_crouch.png`, `web5_d_boss_3.png`,
+  `web5_d_boss_6.png`, plus the native-res
+  `fix5_boss_standing.png`. Exported game package md5:
+  `49f42b3c0af89f3cabe9188d65cfe055`.
+
+Explicitly not tested:
+
+- iPhone 17 physical device (V2–V9 still pending) — unchanged.
+- Whether the new boss redraws and the corrected crouch *feel* right
+  in motion is the user's playtest call, as is the boss's death
+  starting from a slightly shorter stance.

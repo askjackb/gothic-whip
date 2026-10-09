@@ -2,7 +2,7 @@
 
 Method: PIL/scipy measurement of `game/art/frames/<clip>/` (alpha > 40; LCC = largest connected component = the figure). Pivot drift tolerance ≤ 2 px; adjacent-frame LCC height pop threshold > 4.0%. One contact strip per clip in `game/tests/shots/seq_<actor>_<clip>.png` (red = contract pivot, green = actor design height).
 
-Clips audited: 64. Defects: 0. Warnings: 0. Waived: 7. Intended transitions noted: 135.
+Clips audited: 64. Defects: 0. Warnings: 0. Waived: 7. Intended transitions noted: 134.
 
 ## Per-clip verdicts
 
@@ -13,8 +13,8 @@ Clips audited: 64. Defects: 0. Warnings: 0. Waived: 7. Intended transitions note
 | hero_start_move | hero | 3/3 | 150 | False | 224/224/224 | 0.5 | - | hero.start_move | PASS |
 | hero_stop_move | hero | 3/3 | 150 | False | 224/224/224 | 1 | - | hero.stop_move | PASS |
 | hero_turn | hero | 3/3 | 150 | False | 224/224/224 | 0.5 | - | hero.turn | PASS |
-| hero_crouch_enter | hero | 4/4 | 200 | False | 142/163/211 | 0.5 | - | hero.crouch_enter | CHECK |
-| hero_crouch_idle | hero | 6/6 | 900 | True | 135/140/146 | 0.5 | 4.3 | hero.crouch_idle | CHECK |
+| hero_crouch_enter | hero | 4/4 | 200 | False | 142/162/211 | 1 | - | hero.crouch_enter | CHECK |
+| hero_crouch_idle | hero | 6/6 | 900 | True | 138/138/140 | 2.5 | 0.0 | hero.crouch_idle | PASS |
 | hero_jump_takeoff | hero | 3/3 | 120 | False | 171/223/224 | 0 | - | hero.jump_takeoff | CHECK |
 | hero_jump_rise | hero | 4/4 | 240 | False | 181/223/224 | 1 | - | hero.jump_rise | CHECK |
 | hero_jump_apex | hero | 3/3 | 150 | False | 178/200/224 | 1 | - | hero.jump_apex | CHECK |
@@ -53,24 +53,24 @@ Clips audited: 64. Defects: 0. Warnings: 0. Waived: 7. Intended transitions note
 | ranged_hurt | ranged | 3/3 | 180 | False | 270/288/288 | 0.5 | - | ranged.hurt | CHECK |
 | ranged_death | ranged | 6/6 | 480 | False | 284/288/288 | 0.5 | - | ranged.dead | PASS |
 | projectile_grave_shot | projectile | 3/3 | 240 | True | 64/64/64 | 0 | 0.0 | projectile.flight | PASS |
-| boss_idle | boss | 8/8 | 1000 | True | 350/352/353 | 1.5 | -0.6 | boss.dormant, boss.idle | PASS |
+| boss_idle | boss | 8/8 | 1000 | True | 351/351/352 | 0.5 | 0.0 | boss.dormant, boss.idle | PASS |
 | boss_walk | boss | 8/8 | 640 | True | 350/351/352 | 1.5 | 0.0 | boss.advance | PASS |
-| boss_turn | boss | 4/4 | 300 | False | 352/352/352 | 1 | - | boss.turn | PASS |
+| boss_turn | boss | 4/4 | 300 | False | 351/351/351 | 1.5 | - | boss.turn | PASS |
 | boss_strike_windup | boss | 7/7 | 700 | False | 350/352/352 | 1 | - | boss.strike_windup | PASS |
-| boss_strike_execute | boss | 4/4 | 200 | False | 293/359/424 | 13 | - | boss.strike | CHECK |
+| boss_strike_execute | boss | 4/4 | 200 | False | 261/299/352 | 5 | - | boss.strike | CHECK |
 | boss_strike_recover | boss | 6/6 | 1100 | False | 263/350/352 | 1 | - | boss.strike_recover | CHECK |
-| boss_hazard_windup | boss | 8/8 | 1200 | False | 351/352/352 | 1.5 | - | boss.hazard_cast | PASS |
+| boss_hazard_windup | boss | 8/8 | 1200 | False | 335/351/352 | 10.5 | - | boss.hazard_cast | CHECK |
 | boss_hazard_execute | boss | 4/4 | 400 | False | 304/330/351 | 1 | - | boss.hazard_erupt | CHECK |
 | boss_hazard_recover | boss | 6/6 | 900 | False | 252/350/352 | 1 | - | boss.hazard_recover | CHECK |
 | boss_hurt | boss | 3/3 | 200 | False | 352/352/352 | 0.5 | - | boss.hurt | PASS |
-| boss_death | boss | 12/12 | 1080 | False | 160/239/364 | 17 | - | boss.dead | CHECK |
+| boss_death | boss | 12/12 | 1080 | False | 112/190/291 | 17.5 | - | boss.dead | CHECK |
 | vfx_whip_impact | vfx | 6/6 | 280 | False | 58/128/204 | 0 | - | vfx.whip_hit | CHECK |
 | vfx_damage_indicator | vfx | 2/2 | 300 | False | 217/218/220 | 2.5 | - | vfx.damage_flash | PASS |
 | vfx_enemy_defeat | vfx | 8/8 | 560 | False | 17/154/217 | 64.5 | - | vfx.enemy_defeat | CHECK |
 | vfx_checkpoint_activate | vfx | 8/8 | 720 | False | 38/207/254 | 107 | - | vfx.checkpoint | CHECK |
 | vfx_hazard_telegraph | vfxhaz | 4/4 | 1200 | False | 75/78/80 | 30.5 | - | vfx.hazard_cast | CHECK |
 | vfx_hazard_eruption | vfxhaz | 6/6 | 400 | False | 67/136/192 | 136 | - | vfx.hazard_erupt | CHECK |
-| hero_crouch_exit | hero | 4/4 | 200 | False | 142/163/211 | 0.5 | - | hero.crouch_exit | CHECK |
+| hero_crouch_exit | hero | 4/4 | 200 | False | 142/162/211 | 1 | - | hero.crouch_exit | CHECK |
 | hero_get_up | hero | 6/6 | 450 | False | 123/160/208 | 2 | - | hero.get_up | CHECK |
 
 ## Defects
@@ -98,10 +98,8 @@ Warnings disposition: the six warnings are painted cloth/ash extending below the
 
 ## Intended pose transitions (>4% height change, by design)
 
-- hero_crouch_enter: height pop f0->f1: 211->180 (-14.7%) [reviewed cyclic/intended pose]
-- hero_crouch_enter: height pop f1->f2: 180->146 (-18.9%) [reviewed cyclic/intended pose]
-- hero_crouch_idle: height pop f0->f1: 146->139 (-4.8%) [reviewed cyclic/intended pose]
-- hero_crouch_idle: loop wrap f5->f0 height 140->146 (+4.3%) [reviewed cyclic pose]
+- hero_crouch_enter: height pop f0->f1: 211->179 (-15.2%) [reviewed cyclic/intended pose]
+- hero_crouch_enter: height pop f1->f2: 179->146 (-18.4%) [reviewed cyclic/intended pose]
 - hero_jump_takeoff: height pop f0->f1: 171->224 (+31.0%) [reviewed cyclic/intended pose]
 - hero_jump_rise: height pop f0->f1: 181->224 (+23.8%) [reviewed cyclic/intended pose]
 - hero_jump_apex: height pop f0->f1: 224->178 (-20.5%) [reviewed cyclic/intended pose]
@@ -190,23 +188,24 @@ Warnings disposition: the six warnings are painted cloth/ash extending below the
 - ranged_fire: height pop f0->f1: 272->288 (+5.9%)
 - ranged_recover: height pop f0->f1: 269->288 (+7.1%)
 - ranged_hurt: height pop f0->f1: 270->288 (+6.7%)
-- boss_strike_execute: height pop f0->f1: 424->404 (-4.7%) [reviewed cyclic/intended pose]
-- boss_strike_execute: height pop f1->f2: 404->314 (-22.3%) [reviewed cyclic/intended pose]
-- boss_strike_execute: height pop f2->f3: 314->293 (-6.7%) [reviewed cyclic/intended pose]
+- boss_strike_execute: height pop f0->f1: 352->316 (-10.2%) [reviewed cyclic/intended pose]
+- boss_strike_execute: height pop f1->f2: 316->282 (-10.8%) [reviewed cyclic/intended pose]
+- boss_strike_execute: height pop f2->f3: 282->261 (-7.4%) [reviewed cyclic/intended pose]
 - boss_strike_recover: height pop f0->f1: 263->274 (+4.2%)
 - boss_strike_recover: height pop f1->f2: 274->350 (+27.7%)
+- boss_hazard_windup: height pop f5->f6: 352->335 (-4.8%)
+- boss_hazard_windup: height pop f6->f7: 335->351 (+4.8%)
 - boss_hazard_execute: height pop f0->f1: 351->310 (-11.7%)
 - boss_hazard_execute: height pop f2->f3: 304->351 (+15.5%)
 - boss_hazard_recover: height pop f1->f2: 261->350 (+34.1%)
-- boss_death: height pop f0->f1: 364->336 (-7.7%) [reviewed cyclic/intended pose]
-- boss_death: height pop f1->f2: 336->309 (-8.0%) [reviewed cyclic/intended pose]
-- boss_death: height pop f2->f3: 309->283 (-8.4%) [reviewed cyclic/intended pose]
-- boss_death: height pop f4->f5: 276->249 (-9.8%) [reviewed cyclic/intended pose]
-- boss_death: height pop f5->f6: 249->230 (-7.6%) [reviewed cyclic/intended pose]
-- boss_death: height pop f6->f7: 230->202 (-12.2%) [reviewed cyclic/intended pose]
-- boss_death: height pop f7->f8: 202->192 (-5.0%) [reviewed cyclic/intended pose]
-- boss_death: height pop f8->f9: 192->168 (-12.5%) [reviewed cyclic/intended pose]
-- boss_death: height pop f10->f11: 167->160 (-4.2%) [reviewed cyclic/intended pose]
+- boss_death: height pop f0->f1: 291->269 (-7.6%) [reviewed cyclic/intended pose]
+- boss_death: height pop f1->f2: 269->247 (-8.2%) [reviewed cyclic/intended pose]
+- boss_death: height pop f2->f3: 247->226 (-8.5%) [reviewed cyclic/intended pose]
+- boss_death: height pop f4->f5: 221->199 (-10.0%) [reviewed cyclic/intended pose]
+- boss_death: height pop f5->f6: 199->182 (-8.5%) [reviewed cyclic/intended pose]
+- boss_death: height pop f6->f7: 182->158 (-13.2%) [reviewed cyclic/intended pose]
+- boss_death: height pop f8->f9: 154->133 (-13.6%) [reviewed cyclic/intended pose]
+- boss_death: height pop f10->f11: 131->112 (-14.5%) [reviewed cyclic/intended pose]
 - vfx_whip_impact: height pop f0->f1: 86->148 (+72.1%)
 - vfx_whip_impact: height pop f1->f2: 148->204 (+37.8%)
 - vfx_whip_impact: height pop f2->f3: 204->162 (-20.6%)
@@ -227,8 +226,8 @@ Warnings disposition: the six warnings are painted cloth/ash extending below the
 - vfx_hazard_eruption: height pop f0->f1: 67->192 (+186.6%)
 - vfx_hazard_eruption: height pop f3->f4: 192->80 (-58.3%)
 - vfx_hazard_eruption: height pop f4->f5: 80->75 (-6.2%)
-- hero_crouch_exit: height pop f1->f2: 146->180 (+23.3%) [reviewed cyclic/intended pose]
-- hero_crouch_exit: height pop f2->f3: 180->211 (+17.2%) [reviewed cyclic/intended pose]
+- hero_crouch_exit: height pop f1->f2: 146->179 (+22.6%) [reviewed cyclic/intended pose]
+- hero_crouch_exit: height pop f2->f3: 179->211 (+17.9%) [reviewed cyclic/intended pose]
 - hero_get_up: height pop f0->f1: 123->156 (+26.8%) [reviewed cyclic/intended pose]
 - hero_get_up: height pop f1->f2: 156->142 (-9.0%) [reviewed cyclic/intended pose]
 - hero_get_up: height pop f2->f3: 142->164 (+15.5%) [reviewed cyclic/intended pose]

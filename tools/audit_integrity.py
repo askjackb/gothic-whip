@@ -46,11 +46,24 @@ GATE (exit nonzero on any DEFECT):
    (e.g. one gait frame's ponytail swing, +15%) is a FLAG for visual
    adjudication instead — single-frame hair dynamics are a known proxy
    limit, and the visual pass decides.
-Robe/cape actors (ranged, boss) are exempt from check 2 by anatomy (a
-robe legitimately reaches the ground at full width; a slice there is
-indistinguishable from a robe by silhouette metrics alone) — they are
-covered by check 3's visual equivalent: every frame is eyeballed in the
-strips, and their H/SA remain scale-audited elsewhere.
+4. Crouch zoom (round 5): hero_crouch_enter/exit/idle frames whose
+   top-12-rows head ink deviates > 5% from the standing 38 px reference
+   are DEFECTs. The pre-repair transitions were drawn at ~0.9x part
+   scale, so crouching read as a zoom-out and standing as a zoom-in.
+5. Boss lower body (round 5): standing-class boss frames (boss_idle,
+   boss_turn, boss_hazard_windup) with leg_multi < 0.20 AND
+   bottom_solid > 0.50 are DEFECTs. The robe/cape exemption in check 2
+   let the boss ship the same waist-up disease as hero_idle in round 4
+   (helmet + pauldron + gauntlet + cape cone, no legs, at full height);
+   this structural check closes that hole without false-firing on the
+   ranged cultist, whose robe is a different clip family. The boss
+   helmet-run proxy (max ink run in rows 2-15%, boss_walk median 68)
+   is reported as a FLAG only: it catches different anatomy per pose
+   (helmet dome vs pauldron top vs raised gauntlet), so it is
+   adjudicated visually (head-zoom comparisons), never auto-passed.
+Robe/cape actors (ranged) remain exempt from check 2 by anatomy (a
+robe legitimately reaches the ground at full width) and are covered by
+the visual pass on the native-resolution strips.
 
 Nothing is modified. Usage:
   python3 tools/audit_integrity.py [--frames-root DIR] [--strips DIR]
@@ -84,6 +97,12 @@ STANDING = {
 LEGS_ACTORS = {"hero", "pursuer"}          # clause 2 applies (legs/boots)
 HEAD_GATE_CLIPS = {"hero": {"hero_idle", "hero_walk"}}
 HEAD_REF_CLIP = {"hero": "hero_walk"}      # trusted full-body reference
+CROUCH_HEAD_CLIPS = {"hero_crouch_enter", "hero_crouch_exit", "hero_crouch_idle"}
+CROUCH_HEAD_REF = 38.0                     # standing hero top-12-rows ink
+CROUCH_HEAD_DEV_MAX = 0.05
+BOSS_STANDING_CLIPS = {"boss_idle", "boss_turn", "boss_hazard_windup"}
+BOSS_HELM_REF_CLIP = "boss_walk"
+BOSS_HELM_DEV_MAX = 0.12
 
 
 def actor_of(clip):
@@ -138,9 +157,33 @@ def measure(alpha):
     boot_ratio = float(rows[-bb:].mean() / maxrow) if maxrow else 0.0
     dip_zone = rows[int(0.55 * h):max(int(0.55 * h) + 1, int(0.94 * h))]
     leg_dip = float(dip_zone.min() / maxrow) if len(dip_zone) and maxrow else 0.0
+
+    def max_run(row):
+        xs_r = np.where(row)[0]
+        if len(xs_r) == 0:
+            return 0
+        splits = np.where(np.diff(xs_r) >= 6)[0]
+        bounds = np.concatenate(([-1], splits, [len(xs_r) - 1]))
+        return int(max(xs_r[bounds[i + 1]] - xs_r[bounds[i] + 1] + 1
+                       for i in range(len(bounds) - 1)))
+
+    def run_count(row):
+        xs_r = np.where(row)[0]
+        return 0 if len(xs_r) == 0 else int(1 + (np.diff(xs_r) >= 6).sum())
+
+    head_top12 = int(rows[:12].max()) if len(rows) >= 1 else 0
+    helm_band = range(max(0, int(h * 0.02)), max(1, int(h * 0.15)))
+    helm_run = max((max_run(sub[y]) for y in helm_band), default=0)
+    leg_zone = range(int(h * 0.55), max(int(h * 0.55) + 1, int(h * 0.92)))
+    leg_multi = float(np.mean([run_count(sub[y]) >= 2 for y in leg_zone])) if len(leg_zone) else 0.0
+    mid = rows[int(h * 0.55):max(int(h * 0.55) + 1, int(h * 0.65))]
+    bottom = rows[int(h * 0.90):]
+    bottom_solid = float(bottom.mean() / mid.mean()) if len(mid) and mid.mean() else 0.0
     return dict(lcc=(x0, y0, x1, y1), h=int(h), w=int(w),
                 area=int(lcc.sum()), sa=float(np.sqrt(lcc.sum())),
                 head_w=float(rows[:hb].max()), tracked_head=int(tracked),
+                head_top12=head_top12, helm_run=int(helm_run),
+                leg_multi=leg_multi, bottom_solid=bottom_solid,
                 multi=multi / hb, boot_ratio=boot_ratio, leg_dip=leg_dip,
                 top_band_ink=bool(rows[:bb].max() > 0),
                 bottom_band_ink=bool(rows[-bb:].max() > 0))
@@ -215,6 +258,10 @@ def main():
         if vals:
             head_ref[actor] = float(np.median(vals))
 
+    boss_helm_vals = [f["helm_run"] for f in results.get(BOSS_HELM_REF_CLIP, [])
+                      if not f.get("empty")]
+    boss_helm_ref = float(np.median(boss_helm_vals)) if boss_helm_vals else None
+
     # head-gate pre-pass: per gated clip, does a majority of frames deviate?
     head_majority = {}
     for clip in sorted(results):
@@ -258,13 +305,42 @@ def main():
                         verdict = (f"FLAG head-dev {dev:+.0%} (isolated frame; "
                                    f"visual adjudication)")
                         flags.append(f"{clip} f{f['frame']}: " + verdict)
+            if clip in CROUCH_HEAD_CLIPS:
+                dev = (f["head_top12"] - CROUCH_HEAD_REF) / CROUCH_HEAD_REF
+                f["crouch_head_dev"] = dev
+                if abs(dev) > CROUCH_HEAD_DEV_MAX and verdict == "ok":
+                    verdict = (f"DEFECT crouch head-scale: top-12-rows ink "
+                               f"{f['head_top12']} vs standing {CROUCH_HEAD_REF:.0f} "
+                               f"({dev:+.1%})")
+                    defects.append(f"{clip} f{f['frame']}: " + verdict)
+            if clip in BOSS_STANDING_CLIPS:
+                if (f["leg_multi"] < 0.20 and f["bottom_solid"] > 0.50
+                        and verdict == "ok"):
+                    verdict = (f"DEFECT boss lower-body: leg_multi "
+                               f"{f['leg_multi']:.2f} < 0.20 and bottom_solid "
+                               f"{f['bottom_solid']:.2f} > 0.50 (solid torso/cape "
+                               f"column; no leg structure)")
+                    defects.append(f"{clip} f{f['frame']}: " + verdict)
+                if boss_helm_ref:
+                    dev = (f["helm_run"] - boss_helm_ref) / boss_helm_ref
+                    f["boss_helm_dev"] = dev
+                    if abs(dev) > BOSS_HELM_DEV_MAX and verdict == "ok":
+                        verdict = (f"FLAG boss helmet-run {f['helm_run']} vs "
+                                   f"{BOSS_HELM_REF_CLIP} median {boss_helm_ref:.0f} "
+                                   f"({dev:+.0%}; view-sensitive proxy, visual "
+                                   f"adjudication required)")
+                        flags.append(f"{clip} f{f['frame']}: " + verdict)
             tag = " [standing]" if standing else ""
-            if verdict != "ok" or standing:
+            if verdict != "ok" or standing or clip in CROUCH_HEAD_CLIPS \
+                    or clip in BOSS_STANDING_CLIPS:
                 print(f"{clip:26} {f['frame']:>2} {f['h']:>4} {f['w']:>4} "
                       f"{f['tracked_head']:>5} {f['multi']:>5.2f} "
                       f"{f['boot_ratio']:>6.2f} {f['leg_dip']:>5.2f}  {verdict}{tag}")
     print(f"\ntrusted head references: " +
           ", ".join(f"{a}={v:.0f}px ({HEAD_REF_CLIP[a]})" for a, v in sorted(head_ref.items())))
+    if boss_helm_ref:
+        print(f"boss helmet-run reference: {boss_helm_ref:.0f}px "
+              f"({BOSS_HELM_REF_CLIP} median; view-sensitive, flag-only)")
     print(f"INTEGRITY DEFECTS: {len(defects)}")
     for d in defects:
         print("  DEFECT", d)

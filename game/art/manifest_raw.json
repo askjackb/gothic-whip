@@ -1405,6 +1405,8 @@
     "boss_strike_recover",
     "boss_hazard_recover"
    ]
-  }
+  },
+  "2026-10-09 round-5 crouch/boss repair (tools/repair_crouch_boss.py): hero_crouch_enter/exit re-pinned to the 38 px standing head (f00 re-derived from the repaired hero_idle f00 by feet-anchored squash; f01/f03 horizontal head-pin); hero_crouch_idle frames at head 36 uniformly rescaled then bbox-re-anchored to 140. boss_idle, boss_turn, boss_hazard_windup (7 generated poses + peak-hold frame), boss_strike_execute regenerated from sheets in art/source (boss_*_regen.png; identity reference boss_walk f00), chroma-extracted and normalized to the 352 px / 67.5 px helmet anchors. The windup sheet has 8 poses (the 7th/8th carry generated magic wisps at the hands - kept as cast art, detached specks dropped). boss_death uniformly rescaled to walk-family part scale. Pre-repair frames: art/source/frames_prefix_2026-10-09_crouchboss.zip.",
+  "2026-10-09 round-5 crouch/boss repair (tools/repair_crouch_boss.py): hero_crouch_enter/exit re-pinned to the 38 px standing head (f00 re-derived from the repaired hero_idle f00 by feet-anchored squash; f01/f03 horizontal head-pin); hero_crouch_idle frames at head 36 uniformly rescaled then bbox-re-anchored to 140. boss_idle, boss_turn, boss_hazard_windup (7 generated poses + peak-hold frame), boss_strike_execute regenerated from sheets in art/source (boss_*_regen.png; identity reference boss_walk f00), chroma-extracted and normalized to the 352 px / 67.5 px helmet anchors. The windup sheet has 8 poses (the 7th/8th carry generated magic wisps at the hands - kept as cast art, detached specks dropped). boss_death uniformly rescaled to walk-family part scale. Pre-repair frames: art/source/frames_prefix_2026-10-09_crouchboss.zip."
  ]
 }

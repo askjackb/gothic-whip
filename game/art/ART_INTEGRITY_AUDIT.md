@@ -268,3 +268,127 @@ exit 1
   same-stature full-body hunter (the 500 ms whip swing itself remains
   ungradeable from burst screenshots — covered by the sequence audit's
   whip-grip checks and the engine test).
+
+---
+
+# Addendum — round 5 (2026-10-09): crouch zoom + the boss's torso disease
+
+User report, in their words: crouching "feel like it scaled down a
+little, like .9x… when it stand up, it appear it scaled up", and "the
+same torso problem appears to persist for boss". Both confirmed before
+any repair, then repaired in `tools/repair_crouch_boss.py`. Gameplay,
+timings, hitboxes, frame counts: untouched.
+
+## Defect A — crouch transitions zoom instead of bending
+
+Metric (the user's father metric from round 4, top-12-rows ink width):
+standing hero = **38 px** (idle 37–38, walk 38–42). Pre-repair:
+
+| clip | head per frame (px) | bbox H (px) |
+|---|---|---|
+| hero_crouch_enter | 31, 33, 37, 36 | 211, 180, 146, 142 |
+| hero_crouch_exit | 36, 37, 33, 31 | 142, 146, 180, 211 |
+| hero_crouch_idle | 36, 37, 36, 36, 36, 36 | 146, 139, 135, 140, 140, 140 |
+
+crouch_enter f00 is the standing pose drawn uniformly ~0.81× narrow in
+*every* row band (head 30 vs 38, torso 46 vs 58, skirt 66 vs 81) — the
+whole man was generated smaller, so entering crouch looked like a
+0.9× zoom-out and standing back up like a zoom-in. Exit is the enter
+clip in reverse (md5-verified), so it inherits the fix.
+
+Repair (no regeneration needed; the genuine poses were kept):
+- enter f00 re-derived from the repaired full-body hero_idle f00 by a
+  feet-anchored vertical squash to the frame's original 211 px height
+  — the pose *is* the standing stance, so the head stays exactly 38.
+- enter f01/f03 (and the ≤36 crouch_idle frames): horizontal head-pin
+  to 38 about the feet centre (heights/feet untouched); crouch_idle
+  additionally re-anchored so the bbox is the 140 px crouch anchor.
+- crouch_exit := repaired enter reversed.
+
+Post-repair: enter heads **38, 38, 37, 38**; exit **38, 37, 38, 38**;
+crouch_idle **38, 37, 38, 38, 38, 38** — every frame within ±5% of the
+standing 38 (worst deviation 2.6%). hero_attack_crouch audited, not
+modified: frames whose top band is arm-free read 39, 41, 41 (correct);
+the raised arm occupies the band in the others (proxy reads 70–112) —
+documented proxy contamination, visual pass clean. Whip clips
+untouched. Strip evidence: `game/tests/shots/fix5/fix5_crouch_*.png`
+(the before row reads as a smaller man; the after sequence is one man
+bending at the knees with his feet planted).
+
+## Defect B — boss: 11 clips audited, 5 verdicts broken/oversized
+
+Reference: **boss_walk** (the trusted complete knight at H = 352;
+helmet-run median 67.5 px on clean frames, 63–69). Method per frame:
+lower-body structure (leg_multi / bottom_solid), part scale (helmet
+run, height), and native-res eyeballing of every clip.
+
+| clip | verdict | evidence (pre-repair) |
+|---|---|---|
+| boss_idle (8f) | **BROKEN** | helmet+pauldron+gauntlet+cape cone, no pelvis/legs/boots below the waist at H 350–353; bottom_solid 0.54–1.10 vs walk ≤ 0.45; gate fires f00/f04/f07 |
+| boss_turn (4f) | **BROKEN** | torso+robe, no legs in any view |
+| boss_hazard_windup (8f) | **BROKEN** | tassets+robe cone, no legs; gate fires f00 |
+| boss_strike_execute (4f) | **BROKEN (scale)** | H 404/424/386/404 vs 352 anchor; helmet-run 119–216 vs 63–69 (parts 1.15–1.5×) |
+| boss_death (12f) | coherent collapse, **oversized parts** | slump→fall→armour heap reads correctly, but drawn in the oversized batch (f00 H 364, pauldron run 114 vs walk 88) |
+| boss_walk / boss_hurt / boss_strike_windup / boss_hazard_execute | OK | complete armoured legs/boots at walk part scale; untouched |
+| boss_strike_recover / boss_hazard_recover | OK (notes) | frames that read robe-like at strip scale show tassets + armoured leg at 3× zoom; untouched |
+
+Repair — image generation was available again, so the four broken
+clips were **regenerated** (not composited): four sheets conditioned
+on boss_walk f00 as identity reference, chroma-extracted, normalized
+to the family anchors (upright clips: height → 352; strike_execute:
+one sheet-wide factor anchored on its first pose at 352 so the bent
+frames keep the sheet's own proportions), placed bbox-centre →
+(176, 448) exactly like the shipped frames. Sheets:
+`art/source/boss_*_regen.png` (+ the original webp fetches).
+- boss_idle: 4 generated standing poses ping-ponged [0,1,2,3,3,2,1,0]
+  to keep the shipped 8 frames / durations.
+- boss_turn: profile → front → back/cape → profile.
+- boss_hazard_windup: all 8 generated poses; the purple magic wisps
+  the generator attached to the raised hands were kept as cast art
+  (detached specks/dots were dropped in extraction).
+- boss_strike_execute: overhead → diagonal → slam → low recover.
+- boss_death: NOT regenerated (the collapse is drawn correctly);
+  uniformly rescaled ×0.80, the pauldron-proxy ratio to the walk
+  family (114 → 88, factor clamped to [0.80, 1.00] band). f00 now
+  H 291. Honest caveat: death therefore starts from a figure ~17%
+  shorter than his standing 352 — visually it reads as the beginning
+  of the crumple; flagged for the user's playtest verdict.
+
+Boss identity held (teal plate, horned helmet, tattered cape,
+oversized gauntlet) — see `game/tests/shots/fix5/fix5_boss_*.png` and
+the in-game `fix5_boss_standing.png` (state: idle).
+
+Helmet-run proxy caveat, on the record: on the repaired standing
+clips the proxy reads 43–66 vs walk median 68 (flags at −26…−37% on
+several frames). The proxy catches different anatomy per pose (helmet
+dome, pauldron top, raised gauntlet), which is why the gate reports
+it as FLAG-only; the 3× head-zoom comparison (new idle f00/f01/f03 vs
+walk f00) shows the same head at the same size. These flags were
+adjudicated visually, not waved through silently.
+
+## Gate (tools/audit_integrity.py, extended)
+
+New clauses: crouch head vs the standing 38 (±5% DEFECT); boss
+standing lower-body (leg_multi < 0.20 AND bottom_solid > 0.50 DEFECT);
+boss helmet-run flag-only. Measured fail→pass:
+
+```
+$ python3 tools/audit_integrity.py --frames-root <crouchboss archive>
+INTEGRITY DEFECTS: 15   (boss_idle f00/f04/f07 + hazard_windup f00
+  lower-body; 11 crouch head-scale frames)        exit 1
+$ python3 tools/audit_integrity.py            # repaired set
+INTEGRITY DEFECTS: 0    FLAGS: 15 (14 boss helmet-run adjudicated
+  above; hero_walk f03 ponytail — pre-standing flag)   exit 0
+```
+
+## Verification (round 5)
+
+- `tools/audit_sequences.py`: **64 clips, 0 defects, 0 warnings**.
+- `tests/sequence_engine_check.gd`: **SEQUENCE ENGINE RESULT: PASS**.
+- `tests/smoke_test.gd`: **SMOKE RESULT: PASS**.
+- Fresh web export driven in Chromium (`tools/web_check4.js`):
+  **CONSOLE_ERRORS: 0**; `web5_b_crouch.png` hunter fully crouched,
+  `web5_d_boss_3/6.png` boss in the arena mid-fight, full body;
+  native `fix5_boss_standing.png` boss standing on the new idle.
+  pck md5 recorded in REVIEW_RECORD.md.
+- Pre-repair frames archived: `art/source/frames_prefix_2026-10-09_crouchboss.zip`.
