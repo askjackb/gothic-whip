@@ -1,704 +1,814 @@
-# ACTION SIZE AUDIT — per-frame scale drift (user playtest round 3, 2026-10-09)
-
-User report: "When the player stands still, its size doesn't match when he is in action... list all actions of one character and make sure their size won't drift. Cover enemy and boss too."
-
-## Why the previous fixes were not enough
-
-Fix #1 (per-clip uniform scale) anchored each clip's reference statistic (median/max/first-two/last/min LCC height) to the actor design height. A median over mutually inconsistent frames lands on the anchor while individual frames straddle it: e.g. hero_land shipped heights 239/209/169/260 (median 224 = anchor, scale 1.000) — the 260 px 'standing back up' frame stood 16% taller than idle in game. The drift was WITHIN clips, so only a per-frame correction can remove it.
-
-## Method
-
-- **Standing-class frames** of feet-anchored bipeds (hero, boss) are corrected by **height**: factor = design_H / frame_H. An upright figure's perceived size is its height; idle = 224 (hero) / 352 (boss) is the contract (crouch family 140).
-- **All other frames** (poses, transitions, quadruped pursuer, canvas-clipped ranged, flying swooper) are corrected by **SA = sqrt(alpha area)**: factor = clip_median_SA / frame_SA. Under a pure scale change SA scales exactly linearly; pose changes mostly redistribute the same ink (hero_land SA spread 4.9% across a 169..260 px height swing).
-- Standing class = H/design in [0.92, 1.25] and W/H <= 1.05, with an overhead guard: a frame >12% over design height whose SA already matches the clip median (e.g. boss weapon raised) is pose, not scale.
-- **SQ = sqrt(H x W) is reported but NOT used for correction**: for narrow side-profile standing frames SQ collapses (hero_attack_ground f6: SQ 134 vs clip ~204 at identical drawn scale); SQ-driven scaling would have blown that standing recovery frame from 250 px to ~295 px tall — 32% larger than idle, i.e. it would CREATE the reported bug. SQ residuals >4% are listed with the named pose instead.
-- Factors clamp to [0.85, 1.18]; rescale pivots on the contract foot point (LCC bottom-centre -> pivot; swooper: LCC centre -> pivot). Trims recomputed by pack_atlases.py (5 pages, 80 MiB, mips off).
-- **Exempt (contract-locked)**: whip_attack_* (in-hand fix geometry), vfx_*, projectile_grave_shot — verified byte-identical to the pre-fix archive (61/61 md5 matches), only sanity-checked.
-- **Frames regenerated: 0.** The only frames needing a factor outside the clamp are 8 ink-poor collapse/fold poses (death heaps, pursuer alert apex, folded-wing telegraph) — clamp-corrected and pose-named below; no standing-class frame needed more than the clamp, so there was no misdrawn standing frame to regenerate.
-
-## Per-actor summary (LCC height, src px)
-
-| actor | clip | before H | after H | note |
-|---|---|---|---|---|
-| boss | boss_death (12f) | 141..364 | 160..364 |  |
-| boss | boss_hazard_execute (4f) | 310..373 | 304..351 |  |
-| boss | boss_hazard_recover (6f) | 245..361 | 252..352 |  |
-| boss | boss_hazard_windup (8f) | 346..359 | 351..352 |  |
-| boss | boss_hurt (3f) | 339..352 | 352..352 |  |
-| boss | boss_idle (8f) | 329..358 | 350..353 |  |
-| boss | boss_strike_execute (4f) | 276..424 | 293..424 |  |
-| boss | boss_strike_recover (6f) | 280..374 | 263..352 |  |
-| boss | boss_strike_windup (7f) | 345..361 | 350..352 |  |
-| boss | boss_turn (4f) | 347..355 | 352..352 |  |
-| boss | boss_walk (8f) | 335..369 | 350..352 |  |
-| hero | hero_attack_air (8f) | 205..227 | 198..224 |  |
-| hero | hero_attack_crouch (8f) | 135..143 | 139..144 |  |
-| hero | hero_attack_ground (8f) | 207..250 | 203..224 |  |
-| hero | hero_crouch_enter (4f) | 140..190 | 142..211 |  |
-| hero | hero_crouch_exit (4f) | 140..190 | 142..211 |  |
-| hero | hero_crouch_idle (6f) | 135..145 | 135..146 |  |
-| hero | hero_death (10f) | 42..229 | 48..238 |  |
-| hero | hero_fall (4f) | 203..224 | 197..230 |  |
-| hero | hero_get_up (6f) | 123..229 | 123..208 |  |
-| hero | hero_hurt_recoil (4f) | 205..243 | 209..224 |  |
-| hero | hero_idle (8f) | 222..226 | 223..224 |  |
-| hero | hero_jump_apex (3f) | 178..224 | 178..224 |  |
-| hero | hero_jump_rise (4f) | 174..224 | 181..224 |  |
-| hero | hero_jump_takeoff (3f) | 164..223 | 171..224 |  |
-| hero | hero_knockback (4f) | 185..224 | 190..224 |  |
-| hero | hero_knockdown (6f) | 123..229 | 123..208 |  |
-| hero | hero_land (4f) | 169..260 | 174..224 |  |
-| hero | hero_start_move (3f) | 219..239 | 224..224 |  |
-| hero | hero_stop_move (3f) | 223..241 | 224..224 |  |
-| hero | hero_turn (3f) | 212..225 | 224..224 |  |
-| hero | hero_walk (10f) | 215..231 | 223..224 |  |
-| projectile | projectile_grave_shot (3f) | 64..64 | 64..64 | exempt (verified unchanged) |
-| pursuer | pursuer_alert (4f) | 111..160 | 111..160 |  |
-| pursuer | pursuer_approach_walk (8f) | 96..123 | 99..124 |  |
-| pursuer | pursuer_death (6f) | 41..126 | 48..126 |  |
-| pursuer | pursuer_hurt (3f) | 93..135 | 93..132 |  |
-| pursuer | pursuer_idle (6f) | 109..148 | 109..148 |  |
-| pursuer | pursuer_lunge (3f) | 47..112 | 50..95 |  |
-| pursuer | pursuer_lunge_windup (4f) | 111..159 | 111..160 |  |
-| pursuer | pursuer_patrol_walk (8f) | 106..124 | 105..122 |  |
-| pursuer | pursuer_recovery (4f) | 84..139 | 87..140 |  |
-| ranged | ranged_aim (6f) | 288..288 | 279..288 |  |
-| ranged | ranged_death (6f) | 288..288 | 284..288 |  |
-| ranged | ranged_fire (3f) | 288..288 | 272..288 |  |
-| ranged | ranged_hurt (3f) | 288..288 | 270..288 |  |
-| ranged | ranged_idle (6f) | 288..288 | 279..288 |  |
-| ranged | ranged_recover (7f) | 288..288 | 269..288 |  |
-| swooper | swooper_cruise (8f) | 132..182 | 138..180 |  |
-| swooper | swooper_death_fall (5f) | 80..240 | 89..212 |  |
-| swooper | swooper_dive (4f) | 155..174 | 156..188 |  |
-| swooper | swooper_dive_telegraph (4f) | 108..235 | 127..210 |  |
-| swooper | swooper_hurt (3f) | 128..184 | 128..180 |  |
-| swooper | swooper_perch_idle (6f) | 168..173 | 166..174 |  |
-| swooper | swooper_recovery_climb (6f) | 125..175 | 126..171 |  |
-| vfx | vfx_checkpoint_activate (8f) | 38..254 | 38..254 | exempt (verified unchanged) |
-| vfx | vfx_damage_indicator (2f) | 217..220 | 217..220 | exempt (verified unchanged) |
-| vfx | vfx_enemy_defeat (8f) | 17..217 | 17..217 | exempt (verified unchanged) |
-| vfx | vfx_hazard_eruption (6f) | 67..192 | 67..192 | exempt (verified unchanged) |
-| vfx | vfx_hazard_telegraph (4f) | 75..80 | 75..80 | exempt (verified unchanged) |
-| vfx | vfx_whip_impact (6f) | 58..204 | 58..204 | exempt (verified unchanged) |
-| whip | whip_attack_air (8f) | 17..107 | 17..107 | exempt (verified unchanged) |
-| whip | whip_attack_crouch (8f) | 16..80 | 16..80 | exempt (verified unchanged) |
-| whip | whip_attack_ground (8f) | 20..85 | 20..85 | exempt (verified unchanged) |
-
-## Action inventory — every clip, every frame (before -> after)
-
-Columns: HxW = LCC bbox px; SA = sqrt(alpha area); SQ = sqrt(HxW); factor/rule = applied correction (H = height-anchored standing frame, SA = ink-anchored); verdict flags SQ residuals > 4% from the clip median with the named pose.
-
-### boss_death — 12 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 364x188 (207, 262) | - | 364x188 (207, 262) | OK |
-| 1 | 339x227 (208, 277) | 0.994/SA | 336x223 (206, 274) | OK |
-| 2 | 316x240 (212, 275) | 0.977/SA | 309x231 (206, 267) | OK |
-| 3 | 280x257 (204, 268) | 1.014/SA | 283x259 (206, 271) | OK |
-| 4 | 266x285 (199, 275) | 1.039/SA | 276x293 (206, 284) | SQ residual +6.4% — collapse (pose) |
-| 5 | 235x299 (194, 265) | 1.066/SA | 249x318 (206, 281) | SQ residual +5.3% — collapse (pose) |
-| 6 | 228x325 (201, 272) | 1.028/SA | 230x332 (204, 276) | OK |
-| 7 | 210x352 (214, 272) | 0.965/SA | 202x338 (204, 261) | OK |
-| 8 | 205x361 (219, 272) | 0.944/SA | 192x341 (203, 256) | SQ residual -4.2% — collapse (pose) |
-| 9 | 168x361 (206, 246) | 1.004/SA | 168x361 (206, 246) | SQ residual -7.8% — collapse (pose) |
-| 10 | 173x361 (211, 250) | 0.979/SA | 167x352 (203, 242) | SQ residual -9.2% — collapse (pose) |
-| 11 | 141x361 (178, 226) | 1.163/SA | 160x386 (195, 248) | SQ residual -7.0% — collapse (pose) |
-
-### boss_hazard_execute — 4 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 373x214 (193, 282) | 0.944/H | 351x201 (181, 266) | SQ residual -15.4% — pose redistribution; SA-anchored |
-| 1 | 310x343 (206, 326) | - | 310x343 (206, 326) | OK |
-| 2 | 332x354 (224, 343) | 0.918/SA | 304x324 (204, 314) | OK |
-| 3 | 372x123 (167, 214) | 0.946/H | 351x116 (157, 202) | SQ residual -35.7% — pose redistribution; SA-anchored |
-
-### boss_hazard_recover — 6 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 245x284 (195, 264) | 1.032/SA | 252x292 (200, 271) | SQ residual -5.5% — pose redistribution; SA-anchored |
-| 1 | 254x267 (195, 260) | 1.031/SA | 261x274 (200, 267) | SQ residual -6.8% — pose redistribution; SA-anchored |
-| 2 | 354x270 (208, 309) | 0.994/H | 350x268 (206, 306) | SQ residual +6.7% — pose redistribution; SA-anchored |
-| 3 | 359x232 (193, 289) | 0.981/H | 352x227 (188, 283) | OK |
-| 4 | 361x241 (201, 295) | 0.975/H | 352x234 (195, 287) | OK |
-| 5 | 348x242 (219, 290) | 1.011/H | 351x245 (221, 293) | OK |
-
-### boss_hazard_windup — 8 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 348x158 (195, 234) | 1.011/H | 352x158 (197, 236) | SQ residual -29.0% — pose redistribution; SA-anchored |
-| 1 | 346x222 (214, 277) | 1.017/H | 352x226 (216, 282) | SQ residual -15.0% — pose redistribution; SA-anchored |
-| 2 | 351x285 (229, 316) | - | 351x285 (229, 316) | SQ residual -4.7% — pose redistribution; SA-anchored |
-| 3 | 352x313 (239, 332) | - | 352x313 (239, 332) | OK |
-| 4 | 355x318 (236, 336) | 0.992/H | 351x313 (233, 332) | OK |
-| 5 | 352x326 (240, 339) | - | 352x326 (240, 339) | OK |
-| 6 | 359x336 (249, 347) | 0.981/H | 351x327 (242, 339) | OK |
-| 7 | 359x349 (256, 354) | 0.981/H | 352x342 (249, 347) | SQ residual +4.5% — pose redistribution; SA-anchored |
-
-### boss_hurt — 3 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 352x353 (223, 352) | - | 352x353 (223, 352) | SQ residual +6.5% — pose redistribution; SA-anchored |
-| 1 | 339x300 (214, 319) | 1.038/H | 352x311 (221, 331) | OK |
-| 2 | 352x225 (195, 281) | - | 352x225 (195, 281) | SQ residual -15.0% — pose redistribution; SA-anchored |
-
-### boss_idle — 8 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 351x157 (194, 235) | - | 351x157 (194, 235) | SQ residual -26.9% — pose redistribution; SA-anchored |
-| 1 | 351x272 (212, 309) | - | 351x272 (212, 309) | OK |
-| 2 | 353x302 (232, 326) | - | 353x302 (232, 326) | OK |
-| 3 | 329x323 (220, 326) | 1.070/H | 352x343 (234, 348) | SQ residual +8.2% — pose redistribution; SA-anchored |
-| 4 | 358x170 (201, 247) | 0.983/H | 350x167 (197, 242) | SQ residual -24.7% — pose redistribution; SA-anchored |
-| 5 | 347x289 (227, 317) | 1.014/H | 352x293 (230, 321) | OK |
-| 6 | 335x329 (224, 332) | 1.051/H | 352x345 (235, 348) | SQ residual +8.5% — pose redistribution; SA-anchored |
-| 7 | 353x158 (195, 236) | - | 353x158 (195, 236) | SQ residual -26.4% — pose redistribution; SA-anchored |
-
-### boss_strike_execute — 4 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 424x244 (261, 322) | - | 424x244 (261, 322) | SQ residual -6.6% — overhead slam (raised-weapon pose; ink on-scale) |
-| 1 | 408x356 (263, 381) | 0.991/SA | 404x353 (260, 378) | SQ residual +9.6% — overhead slam (raised-weapon pose; ink on-scale) |
-| 2 | 295x378 (245, 334) | 1.066/SA | 314x378 (257, 344) | OK |
-| 3 | 276x370 (245, 320) | 1.062/SA | 293x372 (254, 330) | SQ residual -4.2% — overhead slam (raised-weapon pose; ink on-scale) |
-
-### boss_strike_recover — 6 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 280x353 (227, 314) | 0.946/SA | 263x333 (214, 296) | SQ residual -4.1% — pose redistribution; SA-anchored |
-| 1 | 283x330 (221, 306) | 0.972/SA | 274x320 (213, 296) | SQ residual -4.0% — pose redistribution; SA-anchored |
-| 2 | 341x263 (213, 300) | 1.032/H | 350x272 (219, 308) | OK |
-| 3 | 361x190 (201, 262) | 0.975/H | 352x184 (195, 254) | SQ residual -17.5% — pose redistribution; SA-anchored |
-| 4 | 369x363 (199, 366) | 0.954/H | 351x346 (189, 348) | SQ residual +13.0% — pose redistribution; SA-anchored |
-| 5 | 374x363 (215, 368) | 0.941/H | 352x342 (201, 347) | SQ residual +12.5% — pose redistribution; SA-anchored |
-
-### boss_strike_windup — 7 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 360x152 (182, 234) | 0.978/H | 352x149 (178, 229) | SQ residual -25.3% — pose redistribution; SA-anchored |
-| 1 | 345x230 (202, 282) | 1.020/H | 352x235 (206, 288) | SQ residual -6.2% — pose redistribution; SA-anchored |
-| 2 | 351x268 (207, 307) | - | 351x268 (207, 307) | OK |
-| 3 | 347x305 (213, 325) | 1.014/H | 351x307 (215, 328) | SQ residual +7.0% — pose redistribution; SA-anchored |
-| 4 | 352x263 (207, 304) | - | 352x263 (207, 304) | OK |
-| 5 | 354x304 (215, 328) | 0.994/H | 352x300 (213, 325) | SQ residual +6.0% — pose redistribution; SA-anchored |
-| 6 | 361x326 (221, 343) | 0.975/H | 350x317 (215, 333) | SQ residual +8.6% — pose redistribution; SA-anchored |
-
-### boss_turn — 4 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 347x344 (242, 346) | 1.014/H | 352x348 (245, 350) | OK |
-| 1 | 355x330 (250, 342) | 0.992/H | 352x326 (247, 339) | OK |
-| 2 | 350x289 (233, 318) | 1.006/H | 352x290 (234, 320) | SQ residual -8.7% — pose redistribution; SA-anchored |
-| 3 | 354x352 (240, 353) | 0.994/H | 352x350 (238, 351) | OK |
-
-### boss_walk — 8 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 369x227 (190, 289) | 0.954/H | 350x215 (181, 274) | SQ residual -17.9% — pose redistribution; SA-anchored |
-| 1 | 363x266 (195, 311) | 0.970/H | 351x256 (188, 300) | SQ residual -10.3% — pose redistribution; SA-anchored |
-| 2 | 352x298 (211, 324) | - | 352x298 (211, 324) | OK |
-| 3 | 352x339 (216, 345) | - | 352x339 (216, 345) | OK |
-| 4 | 337x305 (218, 321) | 1.045/H | 350x318 (227, 334) | OK |
-| 5 | 351x318 (214, 334) | - | 351x318 (214, 334) | OK |
-| 6 | 345x345 (221, 345) | 1.020/H | 352x351 (225, 352) | SQ residual +5.2% — pose redistribution; SA-anchored |
-| 7 | 335x324 (214, 330) | 1.051/H | 350x339 (224, 344) | OK |
-
-### hero_attack_air — 8 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 222x211 (148, 216) | 1.009/H | 224x212 (148, 218) | OK |
-| 1 | 226x213 (148, 219) | 0.991/H | 223x210 (146, 216) | OK |
-| 2 | 216x235 (149, 225) | 0.992/SA | 214x232 (147, 223) | OK |
-| 3 | 205x267 (153, 234) | 0.969/SA | 198x259 (147, 226) | OK |
-| 4 | 206x260 (153, 231) | 0.968/SA | 198x252 (147, 223) | OK |
-| 5 | 208x199 (144, 204) | 1.077/H | 224x214 (154, 219) | OK |
-| 6 | 223x175 (145, 198) | 1.004/H | 224x176 (145, 199) | SQ residual -9.3% — airborne lunge/tuck poses |
-| 7 | 227x181 (144, 203) | 0.987/H | 223x178 (142, 199) | SQ residual -9.0% — airborne lunge/tuck poses |
-
-### hero_attack_crouch — 8 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 140x122 (101, 131) | 1.031/SA | 144x126 (104, 135) | OK |
-| 1 | 140x123 (101, 131) | 1.030/SA | 144x126 (104, 135) | OK |
-| 2 | 135x153 (100, 144) | 1.042/SA | 141x159 (104, 150) | SQ residual +9.7% — pose redistribution; SA-anchored |
-| 3 | 137x154 (100, 145) | 1.046/SA | 143x161 (104, 152) | SQ residual +11.1% — pose redistribution; SA-anchored |
-| 4 | 140x135 (105, 138) | 0.992/SA | 139x134 (104, 136) | OK |
-| 5 | 140x136 (104, 138) | - | 140x136 (104, 138) | OK |
-| 6 | 140x135 (105, 138) | 0.994/SA | 139x134 (103, 136) | OK |
-| 7 | 143x132 (105, 137) | 0.994/SA | 142x131 (103, 136) | OK |
-
-### hero_attack_ground — 8 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 232x179 (139, 204) | 0.966/H | 224x173 (134, 197) | SQ residual -7.0% — lunge + side-profile poses (width collapses in profile; standing frames height-anchored to 224) |
-| 1 | 232x179 (139, 204) | 0.966/H | 224x173 (134, 197) | SQ residual -7.0% — lunge + side-profile poses (width collapses in profile; standing frames height-anchored to 224) |
-| 2 | 216x222 (136, 219) | 1.037/H | 223x230 (141, 226) | SQ residual +7.0% — lunge + side-profile poses (width collapses in profile; standing frames height-anchored to 224) |
-| 3 | 207x250 (139, 228) | 0.985/SA | 203x246 (136, 224) | SQ residual +5.6% — lunge + side-profile poses (width collapses in profile; standing frames height-anchored to 224) |
-| 4 | 209x211 (136, 210) | 1.072/H | 224x226 (145, 225) | SQ residual +6.3% — lunge + side-profile poses (width collapses in profile; standing frames height-anchored to 224) |
-| 5 | 215x192 (132, 203) | 1.042/H | 224x200 (137, 212) | OK |
-| 6 | 250x72 (112, 134) | 0.896/H | 224x65 (100, 121) | SQ residual -43.0% — lunge + side-profile poses (width collapses in profile; standing frames height-anchored to 224) |
-| 7 | 250x72 (113, 134) | 0.896/H | 224x65 (101, 121) | SQ residual -43.0% — lunge + side-profile poses (width collapses in profile; standing frames height-anchored to 224) |
-
-### hero_crouch_enter — 4 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 190x59 (83, 106) | 1.112/SA | 211x66 (92, 118) | OK |
-| 1 | 184x83 (95, 124) | 0.980/SA | 180x81 (92, 121) | OK |
-| 2 | 146x94 (93, 117) | - | 146x94 (93, 117) | OK |
-| 3 | 140x95 (91, 115) | 1.015/SA | 142x96 (92, 117) | OK |
-
-### hero_crouch_exit — 4 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 140x95 (91, 115) | 1.015/SA | 142x96 (92, 117) | OK |
-| 1 | 146x94 (93, 117) | - | 146x94 (93, 117) | OK |
-| 2 | 184x83 (95, 124) | 0.980/SA | 180x81 (92, 121) | OK |
-| 3 | 190x59 (83, 106) | 1.112/SA | 211x66 (92, 118) | OK |
-
-### hero_crouch_idle — 6 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 145x115 (96, 129) | 1.005/SA | 146x116 (97, 130) | OK |
-| 1 | 139x119 (97, 129) | - | 139x119 (97, 129) | OK |
-| 2 | 135x120 (97, 127) | - | 135x120 (97, 127) | OK |
-| 3 | 140x119 (97, 129) | - | 140x119 (97, 129) | OK |
-| 4 | 140x119 (97, 129) | - | 140x119 (97, 129) | OK |
-| 5 | 140x119 (97, 129) | - | 140x119 (97, 129) | OK |
-
-### hero_death — 10 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 229x119 (134, 165) | 1.041/SA | 238x124 (138, 172) | OK |
-| 1 | 219x132 (139, 170) | - | 219x132 (139, 170) | OK |
-| 2 | 214x183 (156, 198) | 0.890/SA | 190x162 (139, 175) | OK |
-| 3 | 194x164 (149, 178) | 0.935/SA | 181x152 (138, 166) | OK |
-| 4 | 192x205 (159, 198) | 0.877/SA | 167x180 (139, 173) | OK |
-| 5 | 166x208 (151, 186) | 0.921/SA | 153x191 (139, 171) | OK |
-| 6 | 130x183 (137, 154) | 1.019/SA | 132x186 (139, 157) | SQ residual -7.8% — death collapse to lying corpse (pose); final heap frames are ink-poor by pose |
-| 7 | 88x239 (128, 145) | 1.090/SA | 95x261 (139, 158) | SQ residual -7.4% — death collapse to lying corpse (pose); final heap frames are ink-poor by pose |
-| 8 | 42x145 (91, 78) | 1.180/SA | 48x171 (107, 91) | SQ residual -46.7% — death collapse to lying corpse (pose); final heap frames are ink-poor by pose |
-| 9 | 78x235 (113, 135) | 1.180/SA | 91x277 (132, 159) | SQ residual -6.6% — death collapse to lying corpse (pose); final heap frames are ink-poor by pose |
-
-### hero_fall — 4 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 203x106 (104, 147) | 0.973/SA | 197x103 (100, 142) | SQ residual -11.9% — airborne tuck (pose) |
-| 1 | 215x118 (99, 159) | 1.013/SA | 218x120 (100, 162) | OK |
-| 2 | 222x118 (97, 162) | 1.037/SA | 230x122 (99, 168) | OK |
-| 3 | 224x113 (101, 159) | - | 224x113 (101, 159) | OK |
-
-### hero_get_up — 6 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 123x134 (104, 128) | - | 123x134 (104, 128) | SQ residual -16.4% — rise-from-ground (pose, reverse of knockdown) |
-| 1 | 136x121 (90, 128) | 1.151/SA | 156x139 (103, 147) | SQ residual -4.0% — rise-from-ground (pose, reverse of knockdown) |
-| 2 | 128x133 (93, 130) | 1.113/SA | 142x144 (103, 143) | SQ residual -6.8% — rise-from-ground (pose, reverse of knockdown) |
-| 3 | 153x134 (97, 143) | 1.076/SA | 164x144 (103, 154) | OK |
-| 4 | 219x128 (110, 167) | 0.948/SA | 208x121 (103, 159) | OK |
-| 5 | 229x129 (116, 172) | 0.895/SA | 205x115 (103, 154) | OK |
-
-### hero_hurt_recoil — 4 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 243x77 (109, 137) | 0.922/H | 224x70 (100, 125) | SQ residual -24.6% — pose redistribution; SA-anchored |
-| 1 | 228x122 (123, 167) | 0.982/H | 224x120 (120, 164) | OK |
-| 2 | 205x129 (117, 163) | 1.022/SA | 209x132 (119, 166) | OK |
-| 3 | 220x125 (120, 166) | 1.018/H | 224x127 (121, 169) | OK |
-
-### hero_idle — 8 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 223x133 (137, 172) | 1.004/H | 224x133 (137, 173) | SQ residual -6.1% — pose redistribution; SA-anchored |
-| 1 | 224x139 (139, 176) | - | 224x139 (139, 176) | SQ residual -4.0% — pose redistribution; SA-anchored |
-| 2 | 225x142 (140, 179) | 0.996/H | 224x140 (138, 177) | OK |
-| 3 | 222x146 (138, 180) | 1.009/H | 224x146 (139, 181) | OK |
-| 4 | 226x182 (142, 203) | 0.991/H | 223x179 (140, 200) | SQ residual +8.6% — pose redistribution; SA-anchored |
-| 5 | 224x151 (140, 184) | - | 224x151 (140, 184) | OK |
-| 6 | 224x178 (142, 200) | - | 224x178 (142, 200) | SQ residual +8.6% — pose redistribution; SA-anchored |
-| 7 | 223x152 (140, 184) | 1.004/H | 224x152 (140, 184) | OK |
-
-### hero_jump_apex — 3 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 224x176 (149, 199) | - | 224x176 (149, 199) | OK |
-| 1 | 178x218 (147, 197) | - | 178x218 (147, 197) | OK |
-| 2 | 189x188 (139, 188) | 1.059/SA | 200x198 (146, 199) | OK |
-
-### hero_jump_rise — 4 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 174x136 (113, 154) | 1.042/SA | 181x142 (117, 160) | SQ residual -12.0% — airborne extension/tuck (pose) |
-| 1 | 224x133 (122, 173) | - | 224x133 (122, 173) | SQ residual -5.2% — airborne extension/tuck (pose) |
-| 2 | 211x139 (118, 171) | 1.062/H | 224x148 (124, 182) | OK |
-| 3 | 208x138 (117, 169) | 1.077/H | 223x149 (125, 182) | OK |
-
-### hero_jump_takeoff — 3 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 164x170 (126, 167) | 1.045/SA | 171x178 (131, 174) | SQ residual -9.0% — takeoff crouch then extension (pose) |
-| 1 | 223x163 (132, 191) | 1.004/H | 224x164 (132, 192) | OK |
-| 2 | 221x183 (132, 201) | 1.014/H | 223x184 (132, 203) | SQ residual +5.7% — takeoff crouch then extension (pose) |
-
-### hero_knockback — 4 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 224x123 (116, 166) | - | 224x123 (116, 166) | OK |
-| 1 | 220x123 (105, 164) | 1.018/H | 224x125 (106, 167) | OK |
-| 2 | 185x120 (104, 149) | 1.029/SA | 190x123 (106, 153) | SQ residual -7.9% — pose redistribution; SA-anchored |
-| 3 | 204x117 (107, 154) | - | 204x117 (107, 154) | SQ residual -6.9% — pose redistribution; SA-anchored |
-
-### hero_knockdown — 6 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 229x129 (116, 172) | 0.895/SA | 205x115 (103, 154) | OK |
-| 1 | 219x128 (110, 167) | 0.948/SA | 208x121 (103, 159) | OK |
-| 2 | 153x134 (97, 143) | 1.076/SA | 164x144 (103, 154) | OK |
-| 3 | 128x133 (93, 130) | 1.113/SA | 142x144 (103, 143) | SQ residual -6.8% — fall-to-ground collapse (pose) |
-| 4 | 136x121 (90, 128) | 1.151/SA | 156x139 (103, 147) | SQ residual -4.0% — fall-to-ground collapse (pose) |
-| 5 | 123x134 (104, 128) | - | 123x134 (104, 128) | SQ residual -16.4% — fall-to-ground collapse (pose) |
-
-### hero_land — 4 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 239x121 (121, 170) | 0.937/H | 223x112 (112, 158) | OK |
-| 1 | 209x126 (122, 162) | 1.072/H | 224x135 (130, 174) | SQ residual +10.1% — landing squash (pose; height residual intended, clamp-corrected only) |
-| 2 | 169x139 (117, 153) | 1.029/SA | 174x143 (120, 158) | OK |
-| 3 | 260x82 (116, 146) | 0.862/H | 224x71 (100, 126) | SQ residual -20.2% — landing squash (pose; height residual intended, clamp-corrected only) |
-
-### hero_start_move — 3 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 239x80 (109, 138) | 0.937/H | 224x75 (101, 130) | SQ residual -34.0% — side-profile start frame (width collapse; height anchored) |
-| 1 | 219x176 (138, 196) | 1.023/H | 224x180 (140, 201) | OK |
-| 2 | 224x172 (133, 196) | - | 224x172 (133, 196) | OK |
-
-### hero_stop_move — 3 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 223x206 (137, 214) | 1.004/H | 224x206 (137, 215) | OK |
-| 1 | 224x203 (131, 213) | - | 224x203 (131, 213) | OK |
-| 2 | 241x85 (112, 143) | 0.929/H | 224x79 (103, 133) | SQ residual -37.6% — side-profile stop frame (width collapse; height anchored) |
-
-### hero_turn — 3 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 225x84 (108, 138) | 0.996/H | 224x84 (107, 137) | OK |
-| 1 | 212x186 (128, 199) | 1.057/H | 224x197 (135, 210) | SQ residual +49.6% — mid-turn coat spread (width pose; height anchored) |
-| 2 | 224x88 (108, 140) | - | 224x88 (108, 140) | OK |
-
-### hero_walk — 10 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 229x122 (118, 167) | 0.978/H | 224x118 (114, 163) | SQ residual -11.3% — pose redistribution; SA-anchored |
-| 1 | 231x135 (118, 177) | 0.970/H | 223x130 (113, 170) | SQ residual -7.1% — pose redistribution; SA-anchored |
-| 2 | 227x152 (125, 186) | 0.987/H | 223x150 (123, 183) | OK |
-| 3 | 215x162 (123, 187) | 1.042/H | 223x169 (127, 194) | SQ residual +5.9% — pose redistribution; SA-anchored |
-| 4 | 219x161 (124, 188) | 1.023/H | 224x164 (126, 192) | SQ residual +4.6% — pose redistribution; SA-anchored |
-| 5 | 223x144 (121, 179) | 1.004/H | 223x145 (121, 180) | OK |
-| 6 | 227x152 (123, 186) | 0.987/H | 224x149 (120, 183) | OK |
-| 7 | 224x152 (123, 184) | - | 224x152 (123, 184) | OK |
-| 8 | 224x150 (123, 183) | - | 224x150 (123, 183) | OK |
-| 9 | 220x153 (119, 184) | 1.018/H | 224x156 (121, 187) | OK |
-
-### projectile_grave_shot — 3 frames (EXEMPT — unchanged)
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 64x64 (62, 64) | - | 64x64 (62, 64) | unchanged (md5-verified) |
-| 1 | 64x64 (64, 64) | - | 64x64 (64, 64) | unchanged (md5-verified) |
-| 2 | 64x64 (62, 64) | - | 64x64 (62, 64) | unchanged (md5-verified) |
-
-### pursuer_alert — 4 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 111x203 (100, 150) | - | 111x203 (100, 150) | SQ residual -4.4% — rear-up tell (pose apex) |
-| 1 | 160x211 (105, 184) | 0.953/SA | 152x201 (98, 175) | SQ residual +11.3% — rear-up tell (pose apex) |
-| 2 | 160x175 (90, 167) | 1.111/SA | 160x154 (92, 157) | OK |
-| 3 | 160x108 (78, 132) | 1.180/SA | 160x94 (81, 123) | SQ residual -21.9% — rear-up tell (pose apex) |
-
-### pursuer_approach_walk — 8 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 96x183 (85, 132) | 1.026/SA | 99x188 (86, 136) | OK |
-| 1 | 104x179 (87, 136) | 1.004/SA | 102x180 (85, 136) | OK |
-| 2 | 123x174 (86, 146) | 1.008/SA | 124x175 (85, 147) | SQ residual +4.5% — pose redistribution; SA-anchored |
-| 3 | 115x175 (88, 142) | 0.989/SA | 113x173 (86, 140) | OK |
-| 4 | 107x184 (85, 140) | 1.021/SA | 109x188 (86, 143) | OK |
-| 5 | 111x179 (87, 141) | - | 111x179 (87, 141) | OK |
-| 6 | 111x179 (87, 141) | - | 111x179 (87, 141) | OK |
-| 7 | 111x181 (87, 142) | 0.996/SA | 111x180 (86, 141) | OK |
-
-### pursuer_death — 6 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 126x130 (69, 128) | - | 126x130 (69, 128) | SQ residual +22.4% — collapse to corpse (pose) |
-| 1 | 98x117 (69, 107) | 0.990/SA | 96x114 (67, 105) | OK |
-| 2 | 96x118 (69, 106) | 0.992/SA | 95x113 (67, 104) | OK |
-| 3 | 69x126 (61, 93) | 1.125/SA | 78x141 (68, 105) | OK |
-| 4 | 41x127 (55, 72) | 1.180/SA | 48x149 (64, 85) | SQ residual -19.1% — collapse to corpse (pose) |
-| 5 | 41x127 (55, 72) | 1.180/SA | 48x149 (64, 85) | SQ residual -19.1% — collapse to corpse (pose) |
-
-### pursuer_hurt — 3 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 135x137 (74, 136) | 0.979/SA | 132x134 (72, 133) | SQ residual +12.9% — pose redistribution; SA-anchored |
-| 1 | 93x114 (73, 103) | - | 93x114 (73, 103) | SQ residual -12.6% — pose redistribution; SA-anchored |
-| 2 | 112x124 (72, 118) | 1.011/SA | 112x124 (72, 118) | OK |
-
-### pursuer_idle — 6 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 111x156 (92, 132) | 0.990/SA | 109x154 (89, 130) | OK |
-| 1 | 148x163 (91, 155) | - | 148x163 (91, 155) | SQ residual +17.3% — pose redistribution; SA-anchored |
-| 2 | 111x155 (92, 131) | 0.984/SA | 109x153 (89, 129) | OK |
-| 3 | 110x159 (90, 132) | 1.007/SA | 111x158 (90, 132) | OK |
-| 4 | 140x162 (90, 151) | 1.008/SA | 140x163 (89, 151) | SQ residual +14.1% — pose redistribution; SA-anchored |
-| 5 | 109x159 (90, 132) | 1.007/SA | 110x158 (90, 132) | OK |
-
-### pursuer_lunge — 3 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 112x122 (69, 117) | 0.850/SA | 95x102 (57, 98) | SQ residual +15.5% — flattened leap (pose) |
-| 1 | 61x119 (54, 85) | - | 61x119 (54, 85) | OK |
-| 2 | 47x126 (51, 77) | 1.068/SA | 50x134 (53, 82) | OK |
-
-### pursuer_lunge_windup — 4 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 159x93 (71, 122) | 1.013/SA | 160x94 (71, 123) | SQ residual +9.9% — rear-up/crouch before lunge (pose) |
-| 1 | 150x83 (72, 112) | - | 150x83 (72, 112) | OK |
-| 2 | 111x93 (72, 102) | - | 111x93 (72, 102) | SQ residual -9.0% — rear-up/crouch before lunge (pose) |
-| 3 | 115x87 (72, 100) | 1.008/SA | 116x88 (71, 101) | SQ residual -9.5% — rear-up/crouch before lunge (pose) |
-
-### pursuer_patrol_walk — 8 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 115x166 (79, 138) | 1.049/SA | 121x174 (83, 145) | SQ residual +7.4% — pose redistribution; SA-anchored |
-| 1 | 124x154 (85, 138) | 0.986/SA | 121x152 (82, 136) | OK |
-| 2 | 122x162 (83, 141) | - | 122x162 (83, 141) | SQ residual +4.1% — pose redistribution; SA-anchored |
-| 3 | 112x161 (83, 134) | - | 112x161 (83, 134) | OK |
-| 4 | 107x166 (82, 133) | 1.021/SA | 108x169 (82, 135) | OK |
-| 5 | 108x163 (84, 133) | - | 108x163 (84, 133) | OK |
-| 6 | 110x164 (84, 134) | 0.995/SA | 105x163 (82, 131) | OK |
-| 7 | 106x163 (83, 131) | - | 106x163 (83, 131) | OK |
-
-### pursuer_recovery — 4 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 84x149 (74, 112) | 1.063/SA | 87x158 (77, 117) | OK |
-| 1 | 115x115 (80, 115) | 0.976/SA | 111x112 (77, 112) | SQ residual -5.6% — pose redistribution; SA-anchored |
-| 2 | 139x129 (78, 134) | 1.008/SA | 140x126 (77, 133) | SQ residual +12.4% — pose redistribution; SA-anchored |
-| 3 | 109x128 (78, 118) | - | 109x128 (78, 118) | OK |
-
-### ranged_aim — 6 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 288x169 (165, 221) | 1.028/SA | 288x173 (168, 223) | SQ residual -7.9% — pose redistribution; SA-anchored |
-| 1 | 288x202 (168, 241) | 1.013/SA | 288x204 (169, 242) | OK |
-| 2 | 288x212 (169, 247) | 1.005/SA | 288x212 (169, 247) | OK |
-| 3 | 288x218 (170, 251) | - | 288x218 (170, 251) | OK |
-| 4 | 288x218 (171, 251) | 0.994/SA | 286x185 (167, 230) | SQ residual -5.1% — pose redistribution; SA-anchored |
-| 5 | 288x254 (175, 270) | 0.968/SA | 279x174 (166, 220) | SQ residual -9.1% — pose redistribution; SA-anchored |
-
-### ranged_death — 6 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 288x147 (153, 206) | 1.023/SA | 288x150 (155, 208) | SQ residual -5.9% — pose redistribution; SA-anchored |
-| 1 | 288x172 (157, 223) | - | 288x172 (157, 223) | OK |
-| 2 | 288x171 (158, 222) | 0.996/SA | 287x170 (156, 221) | OK |
-| 3 | 288x165 (157, 218) | - | 288x165 (157, 218) | OK |
-| 4 | 288x171 (157, 222) | - | 288x171 (157, 222) | OK |
-| 5 | 288x172 (159, 223) | 0.988/SA | 284x169 (155, 219) | OK |
-
-### ranged_fire — 3 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 288x170 (136, 221) | 0.943/SA | 272x160 (127, 209) | SQ residual +13.2% — pose redistribution; SA-anchored |
-| 1 | 288x118 (129, 184) | - | 288x118 (129, 184) | OK |
-| 2 | 288x117 (127, 184) | 1.010/SA | 288x117 (127, 184) | OK |
-
-### ranged_hurt — 3 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 288x255 (174, 271) | 0.939/SA | 270x239 (162, 254) | SQ residual +8.3% — pose redistribution; SA-anchored |
-| 1 | 288x191 (163, 234) | - | 288x191 (163, 234) | OK |
-| 2 | 288x176 (159, 225) | 1.023/SA | 288x180 (162, 228) | OK |
-
-### ranged_idle — 6 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 288x131 (151, 194) | 1.017/SA | 288x132 (152, 195) | SQ residual -4.2% — pose redistribution; SA-anchored |
-| 1 | 288x137 (152, 199) | 1.005/SA | 288x138 (153, 199) | OK |
-| 2 | 288x144 (153, 204) | - | 288x144 (153, 204) | OK |
-| 3 | 288x161 (158, 215) | 0.968/SA | 279x155 (153, 208) | OK |
-| 4 | 288x148 (154, 206) | - | 288x148 (154, 206) | OK |
-| 5 | 288x143 (153, 203) | 1.004/SA | 288x143 (152, 203) | OK |
-
-### ranged_recover — 7 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 288x256 (169, 272) | 0.935/SA | 269x239 (157, 254) | SQ residual -6.6% — pose redistribution; SA-anchored |
-| 1 | 288x256 (156, 272) | 1.017/SA | 288x256 (157, 272) | OK |
-| 2 | 288x256 (158, 272) | - | 288x256 (158, 272) | OK |
-| 3 | 288x256 (156, 272) | 1.018/SA | 288x256 (157, 272) | OK |
-| 4 | 288x256 (156, 272) | 1.015/SA | 288x256 (157, 272) | OK |
-| 5 | 288x256 (158, 272) | - | 288x256 (158, 272) | OK |
-| 6 | 288x256 (158, 272) | - | 288x256 (158, 272) | OK |
-
-### swooper_cruise — 8 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 182x165 (119, 173) | 0.990/SA | 179x162 (117, 170) | OK |
-| 1 | 180x173 (118, 176) | - | 180x173 (118, 176) | OK |
-| 2 | 132x180 (113, 154) | 1.048/SA | 138x188 (118, 161) | SQ residual -7.4% — pose redistribution; SA-anchored |
-| 3 | 136x164 (114, 149) | 1.042/SA | 142x171 (118, 156) | SQ residual -10.4% — pose redistribution; SA-anchored |
-| 4 | 157x187 (113, 171) | 1.044/SA | 163x195 (117, 178) | OK |
-| 5 | 169x168 (116, 168) | 1.017/SA | 171x171 (118, 171) | OK |
-| 6 | 169x183 (119, 176) | - | 169x183 (119, 176) | OK |
-| 7 | 173x183 (120, 178) | 0.984/SA | 169x179 (117, 174) | OK |
-
-### swooper_death_fall — 5 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 240x227 (143, 233) | 0.886/SA | 212x201 (126, 206) | SQ residual +14.5% — tumbling fall (pose) |
-| 1 | 170x191 (127, 180) | - | 170x191 (127, 180) | OK |
-| 2 | 177x178 (119, 178) | 1.063/SA | 188x189 (126, 188) | SQ residual +4.6% — tumbling fall (pose) |
-| 3 | 164x176 (128, 170) | 0.989/SA | 162x174 (125, 168) | SQ residual -6.8% — tumbling fall (pose) |
-| 4 | 80x269 (112, 147) | 1.137/SA | 89x305 (126, 165) | SQ residual -8.5% — tumbling fall (pose) |
-
-### swooper_dive — 4 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 165x164 (122, 164) | 0.953/SA | 156x156 (115, 156) | SQ residual -20.4% — dive fold (pose) |
-| 1 | 155x145 (111, 150) | 1.047/SA | 161x152 (116, 156) | SQ residual -20.2% — dive fold (pose) |
-| 2 | 174x221 (116, 196) | - | 174x221 (116, 196) | OK |
-| 3 | 174x222 (108, 196) | 1.080/SA | 188x240 (116, 212) | SQ residual +8.3% — dive fold (pose) |
-
-### swooper_dive_telegraph — 4 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 235x133 (119, 177) | 0.895/SA | 210x119 (106, 158) | SQ residual +20.5% — wings folding to dart (pose) |
-| 1 | 198x87 (107, 131) | - | 198x87 (107, 131) | OK |
-| 2 | 141x86 (78, 110) | 1.180/SA | 166x102 (91, 130) | OK |
-| 3 | 108x109 (62, 108) | 1.180/SA | 127x128 (72, 128) | OK |
-
-### swooper_hurt — 3 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 184x188 (112, 186) | 0.977/SA | 180x184 (109, 182) | SQ residual +15.9% — pose redistribution; SA-anchored |
-| 1 | 170x145 (109, 157) | - | 170x145 (109, 157) | OK |
-| 2 | 128x181 (109, 152) | - | 128x181 (109, 152) | OK |
-
-### swooper_perch_idle — 6 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 168x150 (118, 159) | 1.039/SA | 174x156 (122, 165) | OK |
-| 1 | 168x143 (119, 155) | 1.031/SA | 172x147 (122, 159) | OK |
-| 2 | 168x149 (122, 158) | - | 168x149 (122, 158) | OK |
-| 3 | 173x154 (123, 163) | - | 173x154 (123, 163) | OK |
-| 4 | 173x153 (127, 163) | 0.966/SA | 166x148 (122, 157) | OK |
-| 5 | 170x156 (123, 163) | - | 170x156 (123, 163) | OK |
-
-### swooper_recovery_climb — 6 frames
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 175x143 (111, 158) | 0.921/SA | 161x131 (101, 145) | SQ residual -7.2% — pose redistribution; SA-anchored |
-| 1 | 135x177 (99, 155) | 1.026/SA | 139x182 (101, 159) | OK |
-| 2 | 125x165 (101, 144) | 1.010/SA | 126x167 (101, 145) | SQ residual -7.2% — pose redistribution; SA-anchored |
-| 3 | 167x164 (102, 166) | - | 167x164 (102, 166) | SQ residual +5.8% — pose redistribution; SA-anchored |
-| 4 | 171x143 (102, 156) | - | 171x143 (102, 156) | OK |
-| 5 | 172x152 (106, 162) | 0.958/SA | 164x146 (101, 155) | OK |
-
-### vfx_checkpoint_activate — 8 frames (EXEMPT — unchanged)
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 38x61 (35, 48) | - | 38x61 (35, 48) | unchanged (md5-verified) |
-| 1 | 124x110 (77, 117) | - | 124x110 (77, 117) | unchanged (md5-verified) |
-| 2 | 182x150 (133, 165) | - | 182x150 (133, 165) | unchanged (md5-verified) |
-| 3 | 217x142 (165, 176) | - | 217x142 (165, 176) | unchanged (md5-verified) |
-| 4 | 209x137 (158, 169) | - | 209x137 (158, 169) | unchanged (md5-verified) |
-| 5 | 205x123 (150, 159) | - | 205x123 (150, 159) | unchanged (md5-verified) |
-| 6 | 254x122 (143, 176) | - | 254x122 (143, 176) | unchanged (md5-verified) |
-| 7 | 249x111 (137, 166) | - | 249x111 (137, 166) | unchanged (md5-verified) |
-
-### vfx_damage_indicator — 2 frames (EXEMPT — unchanged)
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 217x200 (113, 208) | - | 217x200 (113, 208) | unchanged (md5-verified) |
-| 1 | 220x217 (141, 218) | - | 220x217 (141, 218) | unchanged (md5-verified) |
-
-### vfx_enemy_defeat — 8 frames (EXEMPT — unchanged)
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 128x128 (128, 128) | - | 128x128 (128, 128) | unchanged (md5-verified) |
-| 1 | 174x174 (169, 174) | - | 174x174 (169, 174) | unchanged (md5-verified) |
-| 2 | 217x217 (188, 217) | - | 217x217 (188, 217) | unchanged (md5-verified) |
-| 3 | 135x174 (124, 153) | - | 135x174 (124, 153) | unchanged (md5-verified) |
-| 4 | 214x223 (187, 218) | - | 214x223 (187, 218) | unchanged (md5-verified) |
-| 5 | 202x195 (136, 198) | - | 202x195 (136, 198) | unchanged (md5-verified) |
-| 6 | 29x13 (31, 19) | - | 29x13 (31, 19) | unchanged (md5-verified) |
-| 7 | 17x12 (15, 14) | - | 17x12 (15, 14) | unchanged (md5-verified) |
-
-### vfx_hazard_eruption — 6 frames (EXEMPT — unchanged)
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 67x119 (70, 89) | - | 67x119 (70, 89) | unchanged (md5-verified) |
-| 1 | 192x222 (163, 206) | - | 192x222 (163, 206) | unchanged (md5-verified) |
-| 2 | 192x312 (230, 245) | - | 192x312 (230, 245) | unchanged (md5-verified) |
-| 3 | 192x320 (246, 248) | - | 192x320 (246, 248) | unchanged (md5-verified) |
-| 4 | 80x200 (132, 126) | - | 80x200 (132, 126) | unchanged (md5-verified) |
-| 5 | 75x204 (81, 124) | - | 75x204 (81, 124) | unchanged (md5-verified) |
-
-### vfx_hazard_telegraph — 4 frames (EXEMPT — unchanged)
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 77x320 (156, 157) | - | 77x320 (156, 157) | unchanged (md5-verified) |
-| 1 | 75x320 (155, 155) | - | 75x320 (155, 155) | unchanged (md5-verified) |
-| 2 | 79x320 (159, 159) | - | 79x320 (159, 159) | unchanged (md5-verified) |
-| 3 | 80x320 (160, 160) | - | 80x320 (160, 160) | unchanged (md5-verified) |
-
-### vfx_whip_impact — 6 frames (EXEMPT — unchanged)
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 86x86 (65, 86) | - | 86x86 (65, 86) | unchanged (md5-verified) |
-| 1 | 148x148 (111, 148) | - | 148x148 (111, 148) | unchanged (md5-verified) |
-| 2 | 204x204 (152, 204) | - | 204x204 (152, 204) | unchanged (md5-verified) |
-| 3 | 162x162 (120, 162) | - | 162x162 (120, 162) | unchanged (md5-verified) |
-| 4 | 108x108 (79, 108) | - | 108x108 (79, 108) | unchanged (md5-verified) |
-| 5 | 58x58 (40, 58) | - | 58x58 (40, 58) | unchanged (md5-verified) |
-
-### whip_attack_air — 8 frames (EXEMPT — unchanged)
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 70x79 (42, 74) | - | 70x79 (42, 74) | unchanged (md5-verified) |
-| 1 | 66x81 (42, 73) | - | 66x81 (42, 73) | unchanged (md5-verified) |
-| 2 | 97x216 (44, 145) | - | 97x216 (44, 145) | unchanged (md5-verified) |
-| 3 | 17x251 (40, 65) | - | 17x251 (40, 65) | unchanged (md5-verified) |
-| 4 | 107x175 (36, 137) | - | 107x175 (36, 137) | unchanged (md5-verified) |
-| 5 | 57x179 (37, 101) | - | 57x179 (37, 101) | unchanged (md5-verified) |
-| 6 | 81x77 (40, 79) | - | 81x77 (40, 79) | unchanged (md5-verified) |
-| 7 | 83x78 (42, 80) | - | 83x78 (42, 80) | unchanged (md5-verified) |
-
-### whip_attack_crouch — 8 frames (EXEMPT — unchanged)
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 72x81 (44, 76) | - | 72x81 (44, 76) | unchanged (md5-verified) |
-| 1 | 74x81 (44, 77) | - | 74x81 (44, 77) | unchanged (md5-verified) |
-| 2 | 53x233 (41, 111) | - | 53x233 (41, 111) | unchanged (md5-verified) |
-| 3 | 16x286 (42, 68) | - | 16x286 (42, 68) | unchanged (md5-verified) |
-| 4 | 74x238 (41, 133) | - | 74x238 (41, 133) | unchanged (md5-verified) |
-| 5 | 47x162 (36, 87) | - | 47x162 (36, 87) | unchanged (md5-verified) |
-| 6 | 80x78 (42, 79) | - | 80x78 (42, 79) | unchanged (md5-verified) |
-| 7 | 76x78 (42, 77) | - | 76x78 (42, 77) | unchanged (md5-verified) |
-
-### whip_attack_ground — 8 frames (EXEMPT — unchanged)
-| f | before HxW (SA, SQ) | factor/rule | after HxW (SA, SQ) | verdict |
-|---|---|---|---|---|
-| 0 | 81x99 (46, 90) | - | 81x99 (46, 90) | unchanged (md5-verified) |
-| 1 | 82x110 (49, 95) | - | 82x110 (49, 95) | unchanged (md5-verified) |
-| 2 | 85x234 (44, 141) | - | 85x234 (44, 141) | unchanged (md5-verified) |
-| 3 | 20x257 (40, 72) | - | 20x257 (40, 72) | unchanged (md5-verified) |
-| 4 | 83x240 (41, 141) | - | 83x240 (41, 141) | unchanged (md5-verified) |
-| 5 | 39x169 (36, 81) | - | 39x169 (36, 81) | unchanged (md5-verified) |
-| 6 | 83x83 (42, 83) | - | 83x83 (42, 83) | unchanged (md5-verified) |
-| 7 | 85x82 (44, 84) | - | 85x82 (44, 84) | unchanged (md5-verified) |
+# Scale audit — post-integrity-fix
+
+Alpha threshold > 40. `h` = full alpha-bbox height; `lcc_h` = largest-connected-component (the figure) bbox height; `foot_off` = pivot.y − LCC bbox bottom (0 = figure's lowest point exactly on the pivot; negative = figure extends below pivot); `ncomp` = component count (>1 means detached debris/satellites present). Whip rows add grip/tip stats vs pivot.
+## Summary (per clip)
+
+| clip | actor | n | full_h min/med/max | lcc_h min/med/max |
+|---|---|---|---|---|
+| boss_death | boss | 12 | 160/241/365 | 160/240/364 |
+| boss_hazard_execute | boss | 4 | 304/330/351 | 304/330/351 |
+| boss_hazard_recover | boss | 6 | 252/351/352 | 252/350/352 |
+| boss_hazard_windup | boss | 8 | 351/352/352 | 351/352/352 |
+| boss_hurt | boss | 3 | 352/352/352 | 352/352/352 |
+| boss_idle | boss | 8 | 350/352/353 | 350/352/353 |
+| boss_strike_execute | boss | 4 | 293/359/424 | 293/359/424 |
+| boss_strike_recover | boss | 6 | 317/352/358 | 263/350/352 |
+| boss_strike_windup | boss | 7 | 350/352/352 | 350/352/352 |
+| boss_turn | boss | 4 | 352/352/352 | 352/352/352 |
+| boss_walk | boss | 8 | 350/351/352 | 350/351/352 |
+| hero_attack_air | hero | 8 | 198/224/246 | 198/223/224 |
+| hero_attack_crouch | hero | 8 | 139/142/144 | 139/142/144 |
+| hero_attack_ground | hero | 8 | 203/224/224 | 203/224/224 |
+| hero_crouch_enter | hero | 4 | 142/163/211 | 142/163/211 |
+| hero_crouch_exit | hero | 4 | 142/163/211 | 142/163/211 |
+| hero_crouch_idle | hero | 6 | 135/140/146 | 135/140/146 |
+| hero_death | hero | 10 | 91/160/238 | 91/160/238 |
+| hero_fall | hero | 4 | 197/221/230 | 197/221/230 |
+| hero_get_up | hero | 6 | 123/160/208 | 123/160/208 |
+| hero_hurt_recoil | hero | 4 | 209/224/224 | 209/224/224 |
+| hero_idle | hero | 8 | 224/224/224 | 224/224/224 |
+| hero_jump_apex | hero | 3 | 178/200/224 | 178/200/224 |
+| hero_jump_rise | hero | 4 | 181/224/224 | 181/224/224 |
+| hero_jump_takeoff | hero | 3 | 171/223/224 | 171/223/224 |
+| hero_knockback | hero | 4 | 190/214/224 | 190/214/224 |
+| hero_knockdown | hero | 6 | 123/160/208 | 123/160/208 |
+| hero_land | hero | 4 | 174/224/224 | 174/224/224 |
+| hero_start_move | hero | 3 | 224/224/224 | 224/224/224 |
+| hero_stop_move | hero | 3 | 224/224/224 | 224/224/224 |
+| hero_turn | hero | 3 | 224/224/224 | 224/224/224 |
+| hero_walk | hero | 10 | 223/224/242 | 223/224/224 |
+| projectile_grave_shot | projectile | 3 | 64/64/64 | 64/64/64 |
+| pursuer_alert | pursuer | 4 | 111/196/245 | 111/196/245 |
+| pursuer_approach_walk | pursuer | 8 | 99/111/124 | 99/111/124 |
+| pursuer_death | pursuer | 6 | 50/88/126 | 48/86/126 |
+| pursuer_hurt | pursuer | 3 | 94/112/132 | 93/112/132 |
+| pursuer_idle | pursuer | 6 | 109/110/148 | 109/110/148 |
+| pursuer_lunge | pursuer | 3 | 50/61/95 | 50/61/95 |
+| pursuer_lunge_windup | pursuer | 4 | 112/133/171 | 111/133/170 |
+| pursuer_patrol_walk | pursuer | 8 | 106/110/122 | 105/110/122 |
+| pursuer_recovery | pursuer | 4 | 88/110/140 | 87/110/140 |
+| ranged_aim | ranged | 6 | 279/288/288 | 279/288/288 |
+| ranged_death | ranged | 6 | 284/288/288 | 284/288/288 |
+| ranged_fire | ranged | 3 | 272/288/288 | 272/288/288 |
+| ranged_hurt | ranged | 3 | 270/288/288 | 270/288/288 |
+| ranged_idle | ranged | 6 | 279/288/288 | 279/288/288 |
+| ranged_recover | ranged | 7 | 269/288/288 | 269/288/288 |
+| swooper_cruise | swooper | 8 | 138/169/180 | 138/169/180 |
+| swooper_death_fall | swooper | 5 | 89/170/213 | 89/170/212 |
+| swooper_dive | swooper | 4 | 156/168/188 | 156/168/188 |
+| swooper_dive_telegraph | swooper | 4 | 127/182/200 | 127/182/200 |
+| swooper_hurt | swooper | 3 | 128/170/180 | 128/170/180 |
+| swooper_perch_idle | swooper | 6 | 166/171/174 | 166/171/174 |
+| swooper_recovery_climb | swooper | 6 | 126/163/171 | 126/162/171 |
+| vfx_checkpoint_activate | vfx | 8 | 126/226/254 | 38/207/254 |
+| vfx_damage_indicator | vfx | 2 | 217/218/220 | 217/218/220 |
+| vfx_enemy_defeat | vfx | 8 | 128/188/220 | 17/154/217 |
+| vfx_hazard_eruption | vfx | 6 | 97/192/192 | 67/136/192 |
+| vfx_hazard_telegraph | vfx | 4 | 75/78/80 | 75/78/80 |
+| vfx_whip_impact | vfx | 6 | 58/128/204 | 58/128/204 |
+| whip_attack_air | whip | 8 | 17/76/107 | 17/76/107 |
+| whip_attack_crouch | whip | 8 | 16/73/80 | 16/73/80 |
+| whip_attack_ground | whip | 8 | 20/82/85 | 20/82/85 |
+
+
+## boss_death  (actor=boss, canvas=[512, 512], pivot=[176, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| boss_death_f00.png | 365 | 364 | 188 | +0 | 4 |  |  |  |
+| boss_death_f01.png | 336 | 336 | 223 | +0 | 2 |  |  |  |
+| boss_death_f02.png | 309 | 309 | 231 | +0 | 2 |  |  |  |
+| boss_death_f03.png | 283 | 283 | 259 | +1 | 1 |  |  |  |
+| boss_death_f04.png | 276 | 276 | 293 | +0 | 1 |  |  |  |
+| boss_death_f05.png | 249 | 249 | 318 | +0 | 1 |  |  |  |
+| boss_death_f06.png | 233 | 230 | 332 | +0 | 4 |  |  |  |
+| boss_death_f07.png | 202 | 202 | 338 | +0 | 3 |  |  |  |
+| boss_death_f08.png | 192 | 192 | 341 | +0 | 4 |  |  |  |
+| boss_death_f09.png | 169 | 168 | 361 | +1 | 3 |  |  |  |
+| boss_death_f10.png | 167 | 167 | 352 | +0 | 6 |  |  |  |
+| boss_death_f11.png | 160 | 160 | 386 | +0 | 7 |  |  |  |
+| **median** | **241** | **240** | | | | | | |
+
+## boss_hazard_execute  (actor=boss, canvas=[512, 512], pivot=[176, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| boss_hazard_execute_f00.png | 351 | 351 | 201 | +0 | 14 |  |  |  |
+| boss_hazard_execute_f01.png | 310 | 310 | 343 | +0 | 11 |  |  |  |
+| boss_hazard_execute_f02.png | 304 | 304 | 324 | +0 | 8 |  |  |  |
+| boss_hazard_execute_f03.png | 351 | 351 | 116 | +0 | 2 |  |  |  |
+| **median** | **330** | **330** | | | | | | |
+
+## boss_hazard_recover  (actor=boss, canvas=[512, 512], pivot=[176, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| boss_hazard_recover_f00.png | 252 | 252 | 292 | +0 | 1 |  |  |  |
+| boss_hazard_recover_f01.png | 261 | 261 | 274 | +0 | 2 |  |  |  |
+| boss_hazard_recover_f02.png | 350 | 350 | 268 | +0 | 2 |  |  |  |
+| boss_hazard_recover_f03.png | 352 | 352 | 227 | +0 | 1 |  |  |  |
+| boss_hazard_recover_f04.png | 352 | 352 | 234 | +0 | 4 |  |  |  |
+| boss_hazard_recover_f05.png | 352 | 351 | 245 | +0 | 2 |  |  |  |
+| **median** | **351** | **350** | | | | | | |
+
+## boss_hazard_windup  (actor=boss, canvas=[512, 512], pivot=[176, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| boss_hazard_windup_f00.png | 352 | 352 | 158 | +0 | 2 |  |  |  |
+| boss_hazard_windup_f01.png | 352 | 352 | 226 | +0 | 3 |  |  |  |
+| boss_hazard_windup_f02.png | 351 | 351 | 285 | +0 | 5 |  |  |  |
+| boss_hazard_windup_f03.png | 352 | 352 | 313 | +0 | 1 |  |  |  |
+| boss_hazard_windup_f04.png | 351 | 351 | 313 | +1 | 5 |  |  |  |
+| boss_hazard_windup_f05.png | 352 | 352 | 326 | +0 | 12 |  |  |  |
+| boss_hazard_windup_f06.png | 351 | 351 | 327 | +1 | 3 |  |  |  |
+| boss_hazard_windup_f07.png | 352 | 352 | 342 | +0 | 4 |  |  |  |
+| **median** | **352** | **352** | | | | | | |
+
+## boss_hurt  (actor=boss, canvas=[512, 512], pivot=[176, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| boss_hurt_f00.png | 352 | 352 | 353 | +0 | 4 |  |  |  |
+| boss_hurt_f01.png | 352 | 352 | 311 | +0 | 4 |  |  |  |
+| boss_hurt_f02.png | 352 | 352 | 225 | +0 | 2 |  |  |  |
+| **median** | **352** | **352** | | | | | | |
+
+## boss_idle  (actor=boss, canvas=[512, 512], pivot=[176, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| boss_idle_f00.png | 351 | 351 | 157 | +0 | 1 |  |  |  |
+| boss_idle_f01.png | 351 | 351 | 272 | +0 | 4 |  |  |  |
+| boss_idle_f02.png | 353 | 353 | 302 | +0 | 4 |  |  |  |
+| boss_idle_f03.png | 352 | 352 | 343 | +0 | 4 |  |  |  |
+| boss_idle_f04.png | 350 | 350 | 167 | +1 | 2 |  |  |  |
+| boss_idle_f05.png | 352 | 352 | 293 | +0 | 3 |  |  |  |
+| boss_idle_f06.png | 352 | 352 | 345 | +0 | 3 |  |  |  |
+| boss_idle_f07.png | 353 | 353 | 158 | +0 | 1 |  |  |  |
+| **median** | **352** | **352** | | | | | | |
+
+## boss_strike_execute  (actor=boss, canvas=[512, 512], pivot=[176, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| boss_strike_execute_f00.png | 424 | 424 | 244 | +0 | 1 |  |  |  |
+| boss_strike_execute_f01.png | 404 | 404 | 353 | +0 | 1 |  |  |  |
+| boss_strike_execute_f02.png | 314 | 314 | 378 | +0 | 5 |  |  |  |
+| boss_strike_execute_f03.png | 293 | 293 | 372 | +0 | 1 |  |  |  |
+| **median** | **359** | **359** | | | | | | |
+
+## boss_strike_recover  (actor=boss, canvas=[512, 512], pivot=[176, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| boss_strike_recover_f00.png | 317 | 263 | 333 | +1 | 15 |  |  |  |
+| boss_strike_recover_f01.png | 327 | 274 | 320 | +0 | 11 |  |  |  |
+| boss_strike_recover_f02.png | 358 | 350 | 272 | +1 | 3 |  |  |  |
+| boss_strike_recover_f03.png | 352 | 352 | 184 | +0 | 2 |  |  |  |
+| boss_strike_recover_f04.png | 352 | 351 | 346 | +0 | 2 |  |  |  |
+| boss_strike_recover_f05.png | 352 | 352 | 342 | +0 | 1 |  |  |  |
+| **median** | **352** | **350** | | | | | | |
+
+## boss_strike_windup  (actor=boss, canvas=[512, 512], pivot=[176, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| boss_strike_windup_f00.png | 352 | 352 | 149 | +0 | 1 |  |  |  |
+| boss_strike_windup_f01.png | 352 | 352 | 235 | +0 | 2 |  |  |  |
+| boss_strike_windup_f02.png | 351 | 351 | 268 | +0 | 4 |  |  |  |
+| boss_strike_windup_f03.png | 351 | 351 | 307 | +1 | 1 |  |  |  |
+| boss_strike_windup_f04.png | 352 | 352 | 263 | +0 | 5 |  |  |  |
+| boss_strike_windup_f05.png | 352 | 352 | 300 | +0 | 1 |  |  |  |
+| boss_strike_windup_f06.png | 350 | 350 | 317 | +1 | 2 |  |  |  |
+| **median** | **352** | **352** | | | | | | |
+
+## boss_turn  (actor=boss, canvas=[512, 512], pivot=[176, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| boss_turn_f00.png | 352 | 352 | 348 | +0 | 2 |  |  |  |
+| boss_turn_f01.png | 352 | 352 | 326 | +0 | 2 |  |  |  |
+| boss_turn_f02.png | 352 | 352 | 290 | +0 | 6 |  |  |  |
+| boss_turn_f03.png | 352 | 352 | 350 | +0 | 3 |  |  |  |
+| **median** | **352** | **352** | | | | | | |
+
+## boss_walk  (actor=boss, canvas=[512, 512], pivot=[176, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| boss_walk_f00.png | 350 | 350 | 215 | +1 | 2 |  |  |  |
+| boss_walk_f01.png | 351 | 351 | 256 | +0 | 2 |  |  |  |
+| boss_walk_f02.png | 352 | 352 | 298 | +0 | 3 |  |  |  |
+| boss_walk_f03.png | 352 | 352 | 339 | +0 | 2 |  |  |  |
+| boss_walk_f04.png | 350 | 350 | 318 | +0 | 3 |  |  |  |
+| boss_walk_f05.png | 351 | 351 | 318 | +0 | 2 |  |  |  |
+| boss_walk_f06.png | 352 | 352 | 351 | +0 | 2 |  |  |  |
+| boss_walk_f07.png | 351 | 350 | 339 | +0 | 3 |  |  |  |
+| **median** | **351** | **351** | | | | | | |
+
+## hero_attack_air  (actor=hero, canvas=[512, 512], pivot=[256, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| hero_attack_air_f00.png | 246 | 224 | 212 | +0 | 2 |  |  |  |
+| hero_attack_air_f01.png | 223 | 223 | 210 | +1 | 1 |  |  |  |
+| hero_attack_air_f02.png | 214 | 214 | 232 | +0 | 1 |  |  |  |
+| hero_attack_air_f03.png | 229 | 198 | 259 | +1 | 3 |  |  |  |
+| hero_attack_air_f04.png | 198 | 198 | 252 | +1 | 1 |  |  |  |
+| hero_attack_air_f05.png | 224 | 224 | 214 | +0 | 1 |  |  |  |
+| hero_attack_air_f06.png | 224 | 224 | 176 | +0 | 1 |  |  |  |
+| hero_attack_air_f07.png | 223 | 223 | 178 | +1 | 1 |  |  |  |
+| **median** | **224** | **223** | | | | | | |
+
+## hero_attack_crouch  (actor=hero, canvas=[512, 512], pivot=[256, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| hero_attack_crouch_f00.png | 144 | 144 | 126 | +0 | 1 |  |  |  |
+| hero_attack_crouch_f01.png | 144 | 144 | 126 | +0 | 1 |  |  |  |
+| hero_attack_crouch_f02.png | 141 | 141 | 159 | +0 | 1 |  |  |  |
+| hero_attack_crouch_f03.png | 143 | 143 | 161 | +0 | 1 |  |  |  |
+| hero_attack_crouch_f04.png | 139 | 139 | 134 | +0 | 1 |  |  |  |
+| hero_attack_crouch_f05.png | 140 | 140 | 136 | +0 | 1 |  |  |  |
+| hero_attack_crouch_f06.png | 139 | 139 | 134 | +0 | 1 |  |  |  |
+| hero_attack_crouch_f07.png | 142 | 142 | 131 | +0 | 1 |  |  |  |
+| **median** | **142** | **142** | | | | | | |
+
+## hero_attack_ground  (actor=hero, canvas=[512, 512], pivot=[256, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| hero_attack_ground_f00.png | 224 | 224 | 173 | +0 | 1 |  |  |  |
+| hero_attack_ground_f01.png | 224 | 224 | 173 | +0 | 1 |  |  |  |
+| hero_attack_ground_f02.png | 223 | 223 | 230 | +0 | 1 |  |  |  |
+| hero_attack_ground_f03.png | 203 | 203 | 246 | +0 | 1 |  |  |  |
+| hero_attack_ground_f04.png | 224 | 224 | 226 | +0 | 1 |  |  |  |
+| hero_attack_ground_f05.png | 224 | 224 | 200 | +0 | 1 |  |  |  |
+| hero_attack_ground_f06.png | 224 | 224 | 65 | +0 | 1 |  |  |  |
+| hero_attack_ground_f07.png | 224 | 224 | 65 | +0 | 1 |  |  |  |
+| **median** | **224** | **224** | | | | | | |
+
+## hero_crouch_enter  (actor=hero, canvas=[512, 512], pivot=[256, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| hero_crouch_enter_f00.png | 211 | 211 | 66 | +0 | 1 |  |  |  |
+| hero_crouch_enter_f01.png | 180 | 180 | 81 | +0 | 1 |  |  |  |
+| hero_crouch_enter_f02.png | 146 | 146 | 94 | +0 | 1 |  |  |  |
+| hero_crouch_enter_f03.png | 142 | 142 | 96 | +0 | 1 |  |  |  |
+| **median** | **163** | **163** | | | | | | |
+
+## hero_crouch_exit  (actor=hero, canvas=[512, 512], pivot=[256, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| hero_crouch_exit_f00.png | 142 | 142 | 96 | +0 | 1 |  |  |  |
+| hero_crouch_exit_f01.png | 146 | 146 | 94 | +0 | 1 |  |  |  |
+| hero_crouch_exit_f02.png | 180 | 180 | 81 | +0 | 1 |  |  |  |
+| hero_crouch_exit_f03.png | 211 | 211 | 66 | +0 | 1 |  |  |  |
+| **median** | **163** | **163** | | | | | | |
+
+## hero_crouch_idle  (actor=hero, canvas=[512, 512], pivot=[256, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| hero_crouch_idle_f00.png | 146 | 146 | 116 | +0 | 1 |  |  |  |
+| hero_crouch_idle_f01.png | 139 | 139 | 119 | +0 | 1 |  |  |  |
+| hero_crouch_idle_f02.png | 135 | 135 | 120 | +0 | 1 |  |  |  |
+| hero_crouch_idle_f03.png | 140 | 140 | 119 | +0 | 1 |  |  |  |
+| hero_crouch_idle_f04.png | 140 | 140 | 119 | +0 | 1 |  |  |  |
+| hero_crouch_idle_f05.png | 140 | 140 | 119 | +0 | 1 |  |  |  |
+| **median** | **140** | **140** | | | | | | |
+
+## hero_death  (actor=hero, canvas=[512, 512], pivot=[256, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| hero_death_f00.png | 238 | 238 | 124 | +0 | 1 |  |  |  |
+| hero_death_f01.png | 219 | 219 | 132 | +0 | 1 |  |  |  |
+| hero_death_f02.png | 190 | 190 | 162 | +0 | 1 |  |  |  |
+| hero_death_f03.png | 181 | 181 | 152 | +0 | 1 |  |  |  |
+| hero_death_f04.png | 167 | 167 | 180 | +0 | 1 |  |  |  |
+| hero_death_f05.png | 153 | 153 | 191 | +0 | 1 |  |  |  |
+| hero_death_f06.png | 132 | 132 | 186 | +0 | 1 |  |  |  |
+| hero_death_f07.png | 95 | 95 | 261 | +0 | 1 |  |  |  |
+| hero_death_f08.png | 95 | 95 | 294 | +0 | 1 |  |  |  |
+| hero_death_f09.png | 91 | 91 | 277 | +0 | 1 |  |  |  |
+| **median** | **160** | **160** | | | | | | |
+
+## hero_fall  (actor=hero, canvas=[512, 512], pivot=[256, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| hero_fall_f00.png | 197 | 197 | 103 | +0 | 2 |  |  |  |
+| hero_fall_f01.png | 218 | 218 | 120 | +0 | 3 |  |  |  |
+| hero_fall_f02.png | 230 | 230 | 122 | +0 | 3 |  |  |  |
+| hero_fall_f03.png | 224 | 224 | 113 | +0 | 1 |  |  |  |
+| **median** | **221** | **221** | | | | | | |
+
+## hero_get_up  (actor=hero, canvas=[512, 512], pivot=[256, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| hero_get_up_f00.png | 123 | 123 | 134 | +0 | 1 |  |  |  |
+| hero_get_up_f01.png | 156 | 156 | 139 | +1 | 2 |  |  |  |
+| hero_get_up_f02.png | 145 | 142 | 144 | +0 | 5 |  |  |  |
+| hero_get_up_f03.png | 164 | 164 | 144 | +1 | 3 |  |  |  |
+| hero_get_up_f04.png | 208 | 208 | 121 | +0 | 1 |  |  |  |
+| hero_get_up_f05.png | 205 | 205 | 115 | +0 | 1 |  |  |  |
+| **median** | **160** | **160** | | | | | | |
+
+## hero_hurt_recoil  (actor=hero, canvas=[512, 512], pivot=[256, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| hero_hurt_recoil_f00.png | 224 | 224 | 70 | +0 | 1 |  |  |  |
+| hero_hurt_recoil_f01.png | 224 | 224 | 120 | +0 | 1 |  |  |  |
+| hero_hurt_recoil_f02.png | 209 | 209 | 132 | +0 | 1 |  |  |  |
+| hero_hurt_recoil_f03.png | 224 | 224 | 127 | +0 | 1 |  |  |  |
+| **median** | **224** | **224** | | | | | | |
+
+## hero_idle  (actor=hero, canvas=[512, 512], pivot=[256, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| hero_idle_f00.png | 224 | 224 | 84 | +0 | 4 |  |  |  |
+| hero_idle_f01.png | 224 | 224 | 84 | +0 | 4 |  |  |  |
+| hero_idle_f02.png | 224 | 224 | 84 | +0 | 8 |  |  |  |
+| hero_idle_f03.png | 224 | 224 | 83 | +0 | 8 |  |  |  |
+| hero_idle_f04.png | 224 | 224 | 83 | +0 | 8 |  |  |  |
+| hero_idle_f05.png | 224 | 224 | 83 | +0 | 8 |  |  |  |
+| hero_idle_f06.png | 224 | 224 | 84 | +0 | 8 |  |  |  |
+| hero_idle_f07.png | 224 | 224 | 84 | +0 | 4 |  |  |  |
+| **median** | **224** | **224** | | | | | | |
+
+## hero_jump_apex  (actor=hero, canvas=[512, 512], pivot=[256, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| hero_jump_apex_f00.png | 224 | 224 | 176 | +0 | 1 |  |  |  |
+| hero_jump_apex_f01.png | 178 | 178 | 218 | +0 | 2 |  |  |  |
+| hero_jump_apex_f02.png | 200 | 200 | 198 | +0 | 2 |  |  |  |
+| **median** | **200** | **200** | | | | | | |
+
+## hero_jump_rise  (actor=hero, canvas=[512, 512], pivot=[256, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| hero_jump_rise_f00.png | 181 | 181 | 142 | +0 | 1 |  |  |  |
+| hero_jump_rise_f01.png | 224 | 224 | 133 | +0 | 2 |  |  |  |
+| hero_jump_rise_f02.png | 224 | 224 | 148 | +0 | 4 |  |  |  |
+| hero_jump_rise_f03.png | 223 | 223 | 149 | +1 | 1 |  |  |  |
+| **median** | **224** | **224** | | | | | | |
+
+## hero_jump_takeoff  (actor=hero, canvas=[512, 512], pivot=[256, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| hero_jump_takeoff_f00.png | 171 | 171 | 178 | +0 | 1 |  |  |  |
+| hero_jump_takeoff_f01.png | 224 | 224 | 164 | +0 | 1 |  |  |  |
+| hero_jump_takeoff_f02.png | 223 | 223 | 184 | +0 | 1 |  |  |  |
+| **median** | **223** | **223** | | | | | | |
+
+## hero_knockback  (actor=hero, canvas=[512, 512], pivot=[256, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| hero_knockback_f00.png | 224 | 224 | 123 | +0 | 1 |  |  |  |
+| hero_knockback_f01.png | 224 | 224 | 125 | +0 | 1 |  |  |  |
+| hero_knockback_f02.png | 190 | 190 | 123 | +0 | 1 |  |  |  |
+| hero_knockback_f03.png | 204 | 204 | 117 | +0 | 1 |  |  |  |
+| **median** | **214** | **214** | | | | | | |
+
+## hero_knockdown  (actor=hero, canvas=[512, 512], pivot=[256, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| hero_knockdown_f00.png | 205 | 205 | 115 | +0 | 1 |  |  |  |
+| hero_knockdown_f01.png | 208 | 208 | 121 | +0 | 1 |  |  |  |
+| hero_knockdown_f02.png | 164 | 164 | 144 | +1 | 3 |  |  |  |
+| hero_knockdown_f03.png | 145 | 142 | 144 | +0 | 5 |  |  |  |
+| hero_knockdown_f04.png | 156 | 156 | 139 | +1 | 2 |  |  |  |
+| hero_knockdown_f05.png | 123 | 123 | 134 | +0 | 1 |  |  |  |
+| **median** | **160** | **160** | | | | | | |
+
+## hero_land  (actor=hero, canvas=[512, 512], pivot=[256, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| hero_land_f00.png | 223 | 223 | 112 | +0 | 1 |  |  |  |
+| hero_land_f01.png | 224 | 224 | 135 | +0 | 2 |  |  |  |
+| hero_land_f02.png | 174 | 174 | 143 | +0 | 1 |  |  |  |
+| hero_land_f03.png | 224 | 224 | 71 | +0 | 1 |  |  |  |
+| **median** | **224** | **224** | | | | | | |
+
+## hero_start_move  (actor=hero, canvas=[512, 512], pivot=[256, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| hero_start_move_f00.png | 224 | 224 | 75 | +0 | 1 |  |  |  |
+| hero_start_move_f01.png | 224 | 224 | 180 | +0 | 1 |  |  |  |
+| hero_start_move_f02.png | 224 | 224 | 172 | +0 | 1 |  |  |  |
+| **median** | **224** | **224** | | | | | | |
+
+## hero_stop_move  (actor=hero, canvas=[512, 512], pivot=[256, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| hero_stop_move_f00.png | 224 | 224 | 206 | +0 | 1 |  |  |  |
+| hero_stop_move_f01.png | 224 | 224 | 203 | +0 | 1 |  |  |  |
+| hero_stop_move_f02.png | 224 | 224 | 79 | +0 | 1 |  |  |  |
+| **median** | **224** | **224** | | | | | | |
+
+## hero_turn  (actor=hero, canvas=[512, 512], pivot=[256, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| hero_turn_f00.png | 224 | 224 | 84 | +0 | 1 |  |  |  |
+| hero_turn_f01.png | 224 | 224 | 197 | +0 | 2 |  |  |  |
+| hero_turn_f02.png | 224 | 224 | 88 | +0 | 1 |  |  |  |
+| **median** | **224** | **224** | | | | | | |
+
+## hero_walk  (actor=hero, canvas=[512, 512], pivot=[256, 448])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| hero_walk_f00.png | 224 | 224 | 118 | +0 | 1 |  |  |  |
+| hero_walk_f01.png | 223 | 223 | 130 | +0 | 5 |  |  |  |
+| hero_walk_f02.png | 223 | 223 | 150 | +0 | 2 |  |  |  |
+| hero_walk_f03.png | 223 | 223 | 169 | +0 | 3 |  |  |  |
+| hero_walk_f04.png | 224 | 224 | 164 | +0 | 1 |  |  |  |
+| hero_walk_f05.png | 223 | 223 | 145 | +0 | 3 |  |  |  |
+| hero_walk_f06.png | 237 | 224 | 149 | +0 | 4 |  |  |  |
+| hero_walk_f07.png | 242 | 224 | 152 | +0 | 2 |  |  |  |
+| hero_walk_f08.png | 224 | 224 | 150 | +0 | 1 |  |  |  |
+| hero_walk_f09.png | 224 | 224 | 156 | +0 | 3 |  |  |  |
+| **median** | **224** | **224** | | | | | | |
+
+## projectile_grave_shot  (actor=projectile, canvas=[64, 64], pivot=[32, 32])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| projectile_grave_shot_f00.png | 64 | 64 | 64 | -32 | 1 |  |  |  |
+| projectile_grave_shot_f01.png | 64 | 64 | 64 | -32 | 1 |  |  |  |
+| projectile_grave_shot_f02.png | 64 | 64 | 64 | -32 | 1 |  |  |  |
+| **median** | **64** | **64** | | | | | | |
+
+## pursuer_alert  (actor=pursuer, canvas=[320, 288], pivot=[128, 256])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| pursuer_alert_f00.png | 111 | 111 | 203 | +1 | 2 |  |  |  |
+| pursuer_alert_f01.png | 185 | 185 | 188 | +0 | 2 |  |  |  |
+| pursuer_alert_f02.png | 207 | 207 | 179 | +0 | 3 |  |  |  |
+| pursuer_alert_f03.png | 245 | 245 | 166 | +0 | 4 |  |  |  |
+| **median** | **196** | **196** | | | | | | |
+
+## pursuer_approach_walk  (actor=pursuer, canvas=[320, 192], pivot=[128, 160])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| pursuer_approach_walk_f00.png | 99 | 99 | 188 | +0 | 1 |  |  |  |
+| pursuer_approach_walk_f01.png | 102 | 102 | 180 | +1 | 9 |  |  |  |
+| pursuer_approach_walk_f02.png | 124 | 124 | 175 | +0 | 16 |  |  |  |
+| pursuer_approach_walk_f03.png | 113 | 113 | 173 | +1 | 10 |  |  |  |
+| pursuer_approach_walk_f04.png | 109 | 109 | 188 | +0 | 4 |  |  |  |
+| pursuer_approach_walk_f05.png | 111 | 111 | 179 | +1 | 3 |  |  |  |
+| pursuer_approach_walk_f06.png | 111 | 111 | 179 | +1 | 5 |  |  |  |
+| pursuer_approach_walk_f07.png | 111 | 111 | 180 | +0 | 15 |  |  |  |
+| **median** | **111** | **111** | | | | | | |
+
+## pursuer_death  (actor=pursuer, canvas=[320, 192], pivot=[128, 160])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| pursuer_death_f00.png | 126 | 126 | 130 | +0 | 4 |  |  |  |
+| pursuer_death_f01.png | 96 | 96 | 114 | +1 | 16 |  |  |  |
+| pursuer_death_f02.png | 96 | 95 | 113 | +0 | 15 |  |  |  |
+| pursuer_death_f03.png | 80 | 78 | 141 | +0 | 3 |  |  |  |
+| pursuer_death_f04.png | 50 | 48 | 149 | +0 | 3 |  |  |  |
+| pursuer_death_f05.png | 52 | 48 | 149 | +0 | 7 |  |  |  |
+| **median** | **88** | **86** | | | | | | |
+
+## pursuer_hurt  (actor=pursuer, canvas=[320, 192], pivot=[128, 160])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| pursuer_hurt_f00.png | 132 | 132 | 134 | +0 | 5 |  |  |  |
+| pursuer_hurt_f01.png | 94 | 93 | 114 | +1 | 2 |  |  |  |
+| pursuer_hurt_f02.png | 112 | 112 | 124 | +1 | 5 |  |  |  |
+| **median** | **112** | **112** | | | | | | |
+
+## pursuer_idle  (actor=pursuer, canvas=[320, 192], pivot=[128, 160])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| pursuer_idle_f00.png | 109 | 109 | 154 | +0 | 1 |  |  |  |
+| pursuer_idle_f01.png | 148 | 148 | 163 | +1 | 3 |  |  |  |
+| pursuer_idle_f02.png | 109 | 109 | 153 | +0 | 1 |  |  |  |
+| pursuer_idle_f03.png | 111 | 111 | 158 | +0 | 9 |  |  |  |
+| pursuer_idle_f04.png | 140 | 140 | 163 | +1 | 8 |  |  |  |
+| pursuer_idle_f05.png | 110 | 110 | 158 | +0 | 9 |  |  |  |
+| **median** | **110** | **110** | | | | | | |
+
+## pursuer_lunge  (actor=pursuer, canvas=[320, 192], pivot=[128, 160])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| pursuer_lunge_f00.png | 95 | 95 | 102 | +0 | 8 |  |  |  |
+| pursuer_lunge_f01.png | 61 | 61 | 119 | -1 | 5 |  |  |  |
+| pursuer_lunge_f02.png | 50 | 50 | 134 | +0 | 10 |  |  |  |
+| **median** | **61** | **61** | | | | | | |
+
+## pursuer_lunge_windup  (actor=pursuer, canvas=[320, 288], pivot=[128, 256])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| pursuer_lunge_windup_f00.png | 171 | 170 | 91 | +1 | 6 |  |  |  |
+| pursuer_lunge_windup_f01.png | 150 | 150 | 83 | +1 | 4 |  |  |  |
+| pursuer_lunge_windup_f02.png | 112 | 111 | 93 | +1 | 6 |  |  |  |
+| pursuer_lunge_windup_f03.png | 116 | 116 | 88 | +0 | 1 |  |  |  |
+| **median** | **133** | **133** | | | | | | |
+
+## pursuer_patrol_walk  (actor=pursuer, canvas=[320, 192], pivot=[128, 160])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| pursuer_patrol_walk_f00.png | 121 | 121 | 174 | +0 | 4 |  |  |  |
+| pursuer_patrol_walk_f01.png | 121 | 121 | 152 | +1 | 8 |  |  |  |
+| pursuer_patrol_walk_f02.png | 122 | 122 | 162 | +1 | 3 |  |  |  |
+| pursuer_patrol_walk_f03.png | 112 | 112 | 161 | +1 | 3 |  |  |  |
+| pursuer_patrol_walk_f04.png | 108 | 108 | 169 | +1 | 2 |  |  |  |
+| pursuer_patrol_walk_f05.png | 108 | 108 | 163 | +1 | 2 |  |  |  |
+| pursuer_patrol_walk_f06.png | 107 | 105 | 163 | +3 | 11 |  |  |  |
+| pursuer_patrol_walk_f07.png | 106 | 106 | 163 | +1 | 3 |  |  |  |
+| **median** | **110** | **110** | | | | | | |
+
+## pursuer_recovery  (actor=pursuer, canvas=[320, 192], pivot=[128, 160])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| pursuer_recovery_f00.png | 88 | 87 | 158 | +2 | 10 |  |  |  |
+| pursuer_recovery_f01.png | 111 | 111 | 112 | +1 | 12 |  |  |  |
+| pursuer_recovery_f02.png | 140 | 140 | 126 | +0 | 8 |  |  |  |
+| pursuer_recovery_f03.png | 109 | 109 | 128 | +0 | 5 |  |  |  |
+| **median** | **110** | **110** | | | | | | |
+
+## ranged_aim  (actor=ranged, canvas=[256, 320], pivot=[128, 288])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| ranged_aim_f00.png | 288 | 288 | 173 | +0 | 1 |  |  |  |
+| ranged_aim_f01.png | 288 | 288 | 204 | +0 | 2 |  |  |  |
+| ranged_aim_f02.png | 288 | 288 | 212 | +0 | 3 |  |  |  |
+| ranged_aim_f03.png | 288 | 288 | 218 | +0 | 4 |  |  |  |
+| ranged_aim_f04.png | 286 | 286 | 185 | +0 | 16 |  |  |  |
+| ranged_aim_f05.png | 279 | 279 | 174 | +0 | 8 |  |  |  |
+| **median** | **288** | **288** | | | | | | |
+
+## ranged_death  (actor=ranged, canvas=[256, 320], pivot=[128, 288])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| ranged_death_f00.png | 288 | 288 | 150 | +0 | 1 |  |  |  |
+| ranged_death_f01.png | 288 | 288 | 172 | +0 | 1 |  |  |  |
+| ranged_death_f02.png | 287 | 287 | 170 | +0 | 2 |  |  |  |
+| ranged_death_f03.png | 288 | 288 | 165 | +0 | 2 |  |  |  |
+| ranged_death_f04.png | 288 | 288 | 171 | +0 | 1 |  |  |  |
+| ranged_death_f05.png | 284 | 284 | 169 | +0 | 14 |  |  |  |
+| **median** | **288** | **288** | | | | | | |
+
+## ranged_fire  (actor=ranged, canvas=[256, 320], pivot=[128, 288])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| ranged_fire_f00.png | 272 | 272 | 160 | +0 | 8 |  |  |  |
+| ranged_fire_f01.png | 288 | 288 | 118 | +0 | 10 |  |  |  |
+| ranged_fire_f02.png | 288 | 288 | 117 | +0 | 3 |  |  |  |
+| **median** | **288** | **288** | | | | | | |
+
+## ranged_hurt  (actor=ranged, canvas=[256, 320], pivot=[128, 288])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| ranged_hurt_f00.png | 270 | 270 | 239 | +0 | 3 |  |  |  |
+| ranged_hurt_f01.png | 288 | 288 | 191 | +0 | 1 |  |  |  |
+| ranged_hurt_f02.png | 288 | 288 | 180 | +0 | 4 |  |  |  |
+| **median** | **288** | **288** | | | | | | |
+
+## ranged_idle  (actor=ranged, canvas=[256, 320], pivot=[128, 288])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| ranged_idle_f00.png | 288 | 288 | 132 | +0 | 1 |  |  |  |
+| ranged_idle_f01.png | 288 | 288 | 138 | +0 | 1 |  |  |  |
+| ranged_idle_f02.png | 288 | 288 | 144 | +0 | 3 |  |  |  |
+| ranged_idle_f03.png | 279 | 279 | 155 | +0 | 1 |  |  |  |
+| ranged_idle_f04.png | 288 | 288 | 148 | +0 | 1 |  |  |  |
+| ranged_idle_f05.png | 288 | 288 | 143 | +0 | 1 |  |  |  |
+| **median** | **288** | **288** | | | | | | |
+
+## ranged_recover  (actor=ranged, canvas=[256, 320], pivot=[128, 288])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| ranged_recover_f00.png | 269 | 269 | 239 | +0 | 3 |  |  |  |
+| ranged_recover_f01.png | 288 | 288 | 256 | +0 | 3 |  |  |  |
+| ranged_recover_f02.png | 288 | 288 | 256 | +0 | 2 |  |  |  |
+| ranged_recover_f03.png | 288 | 288 | 256 | +0 | 1 |  |  |  |
+| ranged_recover_f04.png | 288 | 288 | 256 | +0 | 1 |  |  |  |
+| ranged_recover_f05.png | 288 | 288 | 256 | +0 | 2 |  |  |  |
+| ranged_recover_f06.png | 288 | 288 | 256 | +0 | 1 |  |  |  |
+| **median** | **288** | **288** | | | | | | |
+
+## swooper_cruise  (actor=swooper, canvas=[384, 256], pivot=[192, 128])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| swooper_cruise_f00.png | 179 | 179 | 162 | -89 | 3 |  |  |  |
+| swooper_cruise_f01.png | 180 | 180 | 173 | -90 | 1 |  |  |  |
+| swooper_cruise_f02.png | 138 | 138 | 188 | -69 | 2 |  |  |  |
+| swooper_cruise_f03.png | 142 | 142 | 171 | -71 | 1 |  |  |  |
+| swooper_cruise_f04.png | 163 | 163 | 195 | -81 | 1 |  |  |  |
+| swooper_cruise_f05.png | 171 | 171 | 171 | -85 | 2 |  |  |  |
+| swooper_cruise_f06.png | 169 | 169 | 183 | -84 | 1 |  |  |  |
+| swooper_cruise_f07.png | 169 | 169 | 179 | -84 | 2 |  |  |  |
+| **median** | **169** | **169** | | | | | | |
+
+## swooper_death_fall  (actor=swooper, canvas=[384, 256], pivot=[192, 128])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| swooper_death_fall_f00.png | 213 | 212 | 201 | -107 | 2 |  |  |  |
+| swooper_death_fall_f01.png | 170 | 170 | 191 | -85 | 1 |  |  |  |
+| swooper_death_fall_f02.png | 188 | 188 | 189 | -94 | 1 |  |  |  |
+| swooper_death_fall_f03.png | 162 | 162 | 174 | -81 | 10 |  |  |  |
+| swooper_death_fall_f04.png | 89 | 89 | 305 | -45 | 2 |  |  |  |
+| **median** | **170** | **170** | | | | | | |
+
+## swooper_dive  (actor=swooper, canvas=[384, 256], pivot=[192, 128])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| swooper_dive_f00.png | 156 | 156 | 156 | -78 | 1 |  |  |  |
+| swooper_dive_f01.png | 161 | 161 | 152 | -81 | 1 |  |  |  |
+| swooper_dive_f02.png | 174 | 174 | 221 | -87 | 1 |  |  |  |
+| swooper_dive_f03.png | 188 | 188 | 240 | -94 | 1 |  |  |  |
+| **median** | **168** | **168** | | | | | | |
+
+## swooper_dive_telegraph  (actor=swooper, canvas=[512, 320], pivot=[256, 160])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| swooper_dive_telegraph_f00.png | 200 | 200 | 113 | -100 | 2 |  |  |  |
+| swooper_dive_telegraph_f01.png | 199 | 198 | 87 | -100 | 3 |  |  |  |
+| swooper_dive_telegraph_f02.png | 166 | 166 | 102 | -83 | 1 |  |  |  |
+| swooper_dive_telegraph_f03.png | 127 | 127 | 128 | -63 | 1 |  |  |  |
+| **median** | **182** | **182** | | | | | | |
+
+## swooper_hurt  (actor=swooper, canvas=[384, 256], pivot=[192, 128])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| swooper_hurt_f00.png | 180 | 180 | 184 | -90 | 1 |  |  |  |
+| swooper_hurt_f01.png | 170 | 170 | 145 | -85 | 1 |  |  |  |
+| swooper_hurt_f02.png | 128 | 128 | 181 | -64 | 1 |  |  |  |
+| **median** | **170** | **170** | | | | | | |
+
+## swooper_perch_idle  (actor=swooper, canvas=[384, 256], pivot=[192, 128])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| swooper_perch_idle_f00.png | 174 | 174 | 156 | -87 | 1 |  |  |  |
+| swooper_perch_idle_f01.png | 172 | 172 | 147 | -85 | 1 |  |  |  |
+| swooper_perch_idle_f02.png | 168 | 168 | 149 | -84 | 1 |  |  |  |
+| swooper_perch_idle_f03.png | 173 | 173 | 154 | -87 | 1 |  |  |  |
+| swooper_perch_idle_f04.png | 166 | 166 | 148 | -82 | 1 |  |  |  |
+| swooper_perch_idle_f05.png | 170 | 170 | 156 | -84 | 1 |  |  |  |
+| **median** | **171** | **171** | | | | | | |
+
+## swooper_recovery_climb  (actor=swooper, canvas=[384, 256], pivot=[192, 128])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| swooper_recovery_climb_f00.png | 161 | 161 | 131 | -80 | 3 |  |  |  |
+| swooper_recovery_climb_f01.png | 139 | 139 | 182 | -70 | 3 |  |  |  |
+| swooper_recovery_climb_f02.png | 126 | 126 | 167 | -63 | 3 |  |  |  |
+| swooper_recovery_climb_f03.png | 167 | 167 | 164 | -83 | 1 |  |  |  |
+| swooper_recovery_climb_f04.png | 171 | 171 | 143 | -85 | 1 |  |  |  |
+| swooper_recovery_climb_f05.png | 165 | 164 | 146 | -82 | 3 |  |  |  |
+| **median** | **163** | **162** | | | | | | |
+
+## vfx_checkpoint_activate  (actor=vfx, canvas=[256, 256], pivot=[128, 128])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| vfx_checkpoint_activate_f00.png | 126 | 38 | 61 | -126 | 2 |  |  |  |
+| vfx_checkpoint_activate_f01.png | 236 | 124 | 110 | -126 | 13 |  |  |  |
+| vfx_checkpoint_activate_f02.png | 254 | 182 | 150 | -126 | 9 |  |  |  |
+| vfx_checkpoint_activate_f03.png | 217 | 217 | 142 | -126 | 5 |  |  |  |
+| vfx_checkpoint_activate_f04.png | 209 | 209 | 137 | -126 | 5 |  |  |  |
+| vfx_checkpoint_activate_f05.png | 205 | 205 | 123 | -126 | 4 |  |  |  |
+| vfx_checkpoint_activate_f06.png | 254 | 254 | 122 | -126 | 3 |  |  |  |
+| vfx_checkpoint_activate_f07.png | 249 | 249 | 111 | -126 | 2 |  |  |  |
+| **median** | **226** | **207** | | | | | | |
+
+## vfx_damage_indicator  (actor=vfx, canvas=[256, 256], pivot=[128, 128])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| vfx_damage_indicator_f00.png | 217 | 217 | 200 | -109 | 17 |  |  |  |
+| vfx_damage_indicator_f01.png | 220 | 220 | 217 | -111 | 21 |  |  |  |
+| **median** | **218** | **218** | | | | | | |
+
+## vfx_enemy_defeat  (actor=vfx, canvas=[256, 256], pivot=[128, 128])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| vfx_enemy_defeat_f00.png | 128 | 128 | 128 | -64 | 1 |  |  |  |
+| vfx_enemy_defeat_f01.png | 174 | 174 | 174 | -86 | 2 |  |  |  |
+| vfx_enemy_defeat_f02.png | 217 | 217 | 217 | -108 | 4 |  |  |  |
+| vfx_enemy_defeat_f03.png | 220 | 135 | 174 | -112 | 25 |  |  |  |
+| vfx_enemy_defeat_f04.png | 214 | 214 | 223 | -112 | 2 |  |  |  |
+| vfx_enemy_defeat_f05.png | 202 | 202 | 195 | -106 | 13 |  |  |  |
+| vfx_enemy_defeat_f06.png | 168 | 29 | 13 | +29 | 44 |  |  |  |
+| vfx_enemy_defeat_f07.png | 136 | 17 | 12 | +0 | 16 |  |  |  |
+| **median** | **188** | **154** | | | | | | |
+
+## vfx_hazard_eruption  (actor=vfx, canvas=[320, 192], pivot=[160, 176])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| vfx_hazard_eruption_f00.png | 101 | 67 | 119 | -16 | 21 |  |  |  |
+| vfx_hazard_eruption_f01.png | 192 | 192 | 222 | -16 | 20 |  |  |  |
+| vfx_hazard_eruption_f02.png | 192 | 192 | 312 | -16 | 6 |  |  |  |
+| vfx_hazard_eruption_f03.png | 192 | 192 | 320 | -16 | 1 |  |  |  |
+| vfx_hazard_eruption_f04.png | 192 | 80 | 200 | +96 | 53 |  |  |  |
+| vfx_hazard_eruption_f05.png | 97 | 75 | 204 | -16 | 9 |  |  |  |
+| **median** | **192** | **136** | | | | | | |
+
+## vfx_hazard_telegraph  (actor=vfx, canvas=[320, 192], pivot=[160, 176])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| vfx_hazard_telegraph_f00.png | 77 | 77 | 320 | -9 | 1 |  |  |  |
+| vfx_hazard_telegraph_f01.png | 75 | 75 | 320 | -7 | 1 |  |  |  |
+| vfx_hazard_telegraph_f02.png | 79 | 79 | 320 | -11 | 1 |  |  |  |
+| vfx_hazard_telegraph_f03.png | 80 | 80 | 320 | -12 | 1 |  |  |  |
+| **median** | **78** | **78** | | | | | | |
+
+## vfx_whip_impact  (actor=vfx, canvas=[256, 256], pivot=[128, 128])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| vfx_whip_impact_f00.png | 86 | 86 | 86 | -43 | 26 |  |  |  |
+| vfx_whip_impact_f01.png | 148 | 148 | 148 | -74 | 39 |  |  |  |
+| vfx_whip_impact_f02.png | 204 | 204 | 204 | -102 | 43 |  |  |  |
+| vfx_whip_impact_f03.png | 162 | 162 | 162 | -81 | 35 |  |  |  |
+| vfx_whip_impact_f04.png | 108 | 108 | 108 | -54 | 30 |  |  |  |
+| vfx_whip_impact_f05.png | 58 | 58 | 58 | -29 | 32 |  |  |  |
+| **median** | **128** | **128** | | | | | | |
+
+## whip_attack_air  (actor=whip, canvas=[768, 512], pivot=[276, 308])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| whip_attack_air_f00.png | 70 | 70 | 79 | +181 | 1 | 202 | 92 | 281 |
+| whip_attack_air_f01.png | 66 | 66 | 81 | +189 | 1 | 204 | 90 | 285 |
+| whip_attack_air_f02.png | 97 | 97 | 216 | +147 | 1 | 228 | 130 | 444 |
+| whip_attack_air_f03.png | 17 | 17 | 251 | +185 | 1 | 369 | 116 | 620 |
+| whip_attack_air_f04.png | 107 | 107 | 175 | +64 | 1 | 389 | 142 | 564 |
+| whip_attack_air_f05.png | 57 | 57 | 179 | +104 | 1 | 350 | 191 | 529 |
+| whip_attack_air_f06.png | 81 | 81 | 77 | +66 | 1 | 341 | 205 | 418 |
+| whip_attack_air_f07.png | 83 | 83 | 78 | +68 | 1 | 344 | 202 | 422 |
+| **median** | **76** | **76** | | | | | | |
+
+## whip_attack_crouch  (actor=whip, canvas=[768, 512], pivot=[276, 308])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| whip_attack_crouch_f00.png | 72 | 72 | 81 | +110 | 1 | 197 | 168 | 278 |
+| whip_attack_crouch_f01.png | 74 | 74 | 81 | +110 | 1 | 198 | 167 | 279 |
+| whip_attack_crouch_f02.png | 53 | 53 | 233 | +85 | 1 | 329 | 216 | 562 |
+| whip_attack_crouch_f03.png | 16 | 16 | 286 | +87 | 1 | 335 | 214 | 621 |
+| whip_attack_crouch_f04.png | 74 | 74 | 238 | +8 | 1 | 219 | 243 | 457 |
+| whip_attack_crouch_f05.png | 47 | 47 | 162 | +102 | 1 | 186 | 195 | 348 |
+| whip_attack_crouch_f06.png | 80 | 80 | 78 | +83 | 1 | 177 | 190 | 255 |
+| whip_attack_crouch_f07.png | 76 | 76 | 78 | +40 | 1 | 202 | 234 | 280 |
+| **median** | **73** | **73** | | | | | | |
+
+## whip_attack_ground  (actor=whip, canvas=[768, 512], pivot=[276, 308])
+
+| frame | h_full | lcc_h | lcc_w | foot_off | ncomp | grip_x | grip_y | tip_x |
+|---|---|---|---|---|---|---|---|---|
+| whip_attack_ground_f00.png | 81 | 81 | 99 | +186 | 1 | 168 | 79 | 267 |
+| whip_attack_ground_f01.png | 82 | 82 | 110 | +191 | 1 | 170 | 74 | 280 |
+| whip_attack_ground_f02.png | 85 | 85 | 234 | +141 | 1 | 379 | 160 | 613 |
+| whip_attack_ground_f03.png | 20 | 20 | 257 | +157 | 1 | 365 | 143 | 622 |
+| whip_attack_ground_f04.png | 83 | 83 | 240 | +77 | 1 | 219 | 164 | 459 |
+| whip_attack_ground_f05.png | 39 | 39 | 169 | +166 | 1 | 300 | 116 | 469 |
+| whip_attack_ground_f06.png | 83 | 83 | 83 | +89 | 1 | 251 | 183 | 334 |
+| whip_attack_ground_f07.png | 85 | 85 | 82 | +89 | 1 | 250 | 182 | 332 |
+| **median** | **82** | **82** | | | | | | |
 

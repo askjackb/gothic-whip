@@ -604,3 +604,85 @@ rescale around the contract foot pivot to all non-exempt frames:
 ## Explicitly not tested
 
 - iPhone 17 physical device (V2-V9 still pending) — unchanged.
+
+# 2026-10-09 — Art-integrity fix: hero_idle was a torso since generation (user playtest round 4)
+
+**User report:** "Is the character size really correct this time? When
+the character is standing, I can see that he is only drawn from the
+waist up. This looks incorrect to me."
+
+## Honest history
+
+The user was right again, and the defect is older than every previous
+size fix. The `hero_idle` sheet was generated as a waist-up torso —
+head, belt and hands only, no coat, legs or boots — and its
+head-to-belt span was 224 px, exactly the standing design height.
+Every automated check this project has run measured bounding boxes or
+total ink area, and by those measures the torso was the correct size:
+it passed the per-clip scale fix (round 1), the sequence audit
+(round 1–3), and the per-frame √area normalization (round 3). Three
+bbox-based audits stamped a torso "correct." Standing looked bigger
+than walking — the user's very first size complaint — because standing
+was an oversized torso and walking was the true full body.
+
+A full visual completeness audit followed (every one of the 64 clips /
+357 frames rendered as native-res strips and looked at, plus component
+and edge scans; record: `game/art/ART_INTEGRITY_AUDIT.md`). Findings:
+9 frames broken at generation (hero_idle ×8, hero_death f08 with its
+torso missing), 4 frames clipped by too-small extraction canvases
+(pursuer_alert f02–f03, pursuer_lunge_windup f00, swooper_dive_telegraph
+f01 — the source sheets were intact), and debris components in 17
+frames (sheet slabs, neighbour bleed, a detached hand, boss cell-border
+rectangle outlines). Everything else was complete.
+
+## Fix
+
+- **hero_idle rebuilt full-body.** A freshly generated idle sheet
+  could not be obtained — the image-generation service failed on
+  2026-10-09 — so the idle was rebuilt from the game's own approved
+  full-body standing frame (the `hero_turn` neutral stand) with a
+  subtle breathing loop. The idle is now literally the same man as the
+  walk cycle: head, long coat, legs, boots, whip coil in hand.
+  **The user should judge this rebuilt idle on screen like any new
+  art; if it reads too static, a regenerated idle sheet is the
+  follow-up.** (`tools/repair_integrity.py`, section A1.)
+- **hero_death f08 regenerated** from a candidate sheet generated with
+  the shipped final death frame as identity reference; torso restored.
+- **Canvas-clipped clips reprocessed** from the intact source sheets
+  on larger canvases at the same pivot (`pursuer_alert`,
+  `pursuer_lunge_windup` 320×288; `swooper_dive_telegraph` 512×320).
+- **Debris removed** on the named frames (figures untouched, exact
+  shipped scale preserved); the boss rectangle cleanup needed a second
+  pass for flat edge fragments up to 381 px long, `boss_hazard_recover`
+  f01 included.
+- **New integrity gate** (`tools/audit_integrity.py`): tracks actual
+  head width and lower-body ink structure per frame. It FAILS on the
+  pre-fix archived frames (10 defects, exit 1) and PASSES on the
+  repaired set (0 defects, exit 0). A note recording all of this was
+  added to `game/art/manifest_raw.json`, and the pre-repair frames are
+  archived at `game/art/source/frames_prefix_2026-10-09_integrity.zip`.
+- Gameplay, timings and hitboxes untouched; whip frames and the
+  whip-in-hand anchors untouched.
+
+## Verification
+
+- `tools/audit_integrity.py`: **0 DEFECTS** on the repaired set; the
+  same gate fails on the archived pre-fix frames (evidence above).
+- `tools/audit_sequences.py`: **64 clips, 0 defects, 0 warnings**.
+- `tests/sequence_engine_check.gd`: **SEQUENCE ENGINE RESULT: PASS**.
+- `tests/smoke_test.gd`: **SMOKE RESULT: PASS**.
+- Contact sheets (`game/tests/shots/fix4/contact_hero.png`,
+  `contact_actors.png`, inspected): idle, walk and attack are visibly
+  the same full-body man at the same height.
+- Fresh web export driven in Chromium (`tools/web_check3.js`):
+  **0 console errors**; standing vs walking screenshots show the same
+  stature. The 500 ms whip swing itself still cannot be graded from
+  burst screenshots (established in round 3) — it is covered by the
+  sequence audit's whip-grip checks and the engine test.
+
+## Explicitly not tested
+
+- iPhone 17 physical device (V2–V9 still pending) — unchanged.
+- The rebuilt idle's on-screen feel (breathing loop) awaits the user's
+  playtest verdict, as does a fully regenerated idle sheet if they
+  want one when the image service is back.

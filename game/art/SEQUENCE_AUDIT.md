@@ -2,13 +2,13 @@
 
 Method: PIL/scipy measurement of `game/art/frames/<clip>/` (alpha > 40; LCC = largest connected component = the figure). Pivot drift tolerance ≤ 2 px; adjacent-frame LCC height pop threshold > 4.0%. One contact strip per clip in `game/tests/shots/seq_<actor>_<clip>.png` (red = contract pivot, green = actor design height).
 
-Clips audited: 64. Defects: 0. Warnings: 6. Waived: 7. Intended transitions noted: 136.
+Clips audited: 64. Defects: 0. Warnings: 0. Waived: 7. Intended transitions noted: 135.
 
 ## Per-clip verdicts
 
 | clip | actor | frames (files/spec) | total ms | loop | LCC h min/med/max | max |drift| px | wrap % | states | verdict |
 |---|---|---|---|---|---|---|---|---|---|
-| hero_idle | hero | 8/8 | 1000 | True | 223/224/224 | 1 | 0.0 | hero.idle | PASS |
+| hero_idle | hero | 8/8 | 1000 | True | 224/224/224 | 0.5 | 0.0 | hero.idle | PASS |
 | hero_walk | hero | 10/10 | 800 | True | 223/224/224 | 1 | 0.0 | hero.walk | PASS |
 | hero_start_move | hero | 3/3 | 150 | False | 224/224/224 | 0.5 | - | hero.start_move | PASS |
 | hero_stop_move | hero | 3/3 | 150 | False | 224/224/224 | 1 | - | hero.stop_move | PASS |
@@ -26,22 +26,22 @@ Clips audited: 64. Defects: 0. Warnings: 6. Waived: 7. Intended transitions note
 | hero_hurt_recoil | hero | 4/4 | 200 | False | 209/224/224 | 0.5 | - | hero.hurt_recoil | CHECK |
 | hero_knockback | hero | 4/4 | 300 | False | 190/214/224 | 0.5 | - | hero.knockback | CHECK |
 | hero_knockdown | hero | 6/6 | 360 | False | 123/160/208 | 2 | - | hero.knockdown | CHECK |
-| hero_death | hero | 10/10 | 800 | False | 48/160/238 | 7 | - | hero.death | CHECK |
+| hero_death | hero | 10/10 | 800 | False | 91/160/238 | 1 | - | hero.death | CHECK |
 | whip_attack_ground | whip | 8/8 | 500 | False | 20/82/85 | 0 | - | whip.attack_ground | CHECK |
 | whip_attack_air | whip | 8/8 | 500 | False | 17/75/107 | 0 | - | whip.attack_air | CHECK |
 | whip_attack_crouch | whip | 8/8 | 500 | False | 16/73/80 | 0 | - | whip.attack_crouch | CHECK |
 | pursuer_idle | pursuer | 6/6 | 900 | True | 109/110/148 | 1 | -0.9 | — | WAIVED |
 | pursuer_patrol_walk | pursuer | 8/8 | 720 | True | 105/110/122 | 3 | 14.2 | pursuer.patrol | CHECK |
-| pursuer_alert | pursuer | 4/4 | 300 | False | 111/156/160 | 20 | - | pursuer.alert | CHECK |
+| pursuer_alert | pursuer | 4/4 | 300 | False | 111/196/245 | 1 | - | pursuer.alert | CHECK |
 | pursuer_approach_walk | pursuer | 8/8 | 560 | True | 99/111/124 | 1 | -10.8 | pursuer.chase | CHECK |
-| pursuer_lunge_windup | pursuer | 4/4 | 350 | False | 111/133/160 | 1 | - | pursuer.windup | CHECK |
-| pursuer_lunge | pursuer | 3/3 | 240 | False | 50/61/95 | 2 | - | pursuer.lunge | CHECK |
+| pursuer_lunge_windup | pursuer | 4/4 | 350 | False | 111/133/170 | 1 | - | pursuer.windup | CHECK |
+| pursuer_lunge | pursuer | 3/3 | 240 | False | 50/61/95 | 1 | - | pursuer.lunge | CHECK |
 | pursuer_recovery | pursuer | 4/4 | 600 | False | 87/110/140 | 2 | - | pursuer.recover | CHECK |
 | pursuer_hurt | pursuer | 3/3 | 180 | False | 93/112/132 | 1 | - | pursuer.hurt | CHECK |
 | pursuer_death | pursuer | 6/6 | 480 | False | 48/86/126 | 2.5 | - | pursuer.dead | CHECK |
 | swooper_perch_idle | swooper | 6/6 | 900 | True | 166/171/174 | 1 | 2.4 | — | WAIVED |
 | swooper_cruise | swooper | 8/8 | 720 | True | 138/169/180 | 1 | 5.9 | swooper.cruise, swooper.recover | CHECK |
-| swooper_dive_telegraph | swooper | 4/4 | 600 | False | 127/182/210 | 1 | - | swooper.telegraph | CHECK |
+| swooper_dive_telegraph | swooper | 4/4 | 600 | False | 127/182/200 | 1 | - | swooper.telegraph | CHECK |
 | swooper_dive | swooper | 4/4 | 240 | False | 156/167/188 | 0.5 | - | swooper.dive | CHECK |
 | swooper_recovery_climb | swooper | 6/6 | 900 | False | 126/162/171 | 0.5 | - | swooper.climb | CHECK |
 | swooper_hurt | swooper | 3/3 | 180 | False | 128/170/180 | 0.5 | - | swooper.hurt | CHECK |
@@ -58,10 +58,10 @@ Clips audited: 64. Defects: 0. Warnings: 6. Waived: 7. Intended transitions note
 | boss_turn | boss | 4/4 | 300 | False | 352/352/352 | 1 | - | boss.turn | PASS |
 | boss_strike_windup | boss | 7/7 | 700 | False | 350/352/352 | 1 | - | boss.strike_windup | PASS |
 | boss_strike_execute | boss | 4/4 | 200 | False | 293/359/424 | 13 | - | boss.strike | CHECK |
-| boss_strike_recover | boss | 6/6 | 1100 | False | 263/350/352 | 36 | - | boss.strike_recover | CHECK |
+| boss_strike_recover | boss | 6/6 | 1100 | False | 263/350/352 | 1 | - | boss.strike_recover | CHECK |
 | boss_hazard_windup | boss | 8/8 | 1200 | False | 351/352/352 | 1.5 | - | boss.hazard_cast | PASS |
 | boss_hazard_execute | boss | 4/4 | 400 | False | 304/330/351 | 1 | - | boss.hazard_erupt | CHECK |
-| boss_hazard_recover | boss | 6/6 | 900 | False | 252/350/352 | 52 | - | boss.hazard_recover | CHECK |
+| boss_hazard_recover | boss | 6/6 | 900 | False | 252/350/352 | 1 | - | boss.hazard_recover | CHECK |
 | boss_hurt | boss | 3/3 | 200 | False | 352/352/352 | 0.5 | - | boss.hurt | PASS |
 | boss_death | boss | 12/12 | 1080 | False | 160/239/364 | 17 | - | boss.dead | CHECK |
 | vfx_whip_impact | vfx | 6/6 | 280 | False | 58/128/204 | 0 | - | vfx.whip_hit | CHECK |
@@ -79,12 +79,7 @@ Clips audited: 64. Defects: 0. Warnings: 6. Waived: 7. Intended transitions note
 
 ## Warnings
 
-- hero_death: f8 cloth/satellite extends 7 px below foot line
-- boss_strike_recover: f0 cloth/satellite extends 36 px below foot line
-- boss_strike_recover: f2 cloth/satellite extends 27 px below foot line
-- boss_strike_recover: f3 cloth/satellite extends 4 px below foot line
-- boss_hazard_recover: f0 cloth/satellite extends 52 px below foot line
-- boss_hazard_recover: f2 cloth/satellite extends 11 px below foot line
+- none
 
 Warnings disposition: the six warnings are painted cloth/ash extending below the foot line (boss cloak hems pooling in the two recover opening poses, hero_death ash settle). The feet themselves sit on the pivot in every case (see strips); cloth pooling is a pose property, not pivot or scale drift. Accepted as-is.
 
@@ -136,8 +131,7 @@ Warnings disposition: the six warnings are painted cloth/ash extending below the
 - hero_death: height pop f4->f5: 167->153 (-8.4%) [reviewed cyclic/intended pose]
 - hero_death: height pop f5->f6: 153->132 (-13.7%) [reviewed cyclic/intended pose]
 - hero_death: height pop f6->f7: 132->95 (-28.0%) [reviewed cyclic/intended pose]
-- hero_death: height pop f7->f8: 95->48 (-49.5%) [reviewed cyclic/intended pose]
-- hero_death: height pop f8->f9: 48->91 (+89.6%) [reviewed cyclic/intended pose]
+- hero_death: height pop f8->f9: 95->91 (-4.2%) [reviewed cyclic/intended pose]
 - whip_attack_ground: height pop f2->f3: 85->20 (-76.5%) [reviewed cyclic/intended pose]
 - whip_attack_ground: height pop f3->f4: 20->83 (+315.0%) [reviewed cyclic/intended pose]
 - whip_attack_ground: height pop f4->f5: 83->39 (-53.0%) [reviewed cyclic/intended pose]
@@ -156,12 +150,13 @@ Warnings disposition: the six warnings are painted cloth/ash extending below the
 - whip_attack_crouch: height pop f6->f7: 80->76 (-5.0%) [reviewed cyclic/intended pose]
 - pursuer_patrol_walk: height pop f2->f3: 122->112 (-8.2%) [reviewed cyclic/intended pose]
 - pursuer_patrol_walk: loop wrap f7->f0 height 106->121 (+14.2%) [reviewed cyclic pose]
-- pursuer_alert: height pop f0->f1: 111->152 (+36.9%)
-- pursuer_alert: height pop f1->f2: 152->160 (+5.3%)
+- pursuer_alert: height pop f0->f1: 111->185 (+66.7%)
+- pursuer_alert: height pop f1->f2: 185->207 (+11.9%)
+- pursuer_alert: height pop f2->f3: 207->245 (+18.4%)
 - pursuer_approach_walk: height pop f1->f2: 102->124 (+21.6%) [reviewed cyclic/intended pose]
 - pursuer_approach_walk: height pop f2->f3: 124->113 (-8.9%) [reviewed cyclic/intended pose]
 - pursuer_approach_walk: loop wrap f7->f0 height 111->99 (-10.8%) [reviewed cyclic pose]
-- pursuer_lunge_windup: height pop f0->f1: 160->150 (-6.2%)
+- pursuer_lunge_windup: height pop f0->f1: 170->150 (-11.8%)
 - pursuer_lunge_windup: height pop f1->f2: 150->111 (-26.0%)
 - pursuer_lunge_windup: height pop f2->f3: 111->116 (+4.5%)
 - pursuer_lunge: height pop f0->f1: 95->61 (-35.8%) [reviewed cyclic/intended pose]
@@ -178,7 +173,6 @@ Warnings disposition: the six warnings are painted cloth/ash extending below the
 - swooper_cruise: height pop f3->f4: 142->163 (+14.8%) [reviewed cyclic/intended pose]
 - swooper_cruise: height pop f4->f5: 163->171 (+4.9%) [reviewed cyclic/intended pose]
 - swooper_cruise: loop wrap f7->f0 height 169->179 (+5.9%) [reviewed cyclic pose]
-- swooper_dive_telegraph: height pop f0->f1: 210->198 (-5.7%)
 - swooper_dive_telegraph: height pop f1->f2: 198->166 (-16.2%)
 - swooper_dive_telegraph: height pop f2->f3: 166->127 (-23.5%)
 - swooper_dive: height pop f1->f2: 161->174 (+8.1%)

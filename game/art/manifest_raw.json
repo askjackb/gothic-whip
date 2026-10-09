@@ -537,11 +537,11 @@
    ],
    "canvas": [
     320,
-    192
+    288
    ],
    "pivot": [
     128,
-    160
+    256
    ],
    "source_sheet": "pursuer_alert"
   },
@@ -581,11 +581,11 @@
    ],
    "canvas": [
     320,
-    192
+    288
    ],
    "pivot": [
     128,
-    160
+    256
    ],
    "source_sheet": "pursuer_lunge_windup"
   },
@@ -726,12 +726,12 @@
     150
    ],
    "canvas": [
-    384,
-    256
+    512,
+    320
    ],
    "pivot": [
-    192,
-    128
+    256,
+    160
    ],
    "source_sheet": "swooper_dive_telegraph"
   },
@@ -1388,5 +1388,23 @@
   "hero_crouch_exit derived from hero_crouch_enter (reversed)",
   "hero_get_up derived from hero_knockdown (reversed)"
  ],
- "notes": []
+ "notes": [
+  {
+   "date": "2026-10-09",
+   "fix": "art-integrity round 4 (user eye): hero_idle shipped as a waist-up torso from generation; rebuilt full-body from the approved hero_turn standing frame (image-gen upstream unavailable for a new sheet). hero_death f08 regenerated from a generated candidate sheet. pursuer_alert, pursuer_lunge_windup reprocessed on canvas 320x288 pivot (128,256); swooper_dive_telegraph on 512x320 pivot (256,160) \u2014 source sheets were intact, extraction canvas was too small. Debris components removed on 13 named frames; boss recover cell-border outlines + edge lines removed. Gate: tools/audit_integrity.py (0 defects on the repaired set; fails on art/source/frames_prefix_2026-10-09.zip). Full record: game/art/ART_INTEGRITY_AUDIT.md",
+   "clips_changed": [
+    "hero_idle",
+    "hero_death",
+    "pursuer_alert",
+    "pursuer_lunge_windup",
+    "swooper_dive_telegraph",
+    "hero_fall",
+    "hero_hurt_recoil",
+    "hero_land",
+    "pursuer_lunge",
+    "boss_strike_recover",
+    "boss_hazard_recover"
+   ]
+  }
+ ]
 }

@@ -5,7 +5,7 @@
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1"]
 atlas = ExtResource("1")
-region = Rect2(739, 347, 90, 90)
+region = Rect2(847, 115, 90, 90)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2"]
 atlas = ExtResource("2")
@@ -17,23 +17,23 @@ region = Rect2(409, 1436, 208, 208)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4"]
 atlas = ExtResource("2")
-region = Rect2(1290, 1553, 166, 166)
+region = Rect2(1182, 1698, 166, 166)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5"]
 atlas = ExtResource("1")
-region = Rect2(1901, 571, 112, 112)
+region = Rect2(661, 447, 112, 112)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6"]
-atlas = ExtResource("1")
-region = Rect2(872, 453, 62, 62)
+atlas = ExtResource("2")
+region = Rect2(1986, 1643, 62, 62)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7"]
 atlas = ExtResource("1")
-region = Rect2(324, 243, 132, 132)
+region = Rect2(0, 1684, 132, 132)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8"]
 atlas = ExtResource("2")
-region = Rect2(1733, 1101, 178, 178)
+region = Rect2(830, 1581, 178, 178)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_9"]
 atlas = ExtResource("2")
@@ -53,11 +53,11 @@ region = Rect2(483, 466, 234, 235)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_13"]
 atlas = ExtResource("2")
-region = Rect2(1599, 759, 186, 191)
+region = Rect2(637, 1804, 186, 191)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_14"]
 atlas = ExtResource("2")
-region = Rect2(1242, 1388, 170, 165)
+region = Rect2(1866, 1335, 170, 165)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_15"]
 atlas = ExtResource("2")
@@ -69,11 +69,11 @@ region = Rect2(256, 566, 227, 237)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_17"]
 atlas = ExtResource("2")
-region = Rect2(1975, 1659, 68, 131)
+region = Rect2(796, 1032, 68, 131)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_18"]
 atlas = ExtResource("2")
-region = Rect2(1435, 1719, 114, 240)
+region = Rect2(1732, 1386, 114, 240)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_19"]
 atlas = ExtResource("2")
@@ -81,43 +81,43 @@ region = Rect2(483, 1644, 154, 256)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_20"]
 atlas = ExtResource("2")
-region = Rect2(617, 1322, 172, 221)
+region = Rect2(1406, 722, 172, 221)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_21"]
 atlas = ExtResource("2")
-region = Rect2(1020, 1247, 166, 213)
+region = Rect2(1406, 943, 166, 213)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_22"]
 atlas = ExtResource("2")
-region = Rect2(814, 1786, 152, 209)
+region = Rect2(1887, 1126, 152, 209)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_23"]
 atlas = ExtResource("2")
-region = Rect2(637, 1543, 128, 256)
+region = Rect2(1899, 870, 128, 256)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_24"]
 atlas = ExtResource("2")
-region = Rect2(966, 1778, 116, 253)
+region = Rect2(1750, 1133, 116, 253)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_25"]
-atlas = ExtResource("1")
-region = Rect2(149, 0, 320, 81)
+atlas = ExtResource("2")
+region = Rect2(1665, 1883, 320, 81)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_26"]
-atlas = ExtResource("1")
-region = Rect2(629, 153, 320, 79)
+atlas = ExtResource("2")
+region = Rect2(1665, 1964, 320, 79)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_27"]
 atlas = ExtResource("2")
-region = Rect2(1700, 1576, 320, 83)
+region = Rect2(1513, 1626, 320, 83)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_28"]
 atlas = ExtResource("2")
-region = Rect2(1435, 1959, 320, 84)
+region = Rect2(1348, 1505, 320, 84)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_29"]
 atlas = ExtResource("1")
-region = Rect2(1121, 0, 241, 104)
+region = Rect2(156, 169, 241, 104)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_30"]
 atlas = ExtResource("2")
@@ -137,7 +137,7 @@ region = Rect2(1506, 0, 320, 192)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_34"]
 atlas = ExtResource("1")
-region = Rect2(1480, 132, 212, 101)
+region = Rect2(397, 132, 212, 101)
 
 [resource]
 animations = [

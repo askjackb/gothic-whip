@@ -424,6 +424,13 @@ def main():
     os.makedirs(ATLAS, exist_ok=True)
     log = []
     manifest = {"clips": {}, "derived": [], "notes": []}
+    # preserve hand-written notes (e.g. the 2026-10-09 integrity-fix note)
+    _prev = os.path.join(ROOT, "manifest_raw.json")
+    if os.path.exists(_prev):
+        try:
+            manifest["notes"] = json.load(open(_prev)).get("notes", [])
+        except Exception:
+            pass
     clip_frames = {}  # clip -> list[Image]
 
     for stem, actor, clip, cols, rows, count, loop in SHEETS:
