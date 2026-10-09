@@ -24,7 +24,7 @@ Press **F9** to warp to just outside the boss arena. It exists so screenshots an
 ## What's inside
 
 - `project.godot`, `scenes/`, `scripts/` — the game. State machines are authoritative; sprites never drive logic. Gameplay numbers come from the design contracts in the companion spec repo (below).
-- `art/` — production art: style-lock references (`art/source/`, hashed in `art/manifest.json`), generated sprite sheets, packed texture atlases (7 pages, 112 MiB, mipmaps off), terrain tiles, backgrounds, props, UI, and 11 original synthesized WAV files (no samples, no franchise audio).
+- `art/` — production art: style-lock references (`art/source/`, hashed in `art/manifest.json`), generated sprite sheets, packed texture atlases (5 pages, 80 MiB, mipmaps off), terrain tiles, backgrounds, props, UI, and 11 original synthesized WAV files (no samples, no franchise audio).
 - `tests/smoke_test.gd` — headless verification: 19 gameplay checks plus production assertions (animation clips exist and play, audio loads). Run: `godot --headless --path . --script tests/smoke_test.gd` → expect `SMOKE RESULT: PASS`.
 - `docs/` — the prebuilt web export served by GitHub Pages (present in the `gothic-whip-game` repo).
 - The art/audio pipeline (`tools/`, frame processing, atlas packing, audio synthesis, web verification) lives in the companion repo.

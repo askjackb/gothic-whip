@@ -213,3 +213,65 @@ Date: 2026-10-08. Scope: complete production pass, authorized by the user's dire
 ## Open after this pass
 
 - V2–V9 device validation when hardware is available. R1 headroom is 16 MiB; if future art trims worse, the budget must be revisited (sensitivity case in TEXTURE_BUDGET).
+
+---
+
+# Follow-up review — scale normalization fix (user-reported size-change bug)
+
+Date: 2026-10-09. Scope: user report of 2026-10-09 — "broken sprite: the main character changes in size while moving around and standing still." Art pipeline only; no gameplay code or constant was touched.
+
+## What was wrong (measured, game/art/SCALE_AUDIT_BEFORE.md)
+
+- The full-production entry above states "one uniform anchor scale per actor (no per-frame drift)". **That claim was wrong in effect.** The pipeline did apply a single anchor scale per actor, but the sprite sheets were generated per clip at mutually inconsistent figure sizes, so each clip kept its own scale: hero walk measured 192 px against idle's 224 px (−14%), crouch_idle 252 px — the crouched hunter rendered TALLER than standing — start/stop/turn ≈ 340–363 px, fall ≈ 430 px, hurt_recoil ≈ 418 px.
+- A second defect class compounded it: detached generation debris (thin full-height line artifacts; specks below the feet) inflated bounding boxes and anchored production placement — hero_fall measured the full 448 px canvas height in every frame, boss turn/hurt/hazard_execute a clipped 448 px, pursuer hurt/alert a clipped 160 px.
+- Only the five anchor clips sat at their design heights (idle 224, pursuer 111/112, cruise 169/170, boss 351/352). Ranged measured 288 px against its 300 px reference in every frame (pre-existing 12 px hood-tip clip at the canvas top; unchanged by this fix).
+
+## Fix (tools/process_frames.py, re-run + repacked)
+
+- One uniform scale per clip (never per frame): target ÷ reference, the reference a pose-aware statistic of the figure's largest-connected-component heights on the source cells — median for upright clips, max (most-extended frame) for jump/fall/knockback, first-two-frames for knockdown/death, last frame for crouch_enter, min (most-grounded frame) for pursuer rear-up clips. Hero standing target 224 px (idle untouched); **crouch family 140 px = 0.625 × 224** (new authoritative value, recorded in docs/DECISIONS.md); pursuer 112, swooper 170, ranged 300, boss 352. Frames re-placed by the figure's own bbox (lowest point on the contract pivot, foot_off ≥ −1 px everywhere after); small detached debris removed under a logged area/thinness rule (plausible satellites — coiled whip, blades — kept). Whip grip unchanged: grip_x = 276 = pivot.x, tip reach 172 u ≥ 168 u hitbox. Atlases repacked: **5 pages / 80.0 MiB** (was 7 / 112.0), still inside the ratified R1 model (≤ 7 pages, mips off). Pre-fix frames archived at `game/art/source/frames_prefix_2026-10-09.zip`; per-clip pre/post medians and applied scales recorded in `game/art/manifest.json` (`scale_fix_2026_10_09`), whose original notes are kept and corrected, not rewritten.
+
+## Completed checks
+
+- **Audits**: `game/art/SCALE_AUDIT_AFTER.md` (same method as BEFORE) — hero upright references 219–224 px against 224 (±3% tolerance met), crouch 135–145 against 140 (±5% met), no actor clip measures the full canvas height, pursuer/swooper/boss references 111–112 / 169–170 / 351–352.
+- **Contact sheet**: `game/tests/shots/scale_contact_sheet.png` (all 21 hero clips, pivot crosshair + 224 px line) visually reviewed — the hunter reads the same size standing, walking, turning and attacking; crouch is distinctly low.
+- **Smoke test**: `SMOKE RESULT: PASS` (Godot 4.7.2 headless, extended suite).
+- **Web export + Chromium drive**: fresh Web export, zero console errors; `game/tests/shots/scale_ingame_{idle,walk,crouch}.png` visually reviewed — idle and mid-walk the same size on the spawn platform, crouch properly low in the same spot.
+
+## Explicitly not tested
+
+- iPhone 17 physical device — still NOT-TESTED (V2–V9 pending, as before). Chromium/SwiftShader evidence only.
+- No clip needed regeneration: every rescale fit its contract canvas (post-fix overflow check: nothing past the canvas edge beyond the pre-existing ranged hood-tip clip). Crouch_enter's opening frame stands at 190 px, not 224 — the source sheet's own crouch ratio (0.74) vs the 0.625 design ratio; the 200 ms transition reads as compression and is recorded in the manifest rather than hidden.
+
+## Open after this pass
+
+- V2–V9 device validation (unchanged). R1 headroom is now 48 MiB at 5 pages.
+
+---
+
+# Follow-up review — full sequence audit (every clip, every frame)
+
+Date: 2026-10-09. Scope: extension of the scale-fix pass at the user's direction — verify every sprite and every action sequence locally without playing the game, fix what is found, then publish. Deliverables: `game/art/SEQUENCE_AUDIT.md`, 64 contact strips (`game/tests/shots/seq_<actor>_<clip>.png`), `tools/audit_sequences.py`, `game/tests/sequence_engine_check.gd`.
+
+## Completed checks
+
+- **Programmatic audit (PIL/scipy), all 64 clips / 357 frames**: frame counts == manifest == ANIMATION_SPEC/ASSET_BRIEFS counts for every clip; per-clip duration totals match the briefs (whip clips 500 ms, active frames 2–3 by the [150, 250) ms window, max active tip reach 172 u ≥ the 168 u hitbox); figure reaches the contract pivot in every actor frame (no float > 2 px); swooper/projectile centers within 1.5 px; whip grip at (276, 308) on every frame.
+- **Pops**: 139 adjacent-frame height changes > 4% reviewed against the contact strips — all are the intended pose content (gait bob, wingbeat, breathing, cape sway, crouch/knockdown/death/jump transitions, whip extension). Loop wraps checked for all 16 looping clips; the reviewed-cyclic set joins within pose tolerance.
+- **Coverage**: every GAMEPLAY_RULES §4 hero state, §8.1–§8.4 enemy/boss state, the three whip attack states, the projectile and all six VFX clips resolve to an existing clip in the runtime state maps (`game/scripts/*.gd`); no missing states.
+- **Engine check**: `game/tests/sequence_engine_check.gd` loads all five SpriteFrames resources, steps all 64 clips frame-by-frame through `Anim.apply` (357 frames), asserts frame counts, loop flags, AtlasTexture region sizes against `atlas_regions.json`, and trim-offset reconstruction inside the contract canvases — **SEQUENCE ENGINE RESULT: PASS**. Extended smoke test still **SMOKE RESULT: PASS**.
+
+## Defect found and fixed
+
+- **`vfx_damage_indicator` was blank** (alpha max 0 in both frames): its source is a full-screen red vignette (green center, charcoal surround), not a green-screen sprite, so the chroma pipeline produced transparent frames and the HUD damage flash has never rendered. Fixed with a red-dominance extraction special case in `tools/process_frames.py`; the frames now carry the vignette (217–220 px) and the atlas was repacked. This defect predates the scale fix and is unrelated to it.
+
+## Explicitly waived (with reason, in SEQUENCE_AUDIT.md)
+
+- `pursuer_idle` (no runtime state; its frames 1/4 rear up inside an idle loop) and `swooper_perch_idle` (no runtime state): the shipped behaviors have no stationary/perched state — patrol and cruise cover them. Not user-visible; wiring them in would change gameplay, which this art pass must not do. Retained for ASSET_BRIEFS inventory.
+- Six cloth warnings accepted: boss cloak hems pool below the foot line in two recover opening frames, hero_death ash settles 6 px below; feet remain on the pivot.
+
+## Explicitly not tested
+
+- iPhone 17 physical device (V2–V9 still pending). Sequence smoothness at playback speed on hardware remains a device question; this pass verified structure, geometry and timing data headlessly, plus contact-strip review.
+
+## Open after this pass
+
+- Same as the scale-fix entry: V2–V9 device validation when hardware is available.

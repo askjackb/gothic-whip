@@ -1392,20 +1392,20 @@
  "notes": [
   "Character construction follows the attack key (open coat tails over trousers); the neutral reference uses a closed coat-skirt - drift risk recorded at style lock.",
   "hero_turn clip's final frame faces left in the source art; the runtime flips the whole container with facing, giving a brief wrong-facing read mid-turn.",
-  "All frames: green-screen sheets chroma-keyed programmatically (alpha from green dominance, despilled; per-sheet alpha coverage logged by the pipeline), one uniform anchor scale per actor (hero_idle/pursuer_idle/swooper_cruise/ranged_idle/boss_idle), fixed contract canvases and pivots, frames trimmed for atlasing with per-frame trim offsets restored at runtime (art/clips.json trims)."
+  "All frames: green-screen sheets chroma-keyed programmatically (alpha from green dominance, despilled; per-sheet alpha coverage logged by the pipeline), one uniform anchor scale per actor (hero_idle/pursuer_idle/swooper_cruise/ranged_idle/boss_idle), fixed contract canvases and pivots, frames trimmed for atlasing with per-frame trim offsets restored at runtime (art/clips.json trims).",
+  "CORRECTION (2026-10-09): the 'one uniform anchor scale per actor' statement in the note above did not hold in the shipped frames (hero walk 192 px vs idle 224 px; crouch 252 px; boss turn/hurt clipped at 448 px). Fixed by per-clip scale normalization; full before/after record in the scale_fix_2026_10_09 section of this manifest and game/art/SCALE_AUDIT_*.md.",
+  "Atlases repacked 2026-10-09 after the scale fix: 5 pages / 80.0 MiB (was 7 / 112.0), still within the ratified R1 residency model (<= 7 pages, mips off)."
  ],
  "atlases": {
-  "pages": 7,
+  "pages": 5,
   "page_files": [
    "atlas_hero_0.png",
-   "atlas_hero_1.png",
    "atlas_boss_0.png",
    "atlas_boss_1.png",
-   "atlas_boss_2.png",
    "atlas_enemies_0.png",
    "atlas_enemies_1.png"
   ],
-  "resident_mib_no_mips": 112.0
+  "resident_mib_no_mips": 80.0
  },
  "audio": [
   "mus_ambience_loop.wav",
@@ -1419,5 +1419,487 @@
   "sfx_land.wav",
   "sfx_whip_hit.wav",
   "sfx_whip_swing.wav"
- ]
+ ],
+ "scale_fix_2026_10_09": {
+  "bug": "User report 2026-10-09: main character changes size while moving / standing still.",
+  "root_cause": "Per-clip generation scale drift, propagated by the original pipeline's single per-actor anchor scale; several sheets also carried detached debris (thin sheet lines, specks) that inflated bounding boxes (e.g. frames measuring the full canvas height). The shipped note below claiming 'one uniform anchor scale per actor' was therefore wrong in effect; it is kept unedited as history and corrected here.",
+  "method": "One uniform scale per clip (never per frame): scale = target / reference, the reference being a pose-aware statistic of the figure's largest-connected-component bbox heights measured on the green-screen source cells (median for upright clips, max for jump/fall/knockback extension, first-two-frames for knockdown/death openings, last frame for crouch_enter, min (most-grounded frame) for pursuer rear-up clips). Hero standing target 224 px (idle unchanged), crouch family 140 px (0.625 x 224, chosen for this fix). Frames placed by the LCC bbox (figure's lowest point on the contract pivot), and small detached debris components (area < 1% of the figure or min bbox side <= 6 px) removed and logged by the pipeline. Whip keeps its tip-reach rule on cleaned frames; grip still lands on the (276, 308) pivot (verified in SCALE_AUDIT_AFTER.md).",
+  "audits": [
+   "game/art/SCALE_AUDIT_BEFORE.md",
+   "game/art/SCALE_AUDIT_AFTER.md",
+   "game/tests/shots/scale_contact_sheet.png"
+  ],
+  "clips": {
+   "boss_death": {
+    "pre_fix_lcc_median_px": 186,
+    "post_fix_lcc_median_px": 232,
+    "reference_mode": "first2",
+    "target_px": 352,
+    "pipeline_scale": 0.828
+   },
+   "boss_hazard_execute": {
+    "pre_fix_lcc_median_px": 448,
+    "post_fix_lcc_median_px": 352,
+    "reference_mode": "median",
+    "target_px": 352,
+    "pipeline_scale": 0.479
+   },
+   "boss_hazard_recover": {
+    "pre_fix_lcc_median_px": 404,
+    "post_fix_lcc_median_px": 351,
+    "reference_mode": "median",
+    "target_px": 352,
+    "pipeline_scale": 0.577
+   },
+   "boss_hazard_windup": {
+    "pre_fix_lcc_median_px": 350,
+    "post_fix_lcc_median_px": 352,
+    "reference_mode": "median",
+    "target_px": 352,
+    "pipeline_scale": 0.668
+   },
+   "boss_hurt": {
+    "pre_fix_lcc_median_px": 448,
+    "post_fix_lcc_median_px": 352,
+    "reference_mode": "median",
+    "target_px": 352,
+    "pipeline_scale": 0.418
+   },
+   "boss_idle": {
+    "pre_fix_lcc_median_px": 351,
+    "post_fix_lcc_median_px": 351,
+    "reference_mode": "median",
+    "target_px": 352,
+    "pipeline_scale": 0.665
+   },
+   "boss_strike_execute": {
+    "pre_fix_lcc_median_px": 408,
+    "post_fix_lcc_median_px": 352,
+    "reference_mode": "median",
+    "target_px": 352,
+    "pipeline_scale": 0.534
+   },
+   "boss_strike_recover": {
+    "pre_fix_lcc_median_px": 399,
+    "post_fix_lcc_median_px": 351,
+    "reference_mode": "median",
+    "target_px": 352,
+    "pipeline_scale": 0.584
+   },
+   "boss_strike_windup": {
+    "pre_fix_lcc_median_px": 353,
+    "post_fix_lcc_median_px": 352,
+    "reference_mode": "median",
+    "target_px": 352,
+    "pipeline_scale": 0.663
+   },
+   "boss_turn": {
+    "pre_fix_lcc_median_px": 448,
+    "post_fix_lcc_median_px": 352,
+    "reference_mode": "median",
+    "target_px": 352,
+    "pipeline_scale": 0.468
+   },
+   "boss_walk": {
+    "pre_fix_lcc_median_px": 343,
+    "post_fix_lcc_median_px": 352,
+    "reference_mode": "median",
+    "target_px": 352,
+    "pipeline_scale": 0.682
+   },
+   "hero_attack_air": {
+    "pre_fix_lcc_median_px": 194,
+    "post_fix_lcc_median_px": 219,
+    "reference_mode": "median",
+    "target_px": 224,
+    "pipeline_scale": 0.486
+   },
+   "hero_attack_crouch": {
+    "pre_fix_lcc_median_px": 213,
+    "post_fix_lcc_median_px": 140,
+    "reference_mode": "median",
+    "target_px": 140,
+    "pipeline_scale": 0.283
+   },
+   "hero_attack_ground": {
+    "pre_fix_lcc_median_px": 210,
+    "post_fix_lcc_median_px": 224,
+    "reference_mode": "median",
+    "target_px": 224,
+    "pipeline_scale": 0.458
+   },
+   "hero_crouch_enter": {
+    "pre_fix_lcc_median_px": 391,
+    "post_fix_lcc_median_px": 165,
+    "reference_mode": "last",
+    "target_px": 140,
+    "pipeline_scale": 0.182
+   },
+   "hero_crouch_exit": {
+    "pre_fix_lcc_median_px": 391,
+    "post_fix_lcc_median_px": 165,
+    "reference_mode": "median",
+    "target_px": 224,
+    "pipeline_scale": 0.182,
+    "derived_from": "hero_crouch_enter (reversed)"
+   },
+   "hero_crouch_idle": {
+    "pre_fix_lcc_median_px": 252,
+    "post_fix_lcc_median_px": 140,
+    "reference_mode": "median",
+    "target_px": 140,
+    "pipeline_scale": 0.239
+   },
+   "hero_death": {
+    "pre_fix_lcc_median_px": 160,
+    "post_fix_lcc_median_px": 179,
+    "reference_mode": "first2",
+    "target_px": 224,
+    "pipeline_scale": 0.483
+   },
+   "hero_fall": {
+    "pre_fix_lcc_median_px": 430,
+    "post_fix_lcc_median_px": 218,
+    "reference_mode": "max",
+    "target_px": 224,
+    "pipeline_scale": 0.215
+   },
+   "hero_get_up": {
+    "pre_fix_lcc_median_px": 212,
+    "post_fix_lcc_median_px": 144,
+    "reference_mode": "median",
+    "target_px": 224,
+    "pipeline_scale": 0.294,
+    "derived_from": "hero_knockdown (reversed)"
+   },
+   "hero_hurt_recoil": {
+    "pre_fix_lcc_median_px": 418,
+    "post_fix_lcc_median_px": 224,
+    "reference_mode": "median",
+    "target_px": 224,
+    "pipeline_scale": 0.231
+   },
+   "hero_idle": {
+    "pre_fix_lcc_median_px": 224,
+    "post_fix_lcc_median_px": 224,
+    "reference_mode": "median",
+    "target_px": 224,
+    "pipeline_scale": 0.43
+   },
+   "hero_jump_apex": {
+    "pre_fix_lcc_median_px": 283,
+    "post_fix_lcc_median_px": 189,
+    "reference_mode": "max",
+    "target_px": 224,
+    "pipeline_scale": 0.287
+   },
+   "hero_jump_rise": {
+    "pre_fix_lcc_median_px": 364,
+    "post_fix_lcc_median_px": 210,
+    "reference_mode": "max",
+    "target_px": 224,
+    "pipeline_scale": 0.248
+   },
+   "hero_jump_takeoff": {
+    "pre_fix_lcc_median_px": 352,
+    "post_fix_lcc_median_px": 221,
+    "reference_mode": "max",
+    "target_px": 224,
+    "pipeline_scale": 0.27
+   },
+   "hero_knockback": {
+    "pre_fix_lcc_median_px": 400,
+    "post_fix_lcc_median_px": 212,
+    "reference_mode": "max",
+    "target_px": 224,
+    "pipeline_scale": 0.228
+   },
+   "hero_knockdown": {
+    "pre_fix_lcc_median_px": 212,
+    "post_fix_lcc_median_px": 144,
+    "reference_mode": "first2",
+    "target_px": 224,
+    "pipeline_scale": 0.294
+   },
+   "hero_land": {
+    "pre_fix_lcc_median_px": 388,
+    "post_fix_lcc_median_px": 224,
+    "reference_mode": "median",
+    "target_px": 224,
+    "pipeline_scale": 0.248
+   },
+   "hero_start_move": {
+    "pre_fix_lcc_median_px": 342,
+    "post_fix_lcc_median_px": 224,
+    "reference_mode": "median",
+    "target_px": 224,
+    "pipeline_scale": 0.282
+   },
+   "hero_stop_move": {
+    "pre_fix_lcc_median_px": 340,
+    "post_fix_lcc_median_px": 224,
+    "reference_mode": "median",
+    "target_px": 224,
+    "pipeline_scale": 0.284
+   },
+   "hero_turn": {
+    "pre_fix_lcc_median_px": 363,
+    "post_fix_lcc_median_px": 224,
+    "reference_mode": "median",
+    "target_px": 224,
+    "pipeline_scale": 0.266
+   },
+   "hero_walk": {
+    "pre_fix_lcc_median_px": 192,
+    "post_fix_lcc_median_px": 224,
+    "reference_mode": "median",
+    "target_px": 224,
+    "pipeline_scale": 0.502
+   },
+   "projectile_grave_shot": {
+    "pre_fix_lcc_median_px": 64,
+    "post_fix_lcc_median_px": 64,
+    "reference_mode": "median",
+    "target_px": null,
+    "pipeline_scale": 1.0
+   },
+   "pursuer_alert": {
+    "pre_fix_lcc_median_px": 160,
+    "post_fix_lcc_median_px": 160,
+    "reference_mode": "min",
+    "target_px": 112,
+    "pipeline_scale": 0.27
+   },
+   "pursuer_approach_walk": {
+    "pre_fix_lcc_median_px": 90,
+    "post_fix_lcc_median_px": 111,
+    "reference_mode": "median",
+    "target_px": 112,
+    "pipeline_scale": 0.329
+   },
+   "pursuer_death": {
+    "pre_fix_lcc_median_px": 106,
+    "post_fix_lcc_median_px": 82,
+    "reference_mode": "first2",
+    "target_px": 112,
+    "pipeline_scale": 0.211
+   },
+   "pursuer_hurt": {
+    "pre_fix_lcc_median_px": 160,
+    "post_fix_lcc_median_px": 112,
+    "reference_mode": "median",
+    "target_px": 112,
+    "pipeline_scale": 0.153
+   },
+   "pursuer_idle": {
+    "pre_fix_lcc_median_px": 111,
+    "post_fix_lcc_median_px": 111,
+    "reference_mode": "median",
+    "target_px": 112,
+    "pipeline_scale": 0.268
+   },
+   "pursuer_lunge": {
+    "pre_fix_lcc_median_px": 113,
+    "post_fix_lcc_median_px": 61,
+    "reference_mode": "max",
+    "target_px": 112,
+    "pipeline_scale": 0.142
+   },
+   "pursuer_lunge_windup": {
+    "pre_fix_lcc_median_px": 159,
+    "post_fix_lcc_median_px": 132,
+    "reference_mode": "min",
+    "target_px": 112,
+    "pipeline_scale": 0.173
+   },
+   "pursuer_patrol_walk": {
+    "pre_fix_lcc_median_px": 98,
+    "post_fix_lcc_median_px": 111,
+    "reference_mode": "median",
+    "target_px": 112,
+    "pipeline_scale": 0.303
+   },
+   "pursuer_recovery": {
+    "pre_fix_lcc_median_px": 157,
+    "post_fix_lcc_median_px": 112,
+    "reference_mode": "median",
+    "target_px": 112,
+    "pipeline_scale": 0.187
+   },
+   "ranged_aim": {
+    "pre_fix_lcc_median_px": 288,
+    "post_fix_lcc_median_px": 288,
+    "reference_mode": "median",
+    "target_px": 300,
+    "pipeline_scale": 0.481
+   },
+   "ranged_death": {
+    "pre_fix_lcc_median_px": 288,
+    "post_fix_lcc_median_px": 288,
+    "reference_mode": "first2",
+    "target_px": 300,
+    "pipeline_scale": 0.494
+   },
+   "ranged_fire": {
+    "pre_fix_lcc_median_px": 288,
+    "post_fix_lcc_median_px": 288,
+    "reference_mode": "median",
+    "target_px": 300,
+    "pipeline_scale": 0.344
+   },
+   "ranged_hurt": {
+    "pre_fix_lcc_median_px": 288,
+    "post_fix_lcc_median_px": 288,
+    "reference_mode": "median",
+    "target_px": 300,
+    "pipeline_scale": 0.344
+   },
+   "ranged_idle": {
+    "pre_fix_lcc_median_px": 288,
+    "post_fix_lcc_median_px": 288,
+    "reference_mode": "median",
+    "target_px": 300,
+    "pipeline_scale": 0.496
+   },
+   "ranged_recover": {
+    "pre_fix_lcc_median_px": 269,
+    "post_fix_lcc_median_px": 288,
+    "reference_mode": "median",
+    "target_px": 300,
+    "pipeline_scale": 0.536
+   },
+   "swooper_cruise": {
+    "pre_fix_lcc_median_px": 169,
+    "post_fix_lcc_median_px": 169,
+    "reference_mode": "median",
+    "target_px": 170,
+    "pipeline_scale": 0.351
+   },
+   "swooper_death_fall": {
+    "pre_fix_lcc_median_px": 150,
+    "post_fix_lcc_median_px": 170,
+    "reference_mode": "median",
+    "target_px": 170,
+    "pipeline_scale": 0.396
+   },
+   "swooper_dive": {
+    "pre_fix_lcc_median_px": 194,
+    "post_fix_lcc_median_px": 170,
+    "reference_mode": "median",
+    "target_px": 170,
+    "pipeline_scale": 0.306
+   },
+   "swooper_dive_telegraph": {
+    "pre_fix_lcc_median_px": 232,
+    "post_fix_lcc_median_px": 170,
+    "reference_mode": "median",
+    "target_px": 170,
+    "pipeline_scale": 0.237
+   },
+   "swooper_hurt": {
+    "pre_fix_lcc_median_px": 254,
+    "post_fix_lcc_median_px": 170,
+    "reference_mode": "median",
+    "target_px": 170,
+    "pipeline_scale": 0.235
+   },
+   "swooper_perch_idle": {
+    "pre_fix_lcc_median_px": 169,
+    "post_fix_lcc_median_px": 169,
+    "reference_mode": "median",
+    "target_px": 170,
+    "pipeline_scale": 0.317
+   },
+   "swooper_recovery_climb": {
+    "pre_fix_lcc_median_px": 200,
+    "post_fix_lcc_median_px": 169,
+    "reference_mode": "median",
+    "target_px": 170,
+    "pipeline_scale": 0.297
+   },
+   "vfx_checkpoint_activate": {
+    "pre_fix_lcc_median_px": 256,
+    "post_fix_lcc_median_px": 256,
+    "reference_mode": "median",
+    "target_px": null,
+    "pipeline_scale": 1.0
+   },
+   "vfx_enemy_defeat": {
+    "pre_fix_lcc_median_px": 256,
+    "post_fix_lcc_median_px": 256,
+    "reference_mode": "median",
+    "target_px": null,
+    "pipeline_scale": 1.0
+   },
+   "vfx_hazard_eruption": {
+    "pre_fix_lcc_median_px": 137,
+    "post_fix_lcc_median_px": 137,
+    "reference_mode": "median",
+    "target_px": null,
+    "pipeline_scale": 1.0
+   },
+   "vfx_hazard_telegraph": {
+    "pre_fix_lcc_median_px": 78,
+    "post_fix_lcc_median_px": 78,
+    "reference_mode": "median",
+    "target_px": null,
+    "pipeline_scale": 1.0
+   },
+   "vfx_whip_impact": {
+    "pre_fix_lcc_median_px": 94,
+    "post_fix_lcc_median_px": 94,
+    "reference_mode": "median",
+    "target_px": null,
+    "pipeline_scale": 1.0
+   },
+   "whip_attack_air": {
+    "pre_fix_lcc_median_px": 209,
+    "post_fix_lcc_median_px": 209,
+    "reference_mode": "median",
+    "target_px": null,
+    "pipeline_scale": 0.658
+   },
+   "whip_attack_crouch": {
+    "pre_fix_lcc_median_px": 244,
+    "post_fix_lcc_median_px": 244,
+    "reference_mode": "median",
+    "target_px": null,
+    "pipeline_scale": 0.653
+   },
+   "whip_attack_ground": {
+    "pre_fix_lcc_median_px": 226,
+    "post_fix_lcc_median_px": 226,
+    "reference_mode": "median",
+    "target_px": null,
+    "pipeline_scale": 0.628
+   },
+   "vfx_damage_indicator": {
+    "pre_fix_lcc_median_px": null,
+    "post_fix_lcc_median_px": 218,
+    "reference_mode": "unscaled (vfx path untouched)",
+    "target_px": null,
+    "pipeline_scale": 1.0,
+    "note": "blank (alpha max 0) in the shipped build: its source is a full-screen red vignette, not a green-screen sprite, so the chroma path produced transparent frames and the HUD damage flash never rendered. Repaired in the 2026-10-09 sequence audit via red-dominance extraction; now measures 217-220 px."
+   }
+  },
+  "known_leftovers": [
+   "crouch_enter/exit first frame stands at 190 px (not 224): the source sheet's own crouch depth ratio (0.74) differs from the 0.625 design ratio; the clip is anchored on its crouched end frame (140) per the crouch-family rule, so the 200 ms transition reads as compression.",
+   "ranged figure is placed at the 300 px design height on a canvas with only 288 px above its pivot: the top ~12 px (hood tip) is clipped exactly as in the shipped 2026-10-08 build (measured 288 px in both audits). Pre-existing canvas/pivot/design tension, not introduced by this fix; all six ranged clips are now mutually consistent (recover was 269 px before).",
+   "Within-clip height spread remains where the pose demands it (land 169-260, boss strike overhead 424, pursuer rear-up 160): scale is uniform, poses are not rectangles."
+  ]
+ },
+ "sequence_audit_2026_10_09": {
+  "deliverable": "game/art/SEQUENCE_AUDIT.md",
+  "strips": "game/tests/shots/seq_<actor>_<clip>.png (64 strips)",
+  "engine_check": "game/tests/sequence_engine_check.gd \u2014 SEQUENCE ENGINE RESULT: PASS (64 clips, 357 frames stepped)",
+  "defects_found_and_fixed": [
+   "vfx_damage_indicator blank frames (see scale_fix record) \u2014 pipeline special case added; frames now carry the red vignette."
+  ],
+  "waived": [
+   "pursuer_idle: no runtime state (patrol covers locomotion; alert owns the rear-up); frames 1/4 rear inside the idle loop \u2014 not user-visible, retained for inventory.",
+   "swooper_perch_idle: no runtime state (swooper spawns cruising; no perch behavior shipped) \u2014 retained for inventory."
+  ],
+  "warnings_accepted": "Boss cloak hems pool 4-50 px below the foot line in two recover opening frames and hero_death ash settles 6 px below; feet stay on the pivot \u2014 painted cloth, not drift.",
+  "result": "0 unwaived defects; all 64 clips match spec frame counts and duration totals; whip totals 500 ms with active frames 2-3 and max active tip reach 172 u (>= 168 u)."
+ }
 }

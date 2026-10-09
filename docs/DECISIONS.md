@@ -95,4 +95,17 @@ Recorded per "How to resolve a decision" above. All three resolutions are direct
 1. Which exact Simon costume/incarnation is the canonical visual reference? — **Answered by supersession 2026-10-08** (see Amendments): the reference is now an original hunter design, to be created in P2.
 2. What horror intensity and minimum phone must this support? — **Answered 2026-10-08** (see Amendments): dread/decay/silhouettes, no explicit gore; iPhone 17 with iOS Safari.
 
-No user questions remain open. D09 was the last one — resolved 2026-10-08 ("no stomp. whip is the weapon"). The texture amendment (R1) and proposed baselines (R3) were ratified/confirmed the same day under user-delegated judgement ("use your judgement") — see Amendments. Production (Godot project, greybox, art) still requires a separate explicit implementation assignment.
+No user questions remain open. D09 was the last one — resolved 2026-10-08 ("no stomp. whip is the weapon"). The texture amendment (R1) and proposed baselines (R3) were ratified/confirmed the same day under user-delegated judgement ("use your judgement") — see Amendments.
+
+### 2026-10-09 — sprite scale normalization (production fix; no product-requirement change)
+
+Recorded after the user's bug report of 2026-10-09 (hero changes size while moving). This amendment defines one shared number that production needed and corrects a false production claim; it changes no confirmed requirement.
+
+**Crouch design height (new authoritative value)**
+- Choice: the hero crouch family (crouch_enter/idle/exit, attack_crouch) renders at **140 source px = 0.625 × the 224 px standing height**. Standing remains 224 px (D11's 112 u at 2× density, unchanged).
+- Reason: the crouch collision (60 u vs 104 u standing, ratio 0.577) and the briefs ("well below the standing silhouette", ASSET_BRIEFS S2) bound the choice; 140 sits inside the 0.60–0.65 band. Anchored on the crouched end frame for crouch_enter/exit.
+- Source of authority: production fix under the 2026-10-08 full-production assignment; user-visible defect reported 2026-10-09.
+- Affected documents: this ledger; `game/art/manifest.json` (`scale_fix_2026_10_09`); `game/art/SCALE_AUDIT_BEFORE.md` / `SCALE_AUDIT_AFTER.md`; `docs/REVIEW_RECORD.md` (scale-fix entry).
+
+**Correction of record**
+- The 2026-10-08 production claim "one uniform anchor scale per actor (no per-frame drift)" was wrong in effect: per-clip generation scale drift survived the anchor (walk −14%, crouch taller than standing, several clips clipped at the canvas edge), compounded by detached debris inflating bounding boxes. The fix (per-clip uniform scale from the figure's largest-component heights, debris-aware placement) and its before/after measurements are recorded in the manifest and audits above; the original notes are preserved and corrected, not rewritten.
