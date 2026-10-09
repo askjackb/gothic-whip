@@ -530,3 +530,77 @@ Pages verified built and serving HTTP 200.
 - iPhone 17 physical device (V2–V9 still pending) — unchanged.
 - The adjacent `set_crouched_body` observation from the soft-lock
   entry remains a separate, undecided item.
+
+---
+
+# 2026-10-09 — Per-frame scale drift fix (user playtest round 3)
+
+**User report:** "When the player stands still, its size doesn't match
+when he is in action. I think similar issue applies to all enemy and
+boss. List all actions of one character and make sure their size won't
+drift. Cover enemy and boss too."
+
+## Honest history
+
+The two earlier size fixes were real but insufficient. Fix #1
+(per-clip uniform scale, SCALE_SPEC) anchored each clip's reference
+statistic to the design height; fix #2 (whip in-hand) rebuilt whip
+geometry. Neither touched WITHIN-clip per-frame drift: frames inside
+one clip were generated at mutually inconsistent sizes, and a median
+over such frames lands on the anchor while individual frames straddle
+it. Shipped proof: hero_land heights 239/209/169/260 (median 224 =
+anchor, scale 1.000), so its standing frame played 16% taller than
+idle; hero_attack_ground shipped 207..250 tall. The user was right
+for the third time on the same underlying class of defect.
+
+## Fix
+
+`tools/normalize_frame_scales.py` (new) applies a per-frame uniform
+rescale around the contract foot pivot to all non-exempt frames:
+
+- Standing-class frames of the feet-anchored bipeds (hero, boss):
+  corrected by height to the design anchor (hero 224, boss 352,
+  crouch family 140). An upright figure's perceived size is its
+  height, so standing must read 224 in every action.
+- Everything else (poses, transitions, pursuer, canvas-clipped
+  ranged, swooper): corrected by SA = sqrt(alpha area) to the clip
+  median — SA scales exactly linearly under a pure scale change and
+  barely moves when a pose redistributes the same ink (hero_land SA
+  spread 4.9% across a 169..260 px height swing).
+- SQ = sqrt(HxW) is tabulated in the audit but deliberately NOT used
+  for correction: it collapses on narrow side-profile standing frames
+  (hero_attack_ground f6: SQ 134 vs ~204 for the same man standing)
+  and SQ-driven scaling would have blown that frame to ~295 px tall.
+  SQ residuals >4% are therefore listed with named poses instead of
+  being "corrected" into new drift.
+- Factors clamped to [0.85, 1.18]. 216 frames rescaled, 80 within
+  0.4% left untouched, 61 exempt frames (whip/vfx/projectile)
+  verified byte-identical. 8 outliers (death heaps, pursuer alert
+  apex, folded-wing telegraph) are clamp-corrected and pose-named
+  in the audit; 0 frames regenerated — no standing-class frame
+  needed more than the clamp, so no frame was a misdrawn standing
+  pose requiring regeneration.
+- Pre-fix frames archived: `game/art/source/frames_prefix_2026-10-09_gen3.zip`.
+- Full inventory: `game/art/ACTION_SIZE_AUDIT.md` (all 64 clips,
+  every frame, before -> after).
+
+## Verification
+
+- `tools/audit_sequences.py`: **64 clips, 0 defects** (6 pre-existing
+  cloth-below-footline warnings on boss/death frames).
+- `tests/sequence_engine_check.gd`: **SEQUENCE ENGINE RESULT: PASS**.
+- `tests/smoke_test.gd`: **SMOKE RESULT: PASS**.
+- Contact sheets per actor (`game/tests/shots/size_fix_contact_*.png`,
+  inspected): hero idle vs one frame of each of his 21 clips at the
+  same foot line — every upright head touches the 224 line; boss
+  standing tiles all 351-352; pursuer ground clips 111-112 with the
+  rear-up alert (160) and lunge (61) preserved as poses.
+- In-game screenshots at spawn (`size3_a_stand/b_attack/c_jump.png`,
+  inspected): standing, mid-whip and mid-jump figures are the same
+  size.
+- Fresh web export driven in Chromium: walk + whip + jump scripted,
+  0 console errors.
+
+## Explicitly not tested
+
+- iPhone 17 physical device (V2-V9 still pending) — unchanged.

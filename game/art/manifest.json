@@ -1930,5 +1930,23 @@
   "metrics_doc": "game/art/WHIP_HAND_FIX_2026-10-09.md",
   "backup": "game/art/source/frames_prefix_2026-10-09_gen2.zip (generation-2 whip frames replaced here)",
   "shipped_with": "crouch soft-lock fix (hunter.gd one-way-clearance) - both committed and pushed together 2026-10-09"
+ },
+ "frame_scale_fix_2026_10_09": {
+  "user_report": "When the player stands still, its size doesn't match when he is in action. Similar issue applies to all enemy and boss. List all actions of one character and make sure their size won't drift. Cover enemy and boss too.",
+  "diagnosis": "The two earlier fixes (per-clip uniform scale; whip in-hand) left WITHIN-clip per-frame generation drift: frames inside one clip were drawn at inconsistent sizes. Per-clip reference statistics (median/max/first2 heights) landed on the anchor while individual frames straddled it, e.g. hero_land heights 239/209/169/260 (median 224, scale 1.000) \u2014 its standing frame stood 16% taller than idle in game; hero_attack_air opened ~21% larger than idle by bbox.",
+  "fix": "tools/normalize_frame_scales.py: per-frame correction around the contract foot pivot \u2014 standing-class frames of hero/boss corrected by HEIGHT to the design anchor (hero 224, boss 352, crouch family 140), all other frames by SA = sqrt(alpha area) to the clip median (poses, transitions, pursuer, ranged, swooper); factors clamped [0.85, 1.18]. SQ = sqrt(HxW) reported but deliberately not used for correction: it collapses on narrow side-profile standing frames (SQ 134 vs ~204 at identical drawn scale) and would have scaled a standing recovery frame to ~295 px. Whip/VFX/projectile frames exempt and verified byte-identical (61/61 md5).",
+  "measured": "hero upright: idle/walk/start/stop/turn/land standing frames all H=224 (walk was 215-248 bbox); boss standing frames H=350-352 across all clips (was 329-374); 216 frames rescaled, 8 collapse/fold pose outliers clamped + pose-named; 0 frames regenerated (no standing-class frame exceeded the clamp). audit_sequences 0 defects; SEQUENCE ENGINE PASS; SMOKE PASS.",
+  "audit_doc": "game/art/ACTION_SIZE_AUDIT.md (every clip, every frame, before->after, with pose-named SQ residuals)",
+  "evidence": [
+   "game/tests/shots/size_fix_contact_hero.png",
+   "game/tests/shots/size_fix_contact_boss.png",
+   "game/tests/shots/size_fix_contact_pursuer.png",
+   "game/tests/shots/size_fix_contact_swooper.png",
+   "game/tests/shots/size_fix_contact_ranged.png",
+   "game/tests/shots/size3_a_stand.png",
+   "game/tests/shots/size3_b_attack.png",
+   "game/tests/shots/size3_c_jump.png"
+  ],
+  "backup": "game/art/source/frames_prefix_2026-10-09_gen3.zip (all 357 frames as shipped before this fix)"
  }
 }

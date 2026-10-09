@@ -1,2500 +1,2500 @@
 {
- "hero_attack_air#1": {
+ "hero_death#8": {
   "page": "hero_0",
   "x": 0,
   "y": 0,
-  "w": 271,
-  "h": 276
+  "w": 286,
+  "h": 251
  },
- "hero_attack_air#2": {
+ "hero_attack_air#3": {
   "page": "hero_0",
-  "x": 0,
-  "y": 276,
-  "w": 271,
-  "h": 276
+  "x": 286,
+  "y": 0,
+  "w": 263,
+  "h": 267
  },
  "hero_attack_air#0": {
   "page": "hero_0",
   "x": 0,
-  "y": 552,
-  "w": 271,
-  "h": 275
- },
- "hero_attack_air#3": {
-  "page": "hero_0",
-  "x": 0,
-  "y": 827,
-  "w": 271,
-  "h": 275
- },
- "hero_attack_air#4": {
-  "page": "hero_0",
-  "x": 0,
-  "y": 1102,
-  "w": 264,
-  "h": 210
- },
- "hero_attack_ground#3": {
-  "page": "hero_0",
-  "x": 0,
-  "y": 1312,
-  "w": 255,
-  "h": 211
- },
- "hero_death#6": {
-  "page": "hero_0",
-  "x": 0,
-  "y": 1523,
-  "w": 241,
-  "h": 223
+  "y": 251,
+  "w": 232,
+  "h": 277
  },
  "hero_death#7": {
   "page": "hero_0",
-  "x": 0,
-  "y": 1746,
-  "w": 243,
-  "h": 219
+  "x": 549,
+  "y": 0,
+  "w": 265,
+  "h": 238
  },
- "hero_death#8": {
+ "hero_death#6": {
   "page": "hero_0",
-  "x": 241,
-  "y": 1523,
-  "w": 243,
-  "h": 213
- },
- "hero_death#5": {
-  "page": "hero_0",
-  "x": 243,
-  "y": 1736,
-  "w": 212,
-  "h": 236
- },
- "hero_walk#7": {
-  "page": "hero_0",
-  "x": 455,
-  "y": 1736,
-  "w": 203,
-  "h": 246
+  "x": 814,
+  "y": 0,
+  "w": 246,
+  "h": 227
  },
  "hero_attack_ground#2": {
   "page": "hero_0",
-  "x": 264,
-  "y": 1102,
-  "w": 226,
-  "h": 220
- },
- "hero_walk#6": {
-  "page": "hero_0",
-  "x": 484,
-  "y": 1322,
-  "w": 202,
-  "h": 245
- },
- "hero_stop_move#0": {
-  "page": "hero_0",
-  "x": 658,
-  "y": 1567,
-  "w": 210,
-  "h": 227
- },
- "hero_stop_move#1": {
-  "page": "hero_0",
-  "x": 658,
-  "y": 1794,
-  "w": 207,
+  "x": 1060,
+  "y": 0,
+  "w": 234,
   "h": 228
  },
  "hero_attack_ground#4": {
   "page": "hero_0",
-  "x": 865,
-  "y": 1794,
-  "w": 215,
-  "h": 213
+  "x": 814,
+  "y": 227,
+  "w": 230,
+  "h": 228
  },
- "hero_attack_ground#0": {
+ "hero_attack_ground#3": {
   "page": "hero_0",
-  "x": 1080,
-  "y": 0,
-  "w": 183,
-  "h": 236
+  "x": 549,
+  "y": 238,
+  "w": 250,
+  "h": 208
  },
- "hero_attack_ground#1": {
+ "hero_attack_air#4": {
   "page": "hero_0",
-  "x": 868,
-  "y": 0,
-  "w": 183,
-  "h": 236
+  "x": 232,
+  "y": 267,
+  "w": 256,
+  "h": 203
+ },
+ "hero_attack_air#2": {
+  "page": "hero_0",
+  "x": 488,
+  "y": 446,
+  "w": 237,
+  "h": 219
+ },
+ "hero_walk#7": {
+  "page": "hero_0",
+  "x": 232,
+  "y": 470,
+  "w": 203,
+  "h": 246
  },
  "hero_attack_air#5": {
   "page": "hero_0",
-  "x": 490,
+  "x": 0,
+  "y": 528,
+  "w": 218,
+  "h": 228
+ },
+ "hero_attack_air#1": {
+  "page": "hero_0",
+  "x": 1294,
   "y": 0,
-  "w": 203,
-  "h": 212
+  "w": 215,
+  "h": 228
+ },
+ "hero_walk#6": {
+  "page": "hero_0",
+  "x": 1509,
+  "y": 0,
+  "w": 199,
+  "h": 242
+ },
+ "hero_stop_move#0": {
+  "page": "hero_0",
+  "x": 1708,
+  "y": 0,
+  "w": 211,
+  "h": 228
+ },
+ "hero_stop_move#1": {
+  "page": "hero_0",
+  "x": 1708,
+  "y": 228,
+  "w": 207,
+  "h": 228
  },
  "hero_attack_ground#5": {
   "page": "hero_0",
-  "x": 271,
-  "y": 0,
-  "w": 196,
-  "h": 219
- },
- "hero_idle#4": {
-  "page": "hero_0",
-  "x": 490,
-  "y": 212,
-  "w": 186,
-  "h": 230
- },
- "hero_attack_air#7": {
-  "page": "hero_0",
-  "x": 676,
-  "y": 212,
-  "w": 185,
-  "h": 231
- },
- "hero_jump_takeoff#2": {
-  "page": "hero_0",
-  "x": 271,
-  "y": 219,
-  "w": 187,
-  "h": 225
- },
- "hero_idle#6": {
-  "page": "hero_0",
-  "x": 490,
-  "y": 442,
-  "w": 182,
+  "x": 1044,
+  "y": 228,
+  "w": 204,
   "h": 228
  },
  "hero_turn#1": {
   "page": "hero_0",
-  "x": 271,
-  "y": 444,
-  "w": 190,
-  "h": 216
- },
- "hero_jump_apex#0": {
-  "page": "hero_0",
-  "x": 271,
-  "y": 660,
-  "w": 180,
+  "x": 1248,
+  "y": 228,
+  "w": 201,
   "h": 228
  },
- "hero_death#4": {
+ "hero_jump_takeoff#2": {
   "page": "hero_0",
-  "x": 255,
-  "y": 1322,
-  "w": 209,
-  "h": 196
+  "x": 1449,
+  "y": 242,
+  "w": 189,
+  "h": 228
  },
- "hero_death#2": {
+ "hero_death#5": {
   "page": "hero_0",
-  "x": 451,
-  "y": 670,
-  "w": 187,
+  "x": 725,
+  "y": 455,
+  "w": 195,
   "h": 218
  },
- "hero_attack_air#6": {
+ "hero_idle#4": {
   "page": "hero_0",
-  "x": 490,
-  "y": 888,
-  "w": 179,
-  "h": 227
- },
- "hero_jump_apex#1": {
-  "page": "hero_0",
-  "x": 490,
-  "y": 1115,
-  "w": 222,
-  "h": 182
+  "x": 435,
+  "y": 665,
+  "w": 184,
+  "h": 228
  },
  "hero_start_move#1": {
   "page": "hero_0",
-  "x": 686,
-  "y": 1297,
-  "w": 180,
-  "h": 223
- },
- "hero_start_move#2": {
-  "page": "hero_0",
-  "x": 669,
-  "y": 670,
-  "w": 176,
+  "x": 218,
+  "y": 716,
+  "w": 184,
   "h": 228
  },
- "hero_jump_takeoff#1": {
+ "hero_attack_air#7": {
   "page": "hero_0",
-  "x": 712,
-  "y": 898,
-  "w": 167,
+  "x": 0,
+  "y": 756,
+  "w": 183,
+  "h": 228
+ },
+ "hero_idle#6": {
+  "page": "hero_0",
+  "x": 1638,
+  "y": 456,
+  "w": 182,
   "h": 228
  },
  "hero_jump_apex#2": {
   "page": "hero_0",
-  "x": 271,
-  "y": 888,
-  "w": 192,
-  "h": 193
+  "x": 1820,
+  "y": 456,
+  "w": 203,
+  "h": 204
  },
- "hero_walk#4": {
+ "hero_jump_apex#0": {
   "page": "hero_0",
-  "x": 672,
-  "y": 443,
-  "w": 165,
-  "h": 223
+  "x": 1820,
+  "y": 660,
+  "w": 180,
+  "h": 228
+ },
+ "hero_attack_air#6": {
+  "page": "hero_0",
+  "x": 920,
+  "y": 456,
+  "w": 180,
+  "h": 228
+ },
+ "hero_jump_apex#1": {
+  "page": "hero_0",
+  "x": 619,
+  "y": 673,
+  "w": 222,
+  "h": 182
+ },
+ "hero_attack_ground#0": {
+  "page": "hero_0",
+  "x": 1100,
+  "y": 456,
+  "w": 177,
+  "h": 228
+ },
+ "hero_attack_ground#1": {
+  "page": "hero_0",
+  "x": 1277,
+  "y": 470,
+  "w": 177,
+  "h": 228
+ },
+ "hero_start_move#2": {
+  "page": "hero_0",
+  "x": 1454,
+  "y": 470,
+  "w": 176,
+  "h": 228
  },
  "hero_walk#3": {
   "page": "hero_0",
-  "x": 837,
-  "y": 443,
-  "w": 166,
-  "h": 219
- },
- "hero_walk#2": {
-  "page": "hero_0",
-  "x": 845,
-  "y": 662,
-  "w": 156,
-  "h": 231
- },
- "hero_idle#5": {
-  "page": "hero_0",
-  "x": 866,
-  "y": 1126,
-  "w": 156,
+  "x": 1630,
+  "y": 684,
+  "w": 173,
   "h": 228
  },
- "hero_idle#7": {
+ "hero_walk#4": {
   "page": "hero_0",
-  "x": 879,
-  "y": 893,
-  "w": 156,
-  "h": 227
+  "x": 1803,
+  "y": 888,
+  "w": 169,
+  "h": 228
  },
- "hero_walk#8": {
+ "hero_jump_takeoff#1": {
   "page": "hero_0",
-  "x": 1001,
-  "y": 662,
-  "w": 155,
+  "x": 841,
+  "y": 684,
+  "w": 168,
   "h": 228
  },
  "hero_walk#9": {
   "page": "hero_0",
-  "x": 1003,
-  "y": 236,
+  "x": 619,
+  "y": 855,
+  "w": 160,
+  "h": 228
+ },
+ "hero_idle#7": {
+  "page": "hero_0",
+  "x": 402,
+  "y": 893,
   "w": 157,
-  "h": 224
+  "h": 228
+ },
+ "hero_idle#5": {
+  "page": "hero_0",
+  "x": 183,
+  "y": 944,
+  "w": 156,
+  "h": 228
+ },
+ "hero_walk#8": {
+  "page": "hero_0",
+  "x": 0,
+  "y": 984,
+  "w": 155,
+  "h": 228
+ },
+ "hero_walk#2": {
+  "page": "hero_0",
+  "x": 1009,
+  "y": 684,
+  "w": 154,
+  "h": 228
+ },
+ "hero_jump_rise#3": {
+  "page": "hero_0",
+  "x": 1163,
+  "y": 698,
+  "w": 153,
+  "h": 228
+ },
+ "hero_jump_rise#2": {
+  "page": "hero_0",
+  "x": 1316,
+  "y": 698,
+  "w": 152,
+  "h": 228
  },
  "hero_idle#3": {
   "page": "hero_0",
-  "x": 868,
-  "y": 1354,
-  "w": 150,
-  "h": 226
+  "x": 1468,
+  "y": 698,
+  "w": 151,
+  "h": 228
  },
  "hero_walk#5": {
   "page": "hero_0",
-  "x": 1018,
-  "y": 1354,
-  "w": 148,
-  "h": 227
+  "x": 1619,
+  "y": 912,
+  "w": 149,
+  "h": 228
  },
  "hero_idle#2": {
   "page": "hero_0",
-  "x": 1022,
-  "y": 1120,
-  "w": 146,
-  "h": 229
- },
- "hero_death#3": {
-  "page": "hero_0",
-  "x": 1003,
-  "y": 460,
-  "w": 168,
-  "h": 199
- },
- "hero_walk#1": {
-  "page": "hero_0",
-  "x": 1156,
-  "y": 659,
-  "w": 139,
-  "h": 235
+  "x": 1768,
+  "y": 1116,
+  "w": 145,
+  "h": 228
  },
  "hero_idle#1": {
   "page": "hero_0",
-  "x": 1171,
-  "y": 236,
+  "x": 779,
+  "y": 912,
   "w": 143,
+  "h": 228
+ },
+ "hero_death#2": {
+  "page": "hero_0",
+  "x": 559,
+  "y": 1083,
+  "w": 167,
+  "h": 195
+ },
+ "hero_jump_takeoff#0": {
+  "page": "hero_0",
+  "x": 339,
+  "y": 1121,
+  "w": 182,
+  "h": 175
+ },
+ "hero_land#1": {
+  "page": "hero_0",
+  "x": 155,
+  "y": 1172,
+  "w": 139,
+  "h": 228
+ },
+ "hero_death#4": {
+  "page": "hero_0",
+  "x": 922,
+  "y": 912,
+  "w": 184,
+  "h": 172
+ },
+ "hero_idle#0": {
+  "page": "hero_0",
+  "x": 0,
+  "y": 1212,
+  "w": 138,
   "h": 228
  },
  "hero_jump_rise#1": {
   "page": "hero_0",
-  "x": 1263,
-  "y": 0,
+  "x": 1106,
+  "y": 926,
   "w": 137,
   "h": 228
- },
- "hero_idle#0": {
-  "page": "hero_0",
-  "x": 1080,
-  "y": 1581,
-  "w": 137,
-  "h": 227
- },
- "hero_knockdown#0": {
-  "page": "hero_0",
-  "x": 1080,
-  "y": 1808,
-  "w": 133,
-  "h": 233
- },
- "hero_get_up#5": {
-  "page": "hero_0",
-  "x": 1213,
-  "y": 1808,
-  "w": 133,
-  "h": 233
- },
- "hero_jump_rise#2": {
-  "page": "hero_0",
-  "x": 1035,
-  "y": 894,
-  "w": 143,
-  "h": 215
- },
- "hero_land#0": {
-  "page": "hero_0",
-  "x": 1168,
-  "y": 1109,
-  "w": 125,
-  "h": 243
- },
- "hero_land#3": {
-  "page": "hero_0",
-  "x": 1217,
-  "y": 1352,
-  "w": 115,
-  "h": 264
- },
- "hero_knockdown#1": {
-  "page": "hero_0",
-  "x": 1293,
-  "y": 894,
-  "w": 136,
-  "h": 223
- },
- "hero_get_up#4": {
-  "page": "hero_0",
-  "x": 1293,
-  "y": 1117,
-  "w": 136,
-  "h": 223
- },
- "hero_death#1": {
-  "page": "hero_0",
-  "x": 1295,
-  "y": 464,
-  "w": 136,
-  "h": 223
- },
- "hero_jump_rise#3": {
-  "page": "hero_0",
-  "x": 693,
-  "y": 0,
-  "w": 142,
-  "h": 212
- },
- "hero_fall#3": {
-  "page": "hero_0",
-  "x": 1400,
-  "y": 0,
-  "w": 121,
-  "h": 245
- },
- "hero_walk#0": {
-  "page": "hero_0",
-  "x": 1332,
-  "y": 1340,
-  "w": 126,
-  "h": 233
- },
- "hero_jump_takeoff#0": {
-  "page": "hero_0",
-  "x": 484,
-  "y": 1567,
-  "w": 174,
-  "h": 168
- },
- "hero_hurt_recoil#1": {
-  "page": "hero_0",
-  "x": 1332,
-  "y": 1573,
-  "w": 126,
-  "h": 232
- },
- "hero_knockback#0": {
-  "page": "hero_0",
-  "x": 1346,
-  "y": 1805,
-  "w": 127,
-  "h": 228
- },
- "hero_hurt_recoil#3": {
-  "page": "hero_0",
-  "x": 1521,
-  "y": 0,
-  "w": 129,
-  "h": 224
  },
  "hero_death#0": {
   "page": "hero_0",
-  "x": 1650,
+  "x": 1919,
   "y": 0,
-  "w": 123,
-  "h": 233
+  "w": 128,
+  "h": 242
  },
- "hero_hurt_recoil#0": {
+ "hero_walk#1": {
   "page": "hero_0",
-  "x": 1521,
-  "y": 224,
-  "w": 116,
-  "h": 247
+  "x": 1913,
+  "y": 1116,
+  "w": 135,
+  "h": 228
  },
- "hero_knockback#1": {
+ "hero_death#1": {
   "page": "hero_0",
-  "x": 1773,
-  "y": 0,
-  "w": 127,
-  "h": 224
+  "x": 922,
+  "y": 1084,
+  "w": 136,
+  "h": 223
  },
- "hero_hurt_recoil#2": {
+ "hero_hurt_recoil#3": {
   "page": "hero_0",
-  "x": 868,
-  "y": 1581,
-  "w": 133,
-  "h": 209
+  "x": 726,
+  "y": 1140,
+  "w": 131,
+  "h": 228
  },
- "hero_land#1": {
+ "hero_fall#3": {
   "page": "hero_0",
-  "x": 1314,
-  "y": 245,
-  "w": 130,
-  "h": 213
+  "x": 521,
+  "y": 1278,
+  "w": 121,
+  "h": 245
  },
  "hero_fall#2": {
   "page": "hero_0",
-  "x": 1900,
-  "y": 0,
-  "w": 122,
-  "h": 226
+  "x": 294,
+  "y": 1296,
+  "w": 126,
+  "h": 234
+ },
+ "hero_knockback#1": {
+  "page": "hero_0",
+  "x": 138,
+  "y": 1400,
+  "w": 129,
+  "h": 228
+ },
+ "hero_death#3": {
+  "page": "hero_0",
+  "x": 1243,
+  "y": 926,
+  "w": 157,
+  "h": 185
+ },
+ "hero_hurt_recoil#2": {
+  "page": "hero_0",
+  "x": 0,
+  "y": 1440,
+  "w": 136,
+  "h": 213
+ },
+ "hero_knockback#0": {
+  "page": "hero_0",
+  "x": 1400,
+  "y": 926,
+  "w": 127,
+  "h": 228
+ },
+ "hero_hurt_recoil#1": {
+  "page": "hero_0",
+  "x": 1243,
+  "y": 1111,
+  "w": 124,
+  "h": 228
+ },
+ "hero_walk#0": {
+  "page": "hero_0",
+  "x": 1058,
+  "y": 1154,
+  "w": 123,
+  "h": 228
  },
  "hero_fall#1": {
   "page": "hero_0",
-  "x": 1773,
-  "y": 224,
-  "w": 122,
-  "h": 219
- },
- "hero_knockback#3": {
-  "page": "hero_0",
-  "x": 1637,
-  "y": 233,
-  "w": 121,
-  "h": 208
+  "x": 857,
+  "y": 1307,
+  "w": 124,
+  "h": 222
  },
  "hero_jump_rise#0": {
   "page": "hero_0",
-  "x": 861,
-  "y": 236,
-  "w": 140,
-  "h": 178
+  "x": 642,
+  "y": 1368,
+  "w": 146,
+  "h": 185
+ },
+ "hero_death#9": {
+  "page": "hero_0",
+  "x": 267,
+  "y": 1530,
+  "w": 281,
+  "h": 96
+ },
+ "hero_land#0": {
+  "page": "hero_0",
+  "x": 1527,
+  "y": 1140,
+  "w": 117,
+  "h": 228
+ },
+ "hero_knockdown#1": {
+  "page": "hero_0",
+  "x": 1915,
+  "y": 242,
+  "w": 125,
+  "h": 212
+ },
+ "hero_get_up#4": {
+  "page": "hero_0",
+  "x": 1367,
+  "y": 1154,
+  "w": 125,
+  "h": 212
  },
  "hero_land#2": {
   "page": "hero_0",
-  "x": 1895,
-  "y": 226,
-  "w": 143,
-  "h": 173
+  "x": 1181,
+  "y": 1339,
+  "w": 147,
+  "h": 178
  },
- "hero_knockback#2": {
+ "hero_knockback#3": {
   "page": "hero_0",
-  "x": 1171,
-  "y": 464,
-  "w": 124,
-  "h": 189
- },
- "hero_fall#0": {
-  "page": "hero_0",
-  "x": 1178,
-  "y": 894,
-  "w": 110,
+  "x": 1644,
+  "y": 1140,
+  "w": 121,
   "h": 208
- },
- "hero_attack_crouch#3": {
-  "page": "hero_0",
-  "x": 1295,
-  "y": 687,
-  "w": 158,
-  "h": 141
- },
- "hero_attack_crouch#2": {
-  "page": "hero_0",
-  "x": 1431,
-  "y": 471,
-  "w": 157,
-  "h": 139
- },
- "hero_stop_move#2": {
-  "page": "hero_0",
-  "x": 1637,
-  "y": 441,
-  "w": 89,
-  "h": 245
  },
  "hero_knockdown#2": {
   "page": "hero_0",
-  "x": 712,
-  "y": 1126,
-  "w": 138,
-  "h": 157
+  "x": 1328,
+  "y": 1366,
+  "w": 148,
+  "h": 169
  },
  "hero_get_up#3": {
   "page": "hero_0",
-  "x": 1895,
-  "y": 399,
-  "w": 138,
-  "h": 157
+  "x": 981,
+  "y": 1382,
+  "w": 148,
+  "h": 169
+ },
+ "hero_knockdown#0": {
+  "page": "hero_0",
+  "x": 788,
+  "y": 1529,
+  "w": 119,
+  "h": 209
+ },
+ "hero_get_up#5": {
+  "page": "hero_0",
+  "x": 1129,
+  "y": 1517,
+  "w": 119,
+  "h": 209
+ },
+ "hero_knockback#2": {
+  "page": "hero_0",
+  "x": 907,
+  "y": 1551,
+  "w": 127,
+  "h": 194
+ },
+ "hero_hurt_recoil#0": {
+  "page": "hero_0",
+  "x": 0,
+  "y": 1745,
+  "w": 107,
+  "h": 228
+ },
+ "hero_attack_crouch#3": {
+  "page": "hero_0",
+  "x": 548,
+  "y": 1553,
+  "w": 165,
+  "h": 147
+ },
+ "hero_attack_crouch#2": {
+  "page": "hero_0",
+  "x": 267,
+  "y": 1626,
+  "w": 163,
+  "h": 145
+ },
+ "hero_knockdown#4": {
+  "page": "hero_0",
+  "x": 107,
+  "y": 1653,
+  "w": 143,
+  "h": 161
+ },
+ "hero_get_up#1": {
+  "page": "hero_0",
+  "x": 107,
+  "y": 1814,
+  "w": 143,
+  "h": 161
+ },
+ "hero_land#3": {
+  "page": "hero_0",
+  "x": 420,
+  "y": 1296,
+  "w": 100,
+  "h": 228
+ },
+ "hero_knockdown#3": {
+  "page": "hero_0",
+  "x": 250,
+  "y": 1771,
+  "w": 152,
+  "h": 149
+ },
+ "hero_get_up#2": {
+  "page": "hero_0",
+  "x": 402,
+  "y": 1771,
+  "w": 152,
+  "h": 149
+ },
+ "hero_fall#0": {
+  "page": "hero_0",
+  "x": 554,
+  "y": 1745,
+  "w": 107,
+  "h": 202
  },
  "hero_turn#2": {
   "page": "hero_0",
-  "x": 1473,
-  "y": 610,
+  "x": 1034,
+  "y": 1551,
   "w": 92,
   "h": 228
  },
- "hero_start_move#0": {
-  "page": "hero_0",
-  "x": 1726,
-  "y": 443,
-  "w": 84,
-  "h": 243
- },
  "hero_attack_crouch#5": {
   "page": "hero_0",
-  "x": 1810,
-  "y": 556,
+  "x": 661,
+  "y": 1738,
   "w": 140,
   "h": 144
  },
  "hero_turn#0": {
   "page": "hero_0",
-  "x": 1950,
-  "y": 556,
+  "x": 801,
+  "y": 1738,
   "w": 88,
-  "h": 229
+  "h": 228
  },
  "hero_attack_crouch#4": {
   "page": "hero_0",
-  "x": 1565,
-  "y": 686,
-  "w": 139,
-  "h": 144
+  "x": 661,
+  "y": 1882,
+  "w": 138,
+  "h": 143
  },
  "hero_attack_crouch#6": {
   "page": "hero_0",
-  "x": 1704,
-  "y": 700,
-  "w": 139,
-  "h": 144
+  "x": 889,
+  "y": 1745,
+  "w": 138,
+  "h": 143
  },
  "hero_attack_crouch#7": {
   "page": "hero_0",
-  "x": 1565,
-  "y": 830,
-  "w": 136,
-  "h": 147
- },
- "hero_death#9": {
-  "page": "hero_0",
-  "x": 0,
-  "y": 1965,
-  "w": 239,
-  "h": 82
- },
- "hero_attack_ground#6": {
-  "page": "hero_0",
-  "x": 1473,
-  "y": 838,
-  "w": 76,
-  "h": 254
- },
- "hero_attack_ground#7": {
-  "page": "hero_0",
-  "x": 1843,
-  "y": 700,
-  "w": 76,
-  "h": 254
- },
- "hero_knockdown#3": {
-  "page": "hero_0",
-  "x": 1701,
-  "y": 844,
-  "w": 137,
-  "h": 134
- },
- "hero_get_up#2": {
-  "page": "hero_0",
-  "x": 1549,
-  "y": 977,
-  "w": 137,
-  "h": 134
+  "x": 889,
+  "y": 1888,
+  "w": 135,
+  "h": 146
  },
  "hero_attack_crouch#0": {
   "page": "hero_0",
-  "x": 1919,
-  "y": 785,
-  "w": 127,
-  "h": 144
+  "x": 1024,
+  "y": 1888,
+  "w": 130,
+  "h": 148
  },
  "hero_attack_crouch#1": {
   "page": "hero_0",
-  "x": 1919,
-  "y": 929,
-  "w": 127,
-  "h": 144
+  "x": 1126,
+  "y": 1726,
+  "w": 130,
+  "h": 148
+ },
+ "hero_stop_move#2": {
+  "page": "hero_0",
+  "x": 1765,
+  "y": 1344,
+  "w": 83,
+  "h": 228
+ },
+ "hero_start_move#0": {
+  "page": "hero_0",
+  "x": 1644,
+  "y": 1348,
+  "w": 79,
+  "h": 228
  },
  "hero_crouch_idle#0": {
   "page": "hero_0",
-  "x": 1429,
-  "y": 1092,
-  "w": 119,
-  "h": 149
+  "x": 1248,
+  "y": 1576,
+  "w": 120,
+  "h": 150
  },
  "hero_crouch_idle#3": {
   "page": "hero_0",
-  "x": 1686,
-  "y": 978,
+  "x": 1154,
+  "y": 1874,
   "w": 123,
   "h": 144
  },
  "hero_crouch_idle#4": {
   "page": "hero_0",
-  "x": 1548,
-  "y": 1111,
+  "x": 1256,
+  "y": 1726,
   "w": 123,
   "h": 144
  },
  "hero_crouch_idle#5": {
   "page": "hero_0",
-  "x": 1809,
-  "y": 1073,
+  "x": 1368,
+  "y": 1576,
   "w": 123,
   "h": 144
  },
  "hero_crouch_idle#1": {
   "page": "hero_0",
-  "x": 1671,
-  "y": 1122,
+  "x": 1491,
+  "y": 1368,
   "w": 123,
   "h": 143
  },
  "hero_knockdown#5": {
   "page": "hero_0",
-  "x": 1473,
-  "y": 1255,
+  "x": 250,
+  "y": 1920,
   "w": 138,
   "h": 127
  },
  "hero_get_up#0": {
   "page": "hero_0",
-  "x": 1794,
-  "y": 1217,
+  "x": 388,
+  "y": 1920,
   "w": 138,
   "h": 127
  },
- "hero_knockdown#4": {
-  "page": "hero_0",
-  "x": 1611,
-  "y": 1265,
-  "w": 125,
-  "h": 140
- },
- "hero_get_up#1": {
-  "page": "hero_0",
-  "x": 1473,
-  "y": 1382,
-  "w": 125,
-  "h": 140
- },
  "hero_crouch_idle#2": {
   "page": "hero_0",
-  "x": 1458,
-  "y": 1522,
+  "x": 1491,
+  "y": 1511,
   "w": 124,
   "h": 139
  },
+ "hero_attack_ground#6": {
+  "page": "hero_0",
+  "x": 1972,
+  "y": 888,
+  "w": 69,
+  "h": 228
+ },
+ "hero_attack_ground#7": {
+  "page": "hero_0",
+  "x": 1379,
+  "y": 1720,
+  "w": 69,
+  "h": 228
+ },
  "hero_crouch_enter#1": {
   "page": "hero_0",
-  "x": 1217,
-  "y": 1616,
-  "w": 87,
-  "h": 188
+  "x": 1527,
+  "y": 926,
+  "w": 85,
+  "h": 184
  },
  "hero_crouch_exit#2": {
   "page": "hero_0",
-  "x": 1932,
-  "y": 1073,
-  "w": 87,
-  "h": 188
+  "x": 1848,
+  "y": 1344,
+  "w": 85,
+  "h": 184
+ },
+ "hero_crouch_enter#0": {
+  "page": "hero_0",
+  "x": 1933,
+  "y": 1344,
+  "w": 70,
+  "h": 215
+ },
+ "hero_crouch_exit#3": {
+  "page": "hero_0",
+  "x": 1848,
+  "y": 1528,
+  "w": 70,
+  "h": 215
  },
  "hero_crouch_enter#2": {
   "page": "hero_0",
-  "x": 1932,
-  "y": 1261,
+  "x": 1277,
+  "y": 1870,
   "w": 98,
   "h": 150
  },
  "hero_crouch_exit#1": {
   "page": "hero_0",
-  "x": 1736,
-  "y": 1344,
+  "x": 1723,
+  "y": 1572,
   "w": 98,
   "h": 150
  },
  "hero_crouch_enter#3": {
   "page": "hero_0",
-  "x": 1458,
-  "y": 1661,
-  "w": 99,
-  "h": 144
+  "x": 1615,
+  "y": 1576,
+  "w": 100,
+  "h": 146
  },
  "hero_crouch_exit#0": {
   "page": "hero_0",
-  "x": 1598,
-  "y": 1405,
-  "w": 99,
-  "h": 144
- },
- "hero_crouch_enter#0": {
-  "page": "hero_0",
-  "x": 1444,
-  "y": 245,
-  "w": 63,
-  "h": 194
- },
- "hero_crouch_exit#3": {
-  "page": "hero_0",
-  "x": 1001,
-  "y": 1581,
-  "w": 63,
-  "h": 194
- },
- "boss_strike_execute#1": {
-  "page": "boss_0",
-  "x": 0,
-  "y": 0,
-  "w": 359,
-  "h": 412
+  "x": 1491,
+  "y": 1650,
+  "w": 100,
+  "h": 146
  },
  "boss_hazard_recover#0": {
   "page": "boss_0",
   "x": 0,
-  "y": 412,
-  "w": 373,
-  "h": 373
+  "y": 0,
+  "w": 385,
+  "h": 385
  },
  "boss_hazard_recover#1": {
   "page": "boss_0",
-  "x": 359,
+  "x": 385,
   "y": 0,
-  "w": 373,
-  "h": 373
+  "w": 385,
+  "h": 384
+ },
+ "boss_strike_execute#1": {
+  "page": "boss_0",
+  "x": 770,
+  "y": 0,
+  "w": 355,
+  "h": 408
+ },
+ "boss_strike_recover#2": {
+  "page": "boss_0",
+  "x": 385,
+  "y": 384,
+  "w": 359,
+  "h": 390
  },
  "boss_hazard_recover#2": {
   "page": "boss_0",
   "x": 0,
-  "y": 785,
-  "w": 373,
-  "h": 373
+  "y": 385,
+  "w": 371,
+  "h": 371
  },
  "boss_strike_recover#3": {
   "page": "boss_0",
   "x": 0,
-  "y": 1158,
-  "w": 366,
-  "h": 378
- },
- "boss_strike_recover#4": {
-  "page": "boss_0",
-  "x": 0,
-  "y": 1536,
-  "w": 365,
-  "h": 378
- },
- "boss_strike_recover#5": {
-  "page": "boss_0",
-  "x": 365,
-  "y": 1536,
-  "w": 365,
-  "h": 378
+  "y": 756,
+  "w": 359,
+  "h": 369
  },
  "boss_strike_recover#1": {
   "page": "boss_0",
-  "x": 366,
-  "y": 1158,
-  "w": 364,
-  "h": 378
- },
- "boss_strike_recover#0": {
-  "page": "boss_0",
-  "x": 373,
-  "y": 373,
-  "w": 362,
-  "h": 378
- },
- "boss_strike_recover#2": {
-  "page": "boss_0",
-  "x": 373,
-  "y": 751,
-  "w": 355,
-  "h": 378
+  "x": 0,
+  "y": 1125,
+  "w": 356,
+  "h": 367
  },
  "boss_turn#3": {
   "page": "boss_0",
-  "x": 732,
-  "y": 0,
-  "w": 357,
-  "h": 358
- },
- "boss_hazard_windup#7": {
-  "page": "boss_0",
-  "x": 728,
-  "y": 751,
-  "w": 352,
-  "h": 363
+  "x": 0,
+  "y": 1492,
+  "w": 356,
+  "h": 356
  },
  "boss_hurt#0": {
   "page": "boss_0",
-  "x": 735,
-  "y": 358,
+  "x": 356,
+  "y": 1125,
   "w": 355,
-  "h": 356
- },
- "boss_hazard_windup#6": {
-  "page": "boss_0",
-  "x": 730,
-  "y": 1114,
-  "w": 340,
-  "h": 363
- },
- "boss_walk#3": {
-  "page": "boss_0",
-  "x": 1089,
-  "y": 0,
-  "w": 346,
   "h": 356
  },
  "boss_walk#6": {
   "page": "boss_0",
-  "x": 730,
-  "y": 1477,
-  "w": 350,
-  "h": 350
+  "x": 356,
+  "y": 1481,
+  "w": 354,
+  "h": 357
  },
  "boss_turn#0": {
   "page": "boss_0",
-  "x": 1070,
-  "y": 1114,
-  "w": 348,
-  "h": 351
- },
- "boss_strike_windup#6": {
-  "page": "boss_0",
-  "x": 1080,
-  "y": 714,
-  "w": 330,
-  "h": 365
- },
- "boss_turn#1": {
-  "page": "boss_0",
-  "x": 1080,
-  "y": 1465,
-  "w": 334,
-  "h": 360
- },
- "boss_hazard_execute#2": {
-  "page": "boss_0",
-  "x": 1090,
-  "y": 356,
-  "w": 356,
-  "h": 336
- },
- "boss_hazard_windup#5": {
-  "page": "boss_0",
-  "x": 1435,
-  "y": 0,
-  "w": 330,
+  "x": 710,
+  "y": 1481,
+  "w": 353,
   "h": 356
  },
- "boss_hazard_windup#4": {
+ "boss_idle#3": {
   "page": "boss_0",
-  "x": 1410,
-  "y": 692,
-  "w": 324,
-  "h": 359
- },
- "boss_walk#5": {
-  "page": "boss_0",
-  "x": 1414,
-  "y": 1465,
-  "w": 323,
+  "x": 711,
+  "y": 774,
+  "w": 352,
   "h": 356
  },
  "boss_idle#6": {
   "page": "boss_0",
-  "x": 1418,
-  "y": 1051,
-  "w": 337,
-  "h": 340
+  "x": 744,
+  "y": 408,
+  "w": 352,
+  "h": 356
+ },
+ "boss_strike_recover#4": {
+  "page": "boss_0",
+  "x": 1125,
+  "y": 0,
+  "w": 350,
+  "h": 356
+ },
+ "boss_strike_recover#0": {
+  "page": "boss_0",
+  "x": 1475,
+  "y": 0,
+  "w": 345,
+  "h": 358
+ },
+ "boss_walk#3": {
+  "page": "boss_0",
+  "x": 1125,
+  "y": 356,
+  "w": 346,
+  "h": 356
+ },
+ "boss_strike_recover#5": {
+  "page": "boss_0",
+  "x": 1471,
+  "y": 358,
+  "w": 346,
+  "h": 356
+ },
+ "boss_hazard_windup#7": {
+  "page": "boss_0",
+  "x": 1096,
+  "y": 712,
+  "w": 346,
+  "h": 356
+ },
+ "boss_walk#7": {
+  "page": "boss_0",
+  "x": 1442,
+  "y": 714,
+  "w": 344,
+  "h": 356
  },
  "boss_strike_execute#2": {
   "page": "boss_0",
-  "x": 1446,
-  "y": 356,
+  "x": 711,
+  "y": 1130,
   "w": 380,
-  "h": 300
+  "h": 318
+ },
+ "boss_hazard_windup#6": {
+  "page": "boss_0",
+  "x": 1091,
+  "y": 1068,
+  "w": 333,
+  "h": 356
+ },
+ "boss_turn#1": {
+  "page": "boss_0",
+  "x": 1063,
+  "y": 1448,
+  "w": 331,
+  "h": 356
+ },
+ "boss_hazard_windup#5": {
+  "page": "boss_0",
+  "x": 1394,
+  "y": 1424,
+  "w": 330,
+  "h": 356
+ },
+ "boss_walk#5": {
+  "page": "boss_0",
+  "x": 1724,
+  "y": 1070,
+  "w": 323,
+  "h": 356
+ },
+ "boss_walk#4": {
+  "page": "boss_0",
+  "x": 1724,
+  "y": 1426,
+  "w": 323,
+  "h": 355
+ },
+ "boss_strike_windup#6": {
+  "page": "boss_1",
+  "x": 0,
+  "y": 0,
+  "w": 322,
+  "h": 356
+ },
+ "boss_hazard_windup#4": {
+  "page": "boss_1",
+  "x": 0,
+  "y": 356,
+  "w": 318,
+  "h": 356
  },
  "boss_hazard_windup#3": {
   "page": "boss_1",
   "x": 0,
-  "y": 0,
+  "y": 712,
   "w": 317,
   "h": 356
  },
- "boss_walk#7": {
+ "boss_hurt#1": {
   "page": "boss_1",
   "x": 0,
-  "y": 356,
-  "w": 328,
-  "h": 339
+  "y": 1068,
+  "w": 317,
+  "h": 356
  },
- "boss_strike_windup#5": {
-  "page": "boss_0",
-  "x": 1737,
-  "y": 1391,
-  "w": 308,
-  "h": 358
+ "boss_strike_execute#3": {
+  "page": "boss_1",
+  "x": 0,
+  "y": 1424,
+  "w": 374,
+  "h": 297
  },
- "boss_idle#3": {
+ "boss_strike_windup#3": {
   "page": "boss_1",
   "x": 317,
-  "y": 0,
-  "w": 329,
-  "h": 334
+  "y": 712,
+  "w": 312,
+  "h": 356
  },
  "boss_idle#2": {
-  "page": "boss_0",
-  "x": 1734,
-  "y": 656,
+  "page": "boss_1",
+  "x": 322,
+  "y": 0,
   "w": 306,
   "h": 358
  },
  "boss_hazard_execute#1": {
-  "page": "boss_1",
-  "x": 0,
-  "y": 695,
+  "page": "boss_0",
+  "x": 359,
+  "y": 774,
   "w": 347,
   "h": 315
  },
- "boss_strike_windup#3": {
+ "boss_strike_windup#5": {
   "page": "boss_1",
-  "x": 328,
-  "y": 334,
-  "w": 309,
-  "h": 351
+  "x": 317,
+  "y": 1068,
+  "w": 306,
+  "h": 356
  },
  "boss_walk#2": {
   "page": "boss_1",
-  "x": 0,
-  "y": 1010,
+  "x": 374,
+  "y": 1424,
   "w": 303,
   "h": 356
  },
  "boss_strike_execute#0": {
   "page": "boss_1",
-  "x": 0,
-  "y": 1366,
+  "x": 628,
+  "y": 0,
   "w": 248,
   "h": 428
  },
- "boss_walk#4": {
+ "boss_idle#5": {
   "page": "boss_1",
-  "x": 248,
-  "y": 1366,
-  "w": 309,
-  "h": 341
- },
- "boss_hurt#1": {
-  "page": "boss_1",
-  "x": 303,
-  "y": 1010,
-  "w": 305,
-  "h": 343
- },
- "boss_strike_execute#3": {
-  "page": "boss_1",
-  "x": 347,
-  "y": 685,
-  "w": 372,
-  "h": 281
+  "x": 623,
+  "y": 1068,
+  "w": 298,
+  "h": 356
  },
  "boss_turn#2": {
   "page": "boss_1",
-  "x": 646,
-  "y": 0,
-  "w": 294,
-  "h": 354
- },
- "boss_idle#5": {
-  "page": "boss_1",
-  "x": 557,
-  "y": 1353,
-  "w": 295,
-  "h": 352
+  "x": 677,
+  "y": 1424,
+  "w": 296,
+  "h": 356
  },
  "boss_hazard_windup#2": {
-  "page": "boss_0",
-  "x": 1755,
-  "y": 1014,
+  "page": "boss_1",
+  "x": 629,
+  "y": 428,
   "w": 291,
   "h": 355
  },
+ "boss_hazard_execute#2": {
+  "page": "boss_1",
+  "x": 0,
+  "y": 1721,
+  "w": 329,
+  "h": 309
+ },
  "boss_idle#1": {
-  "page": "boss_0",
-  "x": 1765,
+  "page": "boss_1",
+  "x": 876,
   "y": 0,
   "w": 279,
   "h": 356
  },
- "boss_walk#1": {
-  "page": "boss_1",
-  "x": 608,
-  "y": 966,
-  "w": 270,
-  "h": 367
- },
  "boss_strike_windup#2": {
   "page": "boss_1",
-  "x": 719,
-  "y": 354,
+  "x": 920,
+  "y": 356,
   "w": 272,
   "h": 355
  },
  "boss_strike_windup#4": {
   "page": "boss_1",
-  "x": 852,
-  "y": 1333,
+  "x": 1155,
+  "y": 0,
   "w": 267,
+  "h": 356
+ },
+ "boss_walk#1": {
+  "page": "boss_0",
+  "x": 1786,
+  "y": 714,
+  "w": 262,
+  "h": 356
+ },
+ "boss_hazard_recover#5": {
+  "page": "boss_1",
+  "x": 920,
+  "y": 711,
+  "w": 249,
+  "h": 356
+ },
+ "boss_strike_windup#1": {
+  "page": "boss_1",
+  "x": 921,
+  "y": 1067,
+  "w": 241,
   "h": 356
  },
  "boss_hazard_recover#4": {
   "page": "boss_1",
-  "x": 878,
-  "y": 709,
-  "w": 246,
-  "h": 366
- },
- "boss_hazard_recover#5": {
-  "page": "boss_1",
-  "x": 940,
-  "y": 0,
-  "w": 246,
-  "h": 353
- },
- "boss_hazard_recover#3": {
-  "page": "boss_1",
-  "x": 1119,
-  "y": 1075,
-  "w": 237,
-  "h": 364
- },
- "boss_walk#0": {
-  "page": "boss_1",
-  "x": 1119,
-  "y": 1439,
-  "w": 231,
-  "h": 373
- },
- "boss_strike_windup#1": {
-  "page": "boss_1",
-  "x": 991,
-  "y": 353,
-  "w": 237,
-  "h": 349
- },
- "boss_hazard_execute#0": {
-  "page": "boss_1",
-  "x": 1350,
-  "y": 1439,
-  "w": 219,
-  "h": 377
- },
- "boss_hurt#2": {
-  "page": "boss_1",
-  "x": 852,
-  "y": 1689,
-  "w": 229,
+  "x": 973,
+  "y": 1423,
+  "w": 239,
   "h": 357
- },
- "boss_hazard_windup#1": {
-  "page": "boss_1",
-  "x": 1186,
-  "y": 0,
-  "w": 228,
-  "h": 351
- },
- "boss_death#1": {
-  "page": "boss_1",
-  "x": 557,
-  "y": 1705,
-  "w": 232,
-  "h": 343
- },
- "boss_death#2": {
-  "page": "boss_1",
-  "x": 248,
-  "y": 1707,
-  "w": 246,
-  "h": 320
  },
  "boss_death#4": {
   "page": "boss_0",
-  "x": 1737,
-  "y": 1749,
-  "w": 291,
-  "h": 270
+  "x": 1424,
+  "y": 1070,
+  "w": 300,
+  "h": 280
+ },
+ "boss_hazard_windup#1": {
+  "page": "boss_0",
+  "x": 1817,
+  "y": 358,
+  "w": 231,
+  "h": 356
+ },
+ "boss_hazard_recover#3": {
+  "page": "boss_1",
+  "x": 1162,
+  "y": 1067,
+  "w": 231,
+  "h": 356
+ },
+ "boss_death#5": {
+  "page": "boss_0",
+  "x": 1394,
+  "y": 1780,
+  "w": 323,
+  "h": 254
+ },
+ "boss_hurt#2": {
+  "page": "boss_1",
+  "x": 1212,
+  "y": 1423,
+  "w": 229,
+  "h": 357
  },
  "boss_death#6": {
   "page": "boss_1",
-  "x": 1124,
-  "y": 702,
-  "w": 329,
-  "h": 233
+  "x": 329,
+  "y": 1780,
+  "w": 336,
+  "h": 238
  },
- "boss_death#7": {
-  "page": "boss_0",
-  "x": 730,
-  "y": 1827,
-  "w": 354,
-  "h": 215
+ "boss_walk#0": {
+  "page": "boss_1",
+  "x": 1169,
+  "y": 711,
+  "w": 220,
+  "h": 356
  },
- "boss_death#8": {
-  "page": "boss_0",
-  "x": 1084,
-  "y": 1825,
-  "w": 363,
-  "h": 209
+ "boss_death#1": {
+  "page": "boss_1",
+  "x": 318,
+  "y": 358,
+  "w": 230,
+  "h": 340
  },
  "boss_death#3": {
   "page": "boss_1",
-  "x": 1228,
-  "y": 351,
+  "x": 1192,
+  "y": 356,
   "w": 264,
-  "h": 284
+  "h": 288
  },
- "boss_death#5": {
+ "boss_death#2": {
   "page": "boss_1",
-  "x": 1414,
+  "x": 1422,
   "y": 0,
-  "w": 305,
-  "h": 240
+  "w": 238,
+  "h": 313
+ },
+ "boss_hazard_execute#0": {
+  "page": "boss_0",
+  "x": 1820,
+  "y": 0,
+  "w": 207,
+  "h": 356
  },
  "boss_death#0": {
   "page": "boss_1",
-  "x": 1719,
-  "y": 0,
+  "x": 1389,
+  "y": 644,
   "w": 194,
   "h": 369
  },
- "boss_death#10": {
-  "page": "boss_1",
-  "x": 1081,
-  "y": 1816,
-  "w": 363,
-  "h": 184
+ "boss_death#7": {
+  "page": "boss_0",
+  "x": 356,
+  "y": 1838,
+  "w": 343,
+  "h": 207
  },
- "boss_idle#4": {
+ "boss_death#8": {
+  "page": "boss_0",
+  "x": 0,
+  "y": 1848,
+  "w": 345,
+  "h": 197
+ },
+ "boss_death#11": {
   "page": "boss_1",
-  "x": 1492,
-  "y": 240,
-  "w": 175,
-  "h": 363
+  "x": 1660,
+  "y": 0,
+  "w": 388,
+  "h": 167
  },
  "boss_death#9": {
   "page": "boss_1",
-  "x": 1667,
-  "y": 369,
+  "x": 1660,
+  "y": 167,
   "w": 363,
   "h": 175
  },
+ "boss_death#10": {
+  "page": "boss_0",
+  "x": 699,
+  "y": 1838,
+  "w": 354,
+  "h": 173
+ },
+ "boss_idle#4": {
+  "page": "boss_1",
+  "x": 1393,
+  "y": 1013,
+  "w": 172,
+  "h": 356
+ },
+ "boss_hazard_windup#0": {
+  "page": "boss_1",
+  "x": 1583,
+  "y": 342,
+  "w": 164,
+  "h": 356
+ },
  "boss_idle#7": {
   "page": "boss_1",
-  "x": 1356,
-  "y": 935,
+  "x": 1747,
+  "y": 342,
   "w": 162,
   "h": 358
  },
  "boss_idle#0": {
   "page": "boss_1",
-  "x": 1667,
-  "y": 544,
+  "x": 1583,
+  "y": 698,
   "w": 161,
   "h": 356
  },
- "boss_hazard_windup#0": {
-  "page": "boss_1",
-  "x": 1828,
-  "y": 544,
-  "w": 162,
-  "h": 353
- },
  "boss_strike_windup#0": {
   "page": "boss_1",
-  "x": 1828,
-  "y": 897,
-  "w": 156,
-  "h": 364
- },
- "boss_death#11": {
-  "page": "boss_1",
-  "x": 1518,
-  "y": 1261,
-  "w": 363,
-  "h": 154
+  "x": 1744,
+  "y": 700,
+  "w": 153,
+  "h": 356
  },
  "boss_hazard_execute#3": {
   "page": "boss_1",
-  "x": 1518,
-  "y": 603,
-  "w": 127,
-  "h": 376
- },
- "ranged_aim#5": {
-  "page": "enemies_0",
-  "x": 0,
-  "y": 0,
-  "w": 256,
-  "h": 290
- },
- "ranged_recover#0": {
-  "page": "enemies_0",
-  "x": 0,
-  "y": 290,
-  "w": 256,
-  "h": 290
+  "x": 1909,
+  "y": 342,
+  "w": 120,
+  "h": 356
  },
  "ranged_recover#1": {
   "page": "enemies_0",
   "x": 0,
-  "y": 580,
+  "y": 0,
   "w": 256,
   "h": 290
  },
  "ranged_recover#2": {
   "page": "enemies_0",
   "x": 0,
-  "y": 870,
+  "y": 290,
   "w": 256,
   "h": 290
  },
  "ranged_recover#3": {
   "page": "enemies_0",
   "x": 0,
-  "y": 1160,
+  "y": 580,
   "w": 256,
   "h": 290
  },
  "ranged_recover#4": {
   "page": "enemies_0",
   "x": 0,
-  "y": 1450,
+  "y": 870,
   "w": 256,
   "h": 290
  },
  "ranged_recover#5": {
   "page": "enemies_0",
   "x": 0,
-  "y": 1740,
+  "y": 1160,
   "w": 256,
   "h": 290
  },
  "ranged_recover#6": {
   "page": "enemies_0",
-  "x": 256,
-  "y": 0,
+  "x": 0,
+  "y": 1450,
   "w": 256,
+  "h": 290
+ },
+ "ranged_aim#5": {
+  "page": "enemies_0",
+  "x": 0,
+  "y": 1740,
+  "w": 250,
+  "h": 283
+ },
+ "ranged_aim#4": {
+  "page": "enemies_0",
+  "x": 250,
+  "y": 1740,
+  "w": 233,
   "h": 290
  },
  "ranged_hurt#0": {
   "page": "enemies_0",
-  "x": 512,
+  "x": 483,
   "y": 0,
-  "w": 256,
-  "h": 290
+  "w": 243,
+  "h": 274
  },
- "ranged_aim#4": {
+ "ranged_recover#0": {
   "page": "enemies_0",
-  "x": 768,
+  "x": 726,
   "y": 0,
-  "w": 235,
-  "h": 290
+  "w": 243,
+  "h": 273
  },
  "ranged_aim#3": {
   "page": "enemies_0",
-  "x": 1003,
+  "x": 256,
   "y": 0,
   "w": 226,
   "h": 290
  },
  "ranged_aim#2": {
   "page": "enemies_0",
-  "x": 1229,
+  "x": 969,
   "y": 0,
   "w": 217,
   "h": 290
  },
- "ranged_fire#0": {
-  "page": "enemies_0",
-  "x": 1446,
-  "y": 0,
-  "w": 215,
-  "h": 290
- },
  "vfx_hazard_eruption#1": {
   "page": "enemies_0",
-  "x": 1661,
-  "y": 0,
+  "x": 483,
+  "y": 274,
   "w": 320,
   "h": 192
  },
  "vfx_hazard_eruption#3": {
   "page": "enemies_0",
-  "x": 1661,
-  "y": 192,
+  "x": 1186,
+  "y": 0,
   "w": 320,
   "h": 192
  },
  "vfx_hazard_eruption#4": {
   "page": "enemies_0",
-  "x": 256,
-  "y": 290,
+  "x": 1506,
+  "y": 0,
   "w": 320,
-  "h": 192
- },
- "vfx_hazard_eruption#2": {
-  "page": "enemies_0",
-  "x": 576,
-  "y": 290,
-  "w": 315,
   "h": 192
  },
  "ranged_aim#1": {
   "page": "enemies_0",
-  "x": 891,
-  "y": 290,
-  "w": 206,
+  "x": 1826,
+  "y": 0,
+  "w": 209,
   "h": 290
+ },
+ "vfx_hazard_eruption#2": {
+  "page": "enemies_0",
+  "x": 1186,
+  "y": 192,
+  "w": 315,
+  "h": 192
  },
  "vfx_enemy_defeat#3": {
   "page": "enemies_0",
-  "x": 1097,
-  "y": 290,
+  "x": 1501,
+  "y": 192,
   "w": 242,
   "h": 240
  },
- "swooper_death_fall#0": {
+ "ranged_fire#0": {
   "page": "enemies_0",
-  "x": 1339,
+  "x": 256,
   "y": 290,
-  "w": 232,
-  "h": 244
+  "w": 205,
+  "h": 276
  },
  "ranged_hurt#1": {
   "page": "enemies_0",
-  "x": 1097,
-  "y": 530,
+  "x": 1743,
+  "y": 290,
   "w": 195,
   "h": 290
  },
  "vfx_enemy_defeat#4": {
   "page": "enemies_0",
-  "x": 1571,
-  "y": 384,
+  "x": 803,
+  "y": 290,
   "w": 243,
   "h": 231
  },
  "vfx_enemy_defeat#5": {
   "page": "enemies_0",
-  "x": 1814,
-  "y": 384,
+  "x": 483,
+  "y": 466,
   "w": 234,
   "h": 235
  },
- "ranged_death#5": {
-  "page": "enemies_0",
-  "x": 1292,
-  "y": 534,
-  "w": 189,
-  "h": 290
- },
  "vfx_damage_indicator#1": {
   "page": "enemies_0",
-  "x": 1481,
-  "y": 615,
+  "x": 256,
+  "y": 566,
   "w": 227,
   "h": 237
  },
  "ranged_hurt#2": {
   "page": "enemies_0",
-  "x": 1708,
-  "y": 619,
-  "w": 180,
+  "x": 1046,
+  "y": 384,
+  "w": 184,
+  "h": 290
+ },
+ "ranged_death#5": {
+  "page": "enemies_0",
+  "x": 1230,
+  "y": 384,
+  "w": 184,
+  "h": 288
+ },
+ "ranged_aim#0": {
+  "page": "enemies_0",
+  "x": 1414,
+  "y": 432,
+  "w": 178,
   "h": 290
  },
  "ranged_death#1": {
   "page": "enemies_0",
-  "x": 256,
-  "y": 482,
+  "x": 1230,
+  "y": 672,
   "w": 176,
-  "h": 290
- },
- "ranged_death#2": {
-  "page": "enemies_0",
-  "x": 432,
-  "y": 482,
-  "w": 175,
   "h": 290
  },
  "ranged_death#4": {
   "page": "enemies_0",
-  "x": 607,
-  "y": 482,
+  "x": 717,
+  "y": 521,
   "w": 175,
   "h": 290
  },
- "ranged_aim#0": {
+ "ranged_death#2": {
   "page": "enemies_0",
-  "x": 782,
-  "y": 580,
-  "w": 173,
+  "x": 483,
+  "y": 701,
+  "w": 174,
   "h": 290
  },
  "vfx_damage_indicator#0": {
   "page": "enemies_0",
-  "x": 955,
-  "y": 820,
+  "x": 256,
+  "y": 803,
   "w": 219,
   "h": 224
  },
  "ranged_death#3": {
   "page": "enemies_0",
-  "x": 1174,
-  "y": 824,
+  "x": 892,
+  "y": 674,
   "w": 169,
   "h": 290
  },
  "vfx_enemy_defeat#2": {
   "page": "enemies_0",
-  "x": 1343,
-  "y": 852,
+  "x": 657,
+  "y": 811,
   "w": 221,
   "h": 221
  },
+ "swooper_dive#3": {
+  "page": "enemies_0",
+  "x": 256,
+  "y": 1027,
+  "w": 244,
+  "h": 192
+ },
  "ranged_idle#3": {
   "page": "enemies_0",
-  "x": 1564,
-  "y": 909,
-  "w": 168,
-  "h": 290
- },
- "ranged_idle#4": {
-  "page": "enemies_0",
-  "x": 1888,
-  "y": 619,
-  "w": 153,
-  "h": 290
+  "x": 1061,
+  "y": 674,
+  "w": 160,
+  "h": 283
  },
  "ranged_death#0": {
   "page": "enemies_0",
-  "x": 1343,
-  "y": 1073,
-  "w": 151,
+  "x": 500,
+  "y": 991,
+  "w": 154,
+  "h": 290
+ },
+ "swooper_death_fall#0": {
+  "page": "enemies_0",
+  "x": 256,
+  "y": 1219,
+  "w": 205,
+  "h": 217
+ },
+ "ranged_idle#4": {
+  "page": "enemies_0",
+  "x": 256,
+  "y": 1436,
+  "w": 153,
   "h": 290
  },
  "vfx_whip_impact#2": {
   "page": "enemies_0",
-  "x": 1732,
-  "y": 909,
+  "x": 409,
+  "y": 1436,
   "w": 208,
   "h": 208
  },
  "ranged_idle#2": {
   "page": "enemies_0",
-  "x": 1732,
-  "y": 1117,
+  "x": 1592,
+  "y": 432,
   "w": 148,
   "h": 290
  },
  "ranged_idle#5": {
   "page": "enemies_0",
-  "x": 1880,
-  "y": 1117,
+  "x": 1061,
+  "y": 957,
   "w": 148,
   "h": 290
  },
  "ranged_idle#1": {
   "page": "enemies_0",
-  "x": 1494,
-  "y": 1199,
+  "x": 878,
+  "y": 964,
   "w": 142,
   "h": 290
  },
- "swooper_dive#3": {
-  "page": "enemies_0",
-  "x": 1636,
-  "y": 1407,
-  "w": 226,
-  "h": 179
- },
  "swooper_dive#2": {
   "page": "enemies_0",
-  "x": 256,
-  "y": 1586,
+  "x": 1740,
+  "y": 580,
   "w": 225,
   "h": 179
  },
  "ranged_idle#0": {
   "page": "enemies_0",
-  "x": 1862,
-  "y": 1407,
-  "w": 136,
+  "x": 654,
+  "y": 1032,
+  "w": 137,
   "h": 290
  },
  "vfx_checkpoint_activate#2": {
   "page": "enemies_0",
-  "x": 256,
-  "y": 1765,
+  "x": 483,
+  "y": 1644,
   "w": 154,
   "h": 256
  },
  "vfx_checkpoint_activate#3": {
   "page": "enemies_0",
-  "x": 256,
-  "y": 1363,
+  "x": 617,
+  "y": 1322,
   "w": 172,
   "h": 221
  },
- "swooper_hurt#0": {
+ "swooper_death_fall#2": {
   "page": "enemies_0",
-  "x": 428,
-  "y": 1363,
-  "w": 192,
-  "h": 188
+  "x": 1406,
+  "y": 722,
+  "w": 193,
+  "h": 192
  },
  "vfx_enemy_defeat#6": {
   "page": "enemies_0",
-  "x": 256,
-  "y": 1114,
+  "x": 1599,
+  "y": 759,
   "w": 186,
   "h": 191
  },
  "ranged_fire#1": {
   "page": "enemies_0",
-  "x": 442,
-  "y": 1044,
+  "x": 1406,
+  "y": 914,
+  "w": 122,
+  "h": 290
+ },
+ "ranged_fire#2": {
+  "page": "enemies_0",
+  "x": 1209,
+  "y": 962,
   "w": 122,
   "h": 290
  },
  "vfx_checkpoint_activate#4": {
   "page": "enemies_0",
-  "x": 256,
-  "y": 772,
+  "x": 1020,
+  "y": 1247,
   "w": 166,
   "h": 213
  },
- "ranged_fire#2": {
+ "swooper_hurt#0": {
   "page": "enemies_0",
-  "x": 564,
-  "y": 1044,
-  "w": 121,
-  "h": 290
- },
- "pursuer_alert#1": {
-  "page": "enemies_0",
-  "x": 422,
-  "y": 870,
-  "w": 215,
-  "h": 162
+  "x": 791,
+  "y": 1254,
+  "w": 188,
+  "h": 184
  },
  "swooper_death_fall#1": {
   "page": "enemies_0",
-  "x": 637,
-  "y": 870,
+  "x": 789,
+  "y": 1438,
   "w": 195,
   "h": 174
  },
- "swooper_cruise#7": {
+ "swooper_cruise#4": {
   "page": "enemies_0",
-  "x": 410,
-  "y": 1765,
-  "w": 187,
-  "h": 178
- },
- "swooper_death_fall#2": {
-  "page": "enemies_0",
-  "x": 481,
-  "y": 1551,
-  "w": 182,
-  "h": 181
+  "x": 1785,
+  "y": 759,
+  "w": 199,
+  "h": 168
  },
  "vfx_checkpoint_activate#6": {
   "page": "enemies_0",
-  "x": 597,
-  "y": 1732,
+  "x": 637,
+  "y": 1543,
   "w": 128,
   "h": 256
  },
  "swooper_cruise#1": {
   "page": "enemies_0",
-  "x": 620,
-  "y": 1363,
+  "x": 637,
+  "y": 1799,
   "w": 177,
   "h": 185
  },
- "swooper_dive_telegraph#0": {
-  "page": "enemies_0",
-  "x": 955,
-  "y": 580,
-  "w": 137,
-  "h": 239
- },
  "swooper_cruise#6": {
   "page": "enemies_0",
-  "x": 663,
-  "y": 1548,
+  "x": 765,
+  "y": 1612,
   "w": 187,
   "h": 174
  },
+ "swooper_cruise#7": {
+  "page": "enemies_0",
+  "x": 1785,
+  "y": 927,
+  "w": 184,
+  "h": 174
+ },
+ "pursuer_alert#1": {
+  "page": "enemies_0",
+  "x": 1528,
+  "y": 950,
+  "w": 205,
+  "h": 156
+ },
  "vfx_checkpoint_activate#5": {
   "page": "enemies_0",
-  "x": 685,
-  "y": 1114,
+  "x": 814,
+  "y": 1786,
   "w": 152,
   "h": 209
  },
  "vfx_enemy_defeat#1": {
   "page": "enemies_0",
-  "x": 797,
-  "y": 1363,
+  "x": 1733,
+  "y": 1101,
   "w": 178,
   "h": 178
  },
+ "swooper_cruise#5": {
+  "page": "enemies_0",
+  "x": 1528,
+  "y": 1106,
+  "w": 175,
+  "h": 176
+ },
  "swooper_cruise#0": {
   "page": "enemies_0",
-  "x": 975,
-  "y": 1044,
-  "w": 169,
-  "h": 187
- },
- "swooper_cruise#4": {
-  "page": "enemies_0",
-  "x": 1144,
-  "y": 1114,
-  "w": 191,
-  "h": 162
+  "x": 1331,
+  "y": 1204,
+  "w": 167,
+  "h": 184
  },
  "swooper_death_fall#3": {
   "page": "enemies_0",
-  "x": 725,
-  "y": 1722,
-  "w": 180,
-  "h": 168
+  "x": 952,
+  "y": 1612,
+  "w": 178,
+  "h": 166
  },
- "swooper_cruise#5": {
+ "swooper_death_fall#4": {
   "page": "enemies_0",
-  "x": 850,
-  "y": 1541,
-  "w": 172,
-  "h": 174
- },
- "pursuer_alert#2": {
-  "page": "enemies_0",
-  "x": 975,
-  "y": 1363,
-  "w": 183,
-  "h": 162
+  "x": 1703,
+  "y": 1279,
+  "w": 313,
+  "h": 94
  },
  "vfx_checkpoint_activate#7": {
   "page": "enemies_0",
-  "x": 837,
-  "y": 870,
+  "x": 966,
+  "y": 1778,
   "w": 116,
   "h": 253
  },
  "swooper_recovery_climb#3": {
   "page": "enemies_0",
-  "x": 1158,
-  "y": 1276,
+  "x": 1498,
+  "y": 1282,
   "w": 168,
   "h": 172
  },
- "swooper_dive#0": {
+ "swooper_perch_idle#0": {
   "page": "enemies_0",
-  "x": 1326,
-  "y": 1363,
-  "w": 168,
-  "h": 169
+  "x": 1082,
+  "y": 1778,
+  "w": 160,
+  "h": 179
  },
  "vfx_enemy_defeat#7": {
   "page": "enemies_0",
-  "x": 1022,
-  "y": 1525,
+  "x": 1242,
+  "y": 1388,
   "w": 170,
   "h": 165
  },
  "swooper_perch_idle#5": {
   "page": "enemies_0",
-  "x": 905,
-  "y": 1715,
+  "x": 1130,
+  "y": 1553,
   "w": 160,
   "h": 175
  },
  "swooper_perch_idle#3": {
   "page": "enemies_0",
-  "x": 1065,
-  "y": 1697,
+  "x": 1242,
+  "y": 1728,
   "w": 158,
   "h": 177
  },
  "swooper_dive_telegraph#1": {
   "page": "enemies_0",
-  "x": 837,
-  "y": 1123,
+  "x": 1666,
+  "y": 1373,
   "w": 137,
   "h": 203
  },
- "swooper_perch_idle#4": {
-  "page": "enemies_0",
-  "x": 1223,
-  "y": 1697,
-  "w": 157,
-  "h": 177
- },
  "vfx_whip_impact#3": {
   "page": "enemies_0",
-  "x": 1065,
-  "y": 1874,
+  "x": 1290,
+  "y": 1553,
   "w": 166,
   "h": 166
  },
- "swooper_recovery_climb#5": {
+ "swooper_cruise#2": {
   "page": "enemies_0",
-  "x": 1380,
-  "y": 1532,
-  "w": 156,
-  "h": 176
+  "x": 1242,
+  "y": 1905,
+  "w": 193,
+  "h": 142
  },
  "vfx_checkpoint_activate#1": {
   "page": "enemies_0",
-  "x": 1192,
-  "y": 1448,
+  "x": 1435,
+  "y": 1719,
   "w": 114,
   "h": 240
  },
  "vfx_hazard_telegraph#3": {
   "page": "enemies_0",
-  "x": 1536,
-  "y": 1586,
+  "x": 1435,
+  "y": 1959,
   "w": 320,
   "h": 84
  },
+ "swooper_recovery_climb#1": {
+  "page": "enemies_0",
+  "x": 1456,
+  "y": 1576,
+  "w": 186,
+  "h": 143
+ },
+ "swooper_perch_idle#1": {
+  "page": "enemies_0",
+  "x": 1549,
+  "y": 1719,
+  "w": 151,
+  "h": 176
+ },
  "vfx_hazard_telegraph#2": {
   "page": "enemies_0",
-  "x": 1536,
-  "y": 1670,
+  "x": 1700,
+  "y": 1576,
   "w": 320,
   "h": 83
  },
- "swooper_perch_idle#0": {
-  "page": "enemies_0",
-  "x": 1380,
-  "y": 1708,
-  "w": 154,
-  "h": 172
- },
  "swooper_perch_idle#2": {
   "page": "enemies_0",
-  "x": 1856,
-  "y": 1697,
+  "x": 1803,
+  "y": 1373,
   "w": 153,
   "h": 173
  },
- "swooper_recovery_climb#0": {
+ "swooper_dive_telegraph#0": {
   "page": "enemies_0",
-  "x": 1534,
-  "y": 1753,
-  "w": 147,
-  "h": 179
+  "x": 1700,
+  "y": 1659,
+  "w": 123,
+  "h": 214
+ },
+ "swooper_dive_telegraph#2": {
+  "page": "enemies_0",
+  "x": 1755,
+  "y": 1873,
+  "w": 153,
+  "h": 170
+ },
+ "swooper_perch_idle#4": {
+  "page": "enemies_0",
+  "x": 1823,
+  "y": 1659,
+  "w": 152,
+  "h": 171
  },
  "swooper_hurt#1": {
-  "page": "enemies_0",
-  "x": 1231,
-  "y": 1874,
+  "page": "enemies_1",
+  "x": 0,
+  "y": 0,
   "w": 149,
   "h": 174
  },
  "vfx_hazard_telegraph#0": {
-  "page": "enemies_0",
-  "x": 422,
-  "y": 772,
+  "page": "enemies_1",
+  "x": 149,
+  "y": 0,
   "w": 320,
   "h": 81
  },
+ "swooper_dive#0": {
+  "page": "enemies_1",
+  "x": 469,
+  "y": 0,
+  "w": 160,
+  "h": 161
+ },
+ "swooper_dive#1": {
+  "page": "enemies_1",
+  "x": 149,
+  "y": 81,
+  "w": 156,
+  "h": 165
+ },
  "swooper_recovery_climb#4": {
-  "page": "enemies_0",
-  "x": 1681,
-  "y": 1870,
+  "page": "enemies_1",
+  "x": 0,
+  "y": 174,
   "w": 147,
   "h": 175
  },
+ "pursuer_alert#2": {
+  "page": "enemies_1",
+  "x": 305,
+  "y": 81,
+  "w": 158,
+  "h": 162
+ },
  "pursuer_idle#1": {
-  "page": "enemies_0",
-  "x": 725,
-  "y": 1890,
+  "page": "enemies_1",
+  "x": 629,
+  "y": 0,
   "w": 167,
   "h": 153
  },
- "swooper_perch_idle#1": {
-  "page": "enemies_0",
-  "x": 1828,
-  "y": 1870,
-  "w": 147,
-  "h": 172
+ "swooper_cruise#3": {
+  "page": "enemies_1",
+  "x": 796,
+  "y": 0,
+  "w": 175,
+  "h": 146
+ },
+ "swooper_recovery_climb#5": {
+  "page": "enemies_1",
+  "x": 971,
+  "y": 0,
+  "w": 150,
+  "h": 169
  },
  "vfx_hazard_telegraph#1": {
   "page": "enemies_1",
-  "x": 0,
-  "y": 0,
+  "x": 629,
+  "y": 153,
   "w": 320,
   "h": 79
  },
- "swooper_cruise#2": {
-  "page": "enemies_1",
-  "x": 320,
-  "y": 0,
-  "w": 184,
-  "h": 137
- },
- "swooper_recovery_climb#1": {
-  "page": "enemies_1",
-  "x": 0,
-  "y": 79,
-  "w": 181,
-  "h": 139
- },
  "vfx_hazard_eruption#0": {
-  "page": "enemies_0",
-  "x": 1380,
-  "y": 1932,
+  "page": "enemies_1",
+  "x": 1121,
+  "y": 0,
   "w": 241,
   "h": 104
  },
  "swooper_hurt#2": {
   "page": "enemies_1",
-  "x": 504,
+  "x": 1362,
   "y": 0,
   "w": 185,
   "h": 132
  },
  "pursuer_idle#4": {
-  "page": "enemies_0",
-  "x": 892,
-  "y": 1890,
-  "w": 166,
+  "page": "enemies_1",
+  "x": 1121,
+  "y": 104,
+  "w": 167,
   "h": 145
  },
  "pursuer_alert#0": {
-  "page": "enemies_1",
-  "x": 689,
-  "y": 0,
+  "page": "enemies_0",
+  "x": 1456,
+  "y": 1454,
   "w": 207,
   "h": 115
  },
- "swooper_dive#1": {
-  "page": "enemies_1",
-  "x": 896,
-  "y": 0,
-  "w": 149,
-  "h": 159
- },
- "swooper_cruise#3": {
-  "page": "enemies_1",
-  "x": 689,
-  "y": 115,
-  "w": 168,
-  "h": 141
- },
- "swooper_death_fall#4": {
-  "page": "enemies_1",
-  "x": 181,
-  "y": 137,
-  "w": 279,
-  "h": 84
- },
  "vfx_whip_impact#1": {
-  "page": "enemies_1",
-  "x": 0,
-  "y": 218,
+  "page": "enemies_0",
+  "x": 892,
+  "y": 521,
   "w": 152,
   "h": 152
  },
  "pursuer_approach_walk#2": {
   "page": "enemies_1",
-  "x": 504,
-  "y": 132,
-  "w": 178,
-  "h": 127
+  "x": 1547,
+  "y": 0,
+  "w": 179,
+  "h": 128
+ },
+ "swooper_recovery_climb#0": {
+  "page": "enemies_0",
+  "x": 1911,
+  "y": 1101,
+  "w": 136,
+  "h": 165
  },
  "swooper_recovery_climb#2": {
   "page": "enemies_1",
-  "x": 152,
-  "y": 221,
-  "w": 171,
+  "x": 949,
+  "y": 169,
+  "w": 172,
   "h": 130
+ },
+ "pursuer_patrol_walk#0": {
+  "page": "enemies_1",
+  "x": 1726,
+  "y": 0,
+  "w": 178,
+  "h": 125
  },
  "whip_attack_air#2": {
   "page": "enemies_1",
-  "x": 1045,
-  "y": 0,
+  "x": 1726,
+  "y": 125,
   "w": 220,
   "h": 101
  },
- "pursuer_approach_walk#3": {
+ "pursuer_approach_walk#4": {
   "page": "enemies_1",
-  "x": 323,
-  "y": 221,
-  "w": 179,
-  "h": 120
- },
- "pursuer_approach_walk#7": {
-  "page": "enemies_1",
-  "x": 1265,
-  "y": 0,
-  "w": 185,
-  "h": 116
+  "x": 1288,
+  "y": 132,
+  "w": 192,
+  "h": 113
  },
  "vfx_hazard_eruption#5": {
   "page": "enemies_1",
-  "x": 1045,
-  "y": 101,
+  "x": 1480,
+  "y": 132,
   "w": 212,
   "h": 101
  },
  "pursuer_approach_walk#5": {
   "page": "enemies_1",
-  "x": 857,
-  "y": 159,
+  "x": 1692,
+  "y": 226,
   "w": 183,
   "h": 116
  },
  "whip_attack_ground#4": {
-  "page": "enemies_1",
-  "x": 502,
-  "y": 259,
+  "page": "enemies_0",
+  "x": 984,
+  "y": 1460,
   "w": 244,
   "h": 87
  },
  "whip_attack_ground#2": {
   "page": "enemies_1",
-  "x": 1450,
-  "y": 0,
+  "x": 1288,
+  "y": 245,
   "w": 238,
   "h": 89
  },
+ "pursuer_approach_walk#7": {
+  "page": "enemies_1",
+  "x": 463,
+  "y": 232,
+  "w": 184,
+  "h": 115
+ },
  "pursuer_patrol_walk#2": {
-  "page": "enemies_0",
-  "x": 256,
-  "y": 985,
+  "page": "enemies_1",
+  "x": 1526,
+  "y": 233,
   "w": 166,
   "h": 127
  },
- "pursuer_approach_walk#4": {
-  "page": "enemies_1",
-  "x": 1688,
-  "y": 0,
-  "w": 188,
-  "h": 112
- },
  "pursuer_approach_walk#6": {
   "page": "enemies_1",
-  "x": 1450,
-  "y": 89,
+  "x": 647,
+  "y": 232,
   "w": 183,
   "h": 115
  },
- "pursuer_patrol_walk#0": {
-  "page": "enemies_0",
-  "x": 974,
-  "y": 1231,
-  "w": 170,
-  "h": 120
- },
- "pursuer_patrol_walk#1": {
+ "pursuer_approach_walk#3": {
   "page": "enemies_1",
-  "x": 1876,
-  "y": 0,
-  "w": 158,
-  "h": 128
- },
- "whip_attack_air#4": {
-  "page": "enemies_1",
-  "x": 323,
-  "y": 341,
-  "w": 179,
-  "h": 111
+  "x": 147,
+  "y": 246,
+  "w": 177,
+  "h": 118
  },
  "pursuer_approach_walk#1": {
   "page": "enemies_1",
-  "x": 1257,
-  "y": 116,
-  "w": 183,
+  "x": 1692,
+  "y": 342,
+  "w": 184,
   "h": 108
  },
- "pursuer_hurt#0": {
+ "whip_attack_air#4": {
   "page": "enemies_1",
-  "x": 152,
-  "y": 351,
-  "w": 141,
-  "h": 139
- },
- "pursuer_patrol_walk#3": {
-  "page": "enemies_0",
-  "x": 1681,
-  "y": 1753,
-  "w": 166,
-  "h": 117
- },
- "pursuer_recovery#2": {
-  "page": "enemies_1",
-  "x": 0,
-  "y": 370,
-  "w": 134,
-  "h": 144
- },
- "pursuer_patrol_walk#6": {
-  "page": "enemies_1",
-  "x": 1040,
-  "y": 202,
-  "w": 168,
-  "h": 114
- },
- "pursuer_patrol_walk#4": {
-  "page": "enemies_1",
-  "x": 1633,
-  "y": 112,
-  "w": 171,
+  "x": 830,
+  "y": 299,
+  "w": 179,
   "h": 111
  },
  "pursuer_approach_walk#0": {
+  "page": "enemies_1",
+  "x": 1009,
+  "y": 299,
+  "w": 192,
+  "h": 103
+ },
+ "pursuer_patrol_walk#4": {
+  "page": "enemies_1",
+  "x": 1875,
+  "y": 226,
+  "w": 173,
+  "h": 113
+ },
+ "pursuer_patrol_walk#1": {
   "page": "enemies_0",
-  "x": 410,
-  "y": 1943,
-  "w": 187,
-  "h": 101
+  "x": 461,
+  "y": 1281,
+  "w": 156,
+  "h": 125
+ },
+ "pursuer_recovery#2": {
+  "page": "enemies_0",
+  "x": 483,
+  "y": 1900,
+  "w": 135,
+  "h": 144
+ },
+ "pursuer_patrol_walk#3": {
+  "page": "enemies_1",
+  "x": 1876,
+  "y": 339,
+  "w": 166,
+  "h": 117
  },
  "whip_attack_crouch#4": {
   "page": "enemies_1",
-  "x": 1804,
-  "y": 128,
+  "x": 1201,
+  "y": 334,
   "w": 242,
   "h": 78
  },
  "pursuer_patrol_walk#5": {
   "page": "enemies_1",
-  "x": 1440,
-  "y": 204,
+  "x": 1009,
+  "y": 402,
   "w": 167,
   "h": 113
  },
- "swooper_dive_telegraph#2": {
+ "pursuer_patrol_walk#6": {
   "page": "enemies_1",
-  "x": 1208,
-  "y": 224,
-  "w": 130,
-  "h": 145
+  "x": 1443,
+  "y": 360,
+  "w": 167,
+  "h": 113
  },
  "pursuer_idle#3": {
   "page": "enemies_1",
-  "x": 1804,
-  "y": 206,
-  "w": 163,
+  "x": 1610,
+  "y": 450,
+  "w": 164,
   "h": 115
+ },
+ "pursuer_hurt#0": {
+  "page": "enemies_0",
+  "x": 1186,
+  "y": 1252,
+  "w": 138,
+  "h": 136
  },
  "pursuer_idle#5": {
   "page": "enemies_1",
-  "x": 1607,
-  "y": 223,
-  "w": 163,
+  "x": 1176,
+  "y": 412,
+  "w": 164,
   "h": 114
- },
- "pursuer_idle#0": {
-  "page": "enemies_1",
-  "x": 1338,
-  "y": 317,
-  "w": 160,
-  "h": 116
  },
  "pursuer_patrol_walk#7": {
   "page": "enemies_1",
-  "x": 1770,
-  "y": 321,
+  "x": 1340,
+  "y": 473,
   "w": 167,
   "h": 111
  },
+ "pursuer_idle#0": {
+  "page": "enemies_1",
+  "x": 1774,
+  "y": 456,
+  "w": 158,
+  "h": 114
+ },
  "pursuer_idle#2": {
   "page": "enemies_1",
-  "x": 1498,
-  "y": 337,
-  "w": 159,
-  "h": 116
- },
- "pursuer_alert#3": {
-  "page": "enemies_1",
-  "x": 1657,
-  "y": 337,
-  "w": 112,
-  "h": 162
+  "x": 1507,
+  "y": 565,
+  "w": 157,
+  "h": 113
  },
  "vfx_enemy_defeat#0": {
   "page": "enemies_1",
-  "x": 1769,
-  "y": 432,
+  "x": 324,
+  "y": 243,
   "w": 132,
   "h": 132
  },
+ "swooper_dive_telegraph#3": {
+  "page": "enemies_0",
+  "x": 1908,
+  "y": 1830,
+  "w": 133,
+  "h": 131
+ },
  "pursuer_death#0": {
   "page": "enemies_1",
-  "x": 1901,
-  "y": 432,
+  "x": 0,
+  "y": 349,
   "w": 134,
   "h": 130
  },
- "pursuer_lunge_windup#0": {
-  "page": "enemies_0",
-  "x": 1940,
-  "y": 909,
-  "w": 97,
+ "pursuer_alert#3": {
+  "page": "enemies_1",
+  "x": 1946,
+  "y": 0,
+  "w": 98,
   "h": 162
  },
- "pursuer_lunge#0": {
-  "page": "enemies_1",
-  "x": 1901,
-  "y": 562,
-  "w": 129,
-  "h": 116
+ "pursuer_lunge_windup#0": {
+  "page": "enemies_0",
+  "x": 1938,
+  "y": 290,
+  "w": 98,
+  "h": 162
  },
  "pursuer_hurt#2": {
   "page": "enemies_1",
-  "x": 746,
-  "y": 275,
-  "w": 129,
-  "h": 116
+  "x": 134,
+  "y": 364,
+  "w": 130,
+  "h": 117
+ },
+ "pursuer_recovery#0": {
+  "page": "enemies_1",
+  "x": 456,
+  "y": 347,
+  "w": 162,
+  "h": 93
  },
  "pursuer_recovery#3": {
   "page": "enemies_1",
-  "x": 875,
-  "y": 275,
+  "x": 0,
+  "y": 479,
   "w": 132,
   "h": 113
  },
- "pursuer_recovery#1": {
-  "page": "enemies_1",
-  "x": 1007,
-  "y": 316,
-  "w": 119,
-  "h": 119
- },
  "whip_attack_crouch#2": {
   "page": "enemies_1",
-  "x": 502,
-  "y": 346,
+  "x": 1664,
+  "y": 570,
   "w": 237,
   "h": 58
  },
  "pursuer_lunge_windup#1": {
   "page": "enemies_0",
-  "x": 1636,
-  "y": 1199,
+  "x": 791,
+  "y": 1032,
   "w": 87,
   "h": 155
  },
- "pursuer_recovery#0": {
+ "pursuer_recovery#1": {
   "page": "enemies_1",
-  "x": 1126,
-  "y": 369,
-  "w": 153,
-  "h": 88
- },
- "swooper_dive_telegraph#3": {
-  "page": "enemies_1",
-  "x": 875,
-  "y": 388,
-  "w": 113,
-  "h": 112
+  "x": 1932,
+  "y": 456,
+  "w": 116,
+  "h": 115
  },
  "vfx_whip_impact#4": {
   "page": "enemies_1",
-  "x": 739,
-  "y": 391,
+  "x": 1901,
+  "y": 571,
   "w": 112,
   "h": 112
  },
+ "pursuer_death#3": {
+  "page": "enemies_0",
+  "x": 1082,
+  "y": 1957,
+  "w": 146,
+  "h": 84
+ },
  "pursuer_death#1": {
   "page": "enemies_1",
-  "x": 988,
-  "y": 435,
-  "w": 121,
-  "h": 102
+  "x": 264,
+  "y": 375,
+  "w": 120,
+  "h": 101
  },
  "pursuer_death#2": {
   "page": "enemies_1",
-  "x": 851,
-  "y": 500,
-  "w": 122,
-  "h": 101
+  "x": 618,
+  "y": 347,
+  "w": 121,
+  "h": 100
  },
  "pursuer_hurt#1": {
   "page": "enemies_1",
-  "x": 1279,
-  "y": 433,
+  "x": 384,
+  "y": 440,
   "w": 118,
   "h": 98
  },
  "pursuer_lunge_windup#2": {
-  "page": "enemies_1",
-  "x": 1397,
-  "y": 433,
+  "page": "enemies_0",
+  "x": 1938,
+  "y": 452,
   "w": 97,
   "h": 116
  },
  "whip_attack_air#5": {
-  "page": "enemies_1",
-  "x": 502,
-  "y": 404,
+  "page": "enemies_0",
+  "x": 1549,
+  "y": 1895,
   "w": 183,
   "h": 61
  },
  "pursuer_lunge_windup#3": {
-  "page": "enemies_1",
-  "x": 1494,
-  "y": 453,
-  "w": 91,
+  "page": "enemies_0",
+  "x": 1956,
+  "y": 1373,
+  "w": 92,
   "h": 120
  },
- "whip_attack_ground#1": {
+ "pursuer_lunge#0": {
   "page": "enemies_1",
-  "x": 1109,
-  "y": 457,
+  "x": 502,
+  "y": 440,
+  "w": 109,
+  "h": 99
+ },
+ "whip_attack_ground#1": {
+  "page": "enemies_0",
+  "x": 1908,
+  "y": 1961,
   "w": 114,
   "h": 86
  },
- "pursuer_death#3": {
-  "page": "enemies_1",
-  "x": 973,
-  "y": 537,
-  "w": 130,
-  "h": 75
+ "pursuer_death#5": {
+  "page": "enemies_0",
+  "x": 618,
+  "y": 1984,
+  "w": 154,
+  "h": 58
  },
  "vfx_checkpoint_activate#0": {
-  "page": "enemies_1",
-  "x": 1585,
-  "y": 453,
+  "page": "enemies_0",
+  "x": 1975,
+  "y": 1659,
   "w": 68,
   "h": 131
  },
  "pursuer_lunge#1": {
-  "page": "enemies_0",
-  "x": 685,
-  "y": 1044,
+  "page": "enemies_1",
+  "x": 463,
+  "y": 161,
   "w": 134,
   "h": 66
  },
  "whip_attack_ground#0": {
-  "page": "enemies_0",
-  "x": 782,
-  "y": 482,
+  "page": "enemies_1",
+  "x": 1507,
+  "y": 473,
   "w": 103,
   "h": 85
  },
+ "pursuer_death#4": {
+  "page": "enemies_1",
+  "x": 1664,
+  "y": 628,
+  "w": 154,
+  "h": 56
+ },
  "whip_attack_crouch#5": {
   "page": "enemies_0",
-  "x": 256,
-  "y": 1305,
+  "x": 772,
+  "y": 1995,
   "w": 167,
   "h": 51
  },
  "vfx_whip_impact#0": {
-  "page": "enemies_0",
-  "x": 1571,
-  "y": 290,
+  "page": "enemies_1",
+  "x": 739,
+  "y": 347,
   "w": 90,
   "h": 90
  },
  "whip_attack_ground#7": {
-  "page": "enemies_1",
-  "x": 1338,
-  "y": 224,
+  "page": "enemies_0",
+  "x": 1046,
+  "y": 290,
   "w": 87,
   "h": 89
  },
  "whip_attack_ground#6": {
-  "page": "enemies_0",
-  "x": 1536,
-  "y": 1489,
+  "page": "enemies_1",
+  "x": 264,
+  "y": 476,
   "w": 87,
   "h": 87
  },
+ "pursuer_lunge#2": {
+  "page": "enemies_0",
+  "x": 984,
+  "y": 1547,
+  "w": 139,
+  "h": 54
+ },
  "whip_attack_ground#5": {
   "page": "enemies_1",
-  "x": 1223,
-  "y": 531,
+  "x": 829,
+  "y": 410,
   "w": 173,
   "h": 43
  },
  "whip_attack_air#7": {
   "page": "enemies_1",
-  "x": 1396,
-  "y": 549,
+  "x": 1610,
+  "y": 360,
   "w": 82,
   "h": 87
  },
- "pursuer_death#5": {
-  "page": "enemies_0",
-  "x": 1564,
-  "y": 852,
-  "w": 131,
-  "h": 53
- },
  "whip_attack_crouch#6": {
-  "page": "enemies_1",
-  "x": 1478,
-  "y": 573,
+  "page": "enemies_0",
+  "x": 1743,
+  "y": 192,
   "w": 82,
   "h": 84
  },
  "whip_attack_air#6": {
   "page": "enemies_1",
-  "x": 1967,
-  "y": 206,
+  "x": 1201,
+  "y": 249,
   "w": 81,
   "h": 85
  },
- "pursuer_lunge#2": {
-  "page": "enemies_0",
-  "x": 1380,
-  "y": 1880,
-  "w": 131,
-  "h": 51
- },
  "whip_attack_crouch#1": {
   "page": "enemies_0",
-  "x": 1481,
-  "y": 534,
+  "x": 1956,
+  "y": 1493,
   "w": 85,
   "h": 78
  },
  "whip_attack_crouch#7": {
-  "page": "enemies_1",
-  "x": 1937,
-  "y": 321,
+  "page": "enemies_0",
+  "x": 1965,
+  "y": 568,
   "w": 82,
   "h": 80
  },
- "pursuer_death#4": {
-  "page": "enemies_1",
-  "x": 181,
-  "y": 79,
-  "w": 131,
-  "h": 50
- },
  "whip_attack_crouch#0": {
   "page": "enemies_1",
-  "x": 1653,
-  "y": 499,
+  "x": 739,
+  "y": 437,
   "w": 85,
   "h": 76
  },
  "whip_attack_ground#3": {
-  "page": "enemies_0",
-  "x": 423,
-  "y": 1334,
+  "page": "enemies_1",
+  "x": 611,
+  "y": 513,
   "w": 261,
   "h": 24
  },
  "whip_attack_air#0": {
-  "page": "enemies_1",
-  "x": 1103,
-  "y": 543,
+  "page": "enemies_0",
+  "x": 1965,
+  "y": 648,
   "w": 83,
   "h": 74
  },
  "whip_attack_air#1": {
   "page": "enemies_1",
-  "x": 1738,
-  "y": 564,
+  "x": 132,
+  "y": 481,
   "w": 85,
   "h": 70
  },
  "whip_attack_crouch#3": {
-  "page": "enemies_0",
-  "x": 684,
-  "y": 1334,
+  "page": "enemies_1",
+  "x": 872,
+  "y": 515,
   "w": 290,
   "h": 20
  },
  "whip_attack_air#3": {
   "page": "enemies_1",
-  "x": 1560,
-  "y": 634,
+  "x": 872,
+  "y": 535,
   "w": 255,
   "h": 21
  },
  "projectile_grave_shot#0": {
   "page": "enemies_0",
-  "x": 1981,
-  "y": 0,
+  "x": 1984,
+  "y": 722,
   "w": 64,
   "h": 64
  },
  "projectile_grave_shot#1": {
   "page": "enemies_0",
-  "x": 1981,
-  "y": 64,
+  "x": 1984,
+  "y": 786,
   "w": 64,
   "h": 64
  },
  "projectile_grave_shot#2": {
   "page": "enemies_0",
-  "x": 1981,
-  "y": 128,
+  "x": 1984,
+  "y": 850,
   "w": 64,
   "h": 64
  },
  "vfx_whip_impact#5": {
-  "page": "enemies_0",
-  "x": 1981,
-  "y": 192,
+  "page": "enemies_1",
+  "x": 872,
+  "y": 453,
   "w": 62,
   "h": 62
  }
